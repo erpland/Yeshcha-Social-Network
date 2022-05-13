@@ -1,0 +1,36 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+        <bitmap
+            android:gravity="top"
+            android:src="@drawable/happy_people"
+            android:mipMap="true"
+            />
+
+    </item>
+
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#C80E3E3B"/>
+        </shape>
+    </item>
+
+
+
+    <item
+        android:bottom="-100dp"
+        android:left="0dp"
+        android:right="-260dp"
+        android:top="260dp">
+        <rotate
+            android:fromDegrees="-10"
+            android:pivotX="0%"
+            android:pivotY="100%">
+            <shape
+                android:shape="rectangle">
+                <solid
+                    android:color="@color/background"/>
+            </shape>
+        </rotate>
+    </item>
+</layer-list>
