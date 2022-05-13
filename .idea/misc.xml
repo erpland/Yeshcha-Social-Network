@@ -4,16 +4,21 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/-=android=-/Final_Project_semB/app/src/main/res/drawable-v24/ic_home_icon.xml" value="0.13703703703703704" />
+        <entry key="..\:/-=android=-/Final_Project_semB/app/src/main/res/drawable-v24/ic_user_icon.xml" value="0.403125" />
         <entry key="..\:/-=android=-/Final_Project_semB/app/src/main/res/drawable/bg_left_arrow.xml" value="0.13703703703703704" />
         <entry key="..\:/-=android=-/Final_Project_semB/app/src/main/res/drawable/bg_post.xml" value="0.13703703703703704" />
+        <entry key="..\:/-=android=-/Final_Project_semB/app/src/main/res/drawable/ic_camera.xml" value="0.403125" />
         <entry key="..\:/-=android=-/Final_Project_semB/app/src/main/res/drawable/ic_email.xml" value="0.13703703703703704" />
         <entry key="..\:/-=android=-/Final_Project_semB/app/src/main/res/drawable/ic_facebook.xml" value="0.13703703703703704" />
         <entry key="..\:/-=android=-/Final_Project_semB/app/src/main/res/drawable/ic_location_wrapper.xml" value="0.13703703703703704" />
+        <entry key="..\:/-=android=-/Final_Project_semB/app/src/main/res/drawable/ic_name.xml" value="0.403125" />
+        <entry key="..\:/-=android=-/Final_Project_semB/app/src/main/res/drawable/ic_phone.xml" value="0.403125" />
         <entry key="..\:/-=android=-/Final_Project_semB/app/src/main/res/drawable/login_header.xml" value="0.18703703703703703" />
-        <entry key="..\:/-=android=-/Final_Project_semB/app/src/main/res/layout/activity_login.xml" value="0.1" />
+        <entry key="..\:/-=android=-/Final_Project_semB/app/src/main/res/layout/activity_login.xml" value="0.33" />
         <entry key="..\:/-=android=-/Final_Project_semB/app/src/main/res/layout/activity_main.xml" value="0.33" />
-        <entry key="..\:/-=android=-/Final_Project_semB/app/src/main/res/layout/activity_register.xml" value="0.1" />
+        <entry key="..\:/-=android=-/Final_Project_semB/app/src/main/res/layout/activity_register.xml" value="0.33" />
         <entry key="..\:/-=android=-/Final_Project_semB/app/src/main/res/layout/activity_start.xml" value="0.1" />
+        <entry key="..\:/-=android=-/Final_Project_semB/app/src/main/res/layout/fragment_register_page2.xml" value="0.38697916666666665" />
         <entry key="..\:/-=android=-/Final_Project_semB/app/src/main/res/layout/post_layout.xml" value="0.1" />
         <entry key="..\:/-=android=-/Final_Project_semB/app/src/main/res/menu/bottom_menu.xml" value="0.22" />
       </map>

@@ -11,7 +11,7 @@
     tools:context=".LoginActivity">
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/sub_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -22,10 +22,10 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/headline" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/headline"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/givert_levin"
@@ -42,7 +42,7 @@
         app:layout_constraintVertical_bias="0.111" />
 
     <EditText
-        android:id="@+id/et_email"
+        android:id="@+id/et_emailRegister"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="64dp"
@@ -60,7 +60,7 @@
         app:layout_constraintTop_toTopOf="@+id/start_guide" />
 
     <EditText
-        android:id="@+id/et_password"
+        android:id="@+id/et_passwordRegister"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -71,13 +71,13 @@
         android:hint="סיסמא"
         android:inputType="textPassword"
         android:layoutDirection="rtl"
-        app:layout_constraintEnd_toEndOf="@+id/et_email"
+        app:layout_constraintEnd_toEndOf="@+id/et_emailRegister"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/et_email"
-        app:layout_constraintTop_toBottomOf="@+id/et_email" />
+        app:layout_constraintStart_toStartOf="@+id/et_emailRegister"
+        app:layout_constraintTop_toBottomOf="@+id/et_emailRegister" />
 
     <EditText
-        android:id="@+id/et_password2"
+        android:id="@+id/et_passwordAgain"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -88,13 +88,13 @@
         android:hint="סיסמא שוב"
         android:inputType="textPassword"
         android:layoutDirection="rtl"
-        app:layout_constraintEnd_toEndOf="@+id/et_email"
+        app:layout_constraintEnd_toEndOf="@+id/et_emailRegister"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/et_password"
-        app:layout_constraintTop_toBottomOf="@+id/et_password" />
+        app:layout_constraintStart_toStartOf="@+id/et_passwordRegister"
+        app:layout_constraintTop_toBottomOf="@+id/et_passwordRegister" />
 
     <Button
-        android:id="@+id/btn_login"
+        android:id="@+id/btn_register"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
@@ -103,14 +103,14 @@
         android:text="הירשם"
         android:textColor="@color/background"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/tv_toRegister"
+        app:layout_constraintBottom_toTopOf="@+id/tv_toLogin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_password2"
+        app:layout_constraintTop_toBottomOf="@+id/et_passwordAgain"
         app:layout_constraintVertical_bias="0.81" />
 
     <TextView
-        android:id="@+id/tv_toRegister"
+        android:id="@+id/tv_toLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"

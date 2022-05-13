@@ -11,7 +11,7 @@
     tools:context=".LoginActivity">
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/sub_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -22,10 +22,10 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/headline" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/headline"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/givert_levin"
@@ -42,7 +42,7 @@
         app:layout_constraintVertical_bias="0.111" />
 
     <EditText
-        android:id="@+id/et_email"
+        android:id="@+id/et_emailLogin"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="64dp"
@@ -60,7 +60,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline3" />
 
     <EditText
-        android:id="@+id/et_password"
+        android:id="@+id/et_passwordLogin"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
@@ -71,10 +71,10 @@
         android:hint="סיסמא"
         android:inputType="textPassword"
         android:layoutDirection="rtl"
-        app:layout_constraintEnd_toEndOf="@+id/et_email"
+        app:layout_constraintEnd_toEndOf="@+id/et_emailLogin"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/et_email"
-        app:layout_constraintTop_toBottomOf="@+id/et_email" />
+        app:layout_constraintStart_toStartOf="@+id/et_emailLogin"
+        app:layout_constraintTop_toBottomOf="@+id/et_emailLogin" />
 
     <Button
         android:id="@+id/btn_login"
@@ -89,7 +89,7 @@
         app:layout_constraintBottom_toTopOf="@+id/tv_toRegister"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_password"
+        app:layout_constraintTop_toBottomOf="@+id/et_passwordLogin"
         app:layout_constraintVertical_bias="0.81" />
 
     <TextView
@@ -105,13 +105,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/start_guide"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="251dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"
