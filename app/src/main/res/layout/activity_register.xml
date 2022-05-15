@@ -41,79 +41,11 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.111" />
 
-    <EditText
-        android:id="@+id/et_emailRegister"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="64dp"
-        android:drawableRight="@drawable/ic_email"
-        android:drawablePadding="5sp"
-        android:ems="10"
-        android:hint="אמייל"
-        android:inputType="textEmailAddress"
-        android:layoutDirection="rtl"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/start_guide" />
-
-    <EditText
-        android:id="@+id/et_passwordRegister"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:drawableRight="@drawable/ic_password"
-        android:drawablePadding="5sp"
-        android:ems="10"
-        android:gravity="right"
-        android:hint="סיסמא"
-        android:inputType="textPassword"
-        android:layoutDirection="rtl"
-        app:layout_constraintEnd_toEndOf="@+id/et_emailRegister"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/et_emailRegister"
-        app:layout_constraintTop_toBottomOf="@+id/et_emailRegister" />
-
-    <EditText
-        android:id="@+id/et_passwordAgain"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:drawableRight="@drawable/ic_password"
-        android:drawablePadding="5sp"
-        android:ems="10"
-        android:gravity="right"
-        android:hint="סיסמא שוב"
-        android:inputType="textPassword"
-        android:layoutDirection="rtl"
-        app:layout_constraintEnd_toEndOf="@+id/et_emailRegister"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/et_passwordRegister"
-        app:layout_constraintTop_toBottomOf="@+id/et_passwordRegister" />
-
-    <Button
-        android:id="@+id/btn_register"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginEnd="48dp"
-        android:backgroundTint="@color/main_green"
-        android:text="הירשם"
-        android:textColor="@color/background"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/tv_toLogin"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_passwordAgain"
-        app:layout_constraintVertical_bias="0.81" />
-
     <TextView
         android:id="@+id/tv_toLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="24dp"
         android:fontFamily="@font/heebo"
         android:text="יש לי כבר חשבון!"
         android:textColor="#F14A4A"
@@ -129,5 +61,23 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.39" />
+
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_toLogin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/start_guide">
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/frgCntr_fregments"
+            android:name="com.example.final_project_semb.RegisterPage1Fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

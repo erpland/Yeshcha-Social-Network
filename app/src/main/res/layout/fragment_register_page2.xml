@@ -1,77 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="6.5"
     tools:context=".RegisterPage2Fragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
+        android:id="@+id/rly_addPhoto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_weight="2">
 
-        <RelativeLayout
-            android:id="@+id/rly_addPhoto"
-            android:layout_width="110dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+        <ImageView
+            android:id="@+id/iv_avatar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/default_avatar" />
 
-            <ImageView
-                android:id="@+id/iv_avatar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/default_avatar" />
-
-            <ImageView
-                android:id="@+id/iv_camera"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignRight="@id/iv_avatar"
-                android:layout_alignParentLeft="false"
-                android:layout_alignParentEnd="false"
-                android:layout_alignParentRight="false"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="5dp"
-                android:src="@drawable/ic_camera" />
-
-        </RelativeLayout>
-
-        <EditText
-            android:id="@+id/et_nameRegister"
-            android:layout_width="0dp"
+        <ImageView
+            android:id="@+id/iv_camera"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="64dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="64dp"
-            android:drawableRight="@drawable/ic_name"
-            android:drawablePadding="5sp"
-            android:ems="10"
-            android:hint="שם מלא"
-            android:inputType="text"
-            android:layoutDirection="rtl"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rly_addPhoto" />
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="5dp"
+            android:src="@drawable/ic_camera" />
+    </RelativeLayout>
 
-        <EditText
-            android:id="@+id/et_phoneRegister"
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5" />
+
+    <EditText
+        android:id="@+id/et_phoneRegister"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:drawableRight="@drawable/ic_phone"
+        android:drawablePadding="5sp"
+        android:hint="מספר טלפון"
+        android:inputType="text"
+        android:layoutDirection="rtl" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5" />
+
+    <EditText
+        android:id="@+id/et_nameRegister"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:drawableRight="@drawable/ic_name"
+        android:drawablePadding="5sp"
+        android:ems="10"
+        android:hint="שם מלא"
+        android:inputType="text"
+        android:layoutDirection="rtl" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:weightSum="2.4">
+
+        <Space
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:drawableRight="@drawable/ic_phone"
-            android:drawablePadding="5sp"
-            android:ems="10"
-            android:hint="מספר טלפון"
-            android:inputType="text"
-            android:layoutDirection="rtl"
-            app:layout_constraintEnd_toEndOf="@+id/et_nameRegister"
-            app:layout_constraintStart_toStartOf="@+id/et_nameRegister"
-            app:layout_constraintTop_toBottomOf="@+id/et_nameRegister" />
+            android:layout_height="match_parent"
+            android:layout_weight="0.1" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+            android:id="@+id/btn_registerFinish"
+            android:layout_width="0dp"
 
-</FrameLayout>
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:backgroundTint="@color/main_green"
+            android:text="הירשם"
+            android:textColor="@color/background"
+            android:textSize="18sp" />
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2" />
+
+        <Button
+            android:id="@+id/btn_registerBack"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="חזרה"
+            android:textColor="@color/main_green"
+            android:textSize="18sp"
+            app:strokeColor='@color/main_green' />
+    </LinearLayout>
+
+</LinearLayout>
