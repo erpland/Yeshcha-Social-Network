@@ -1,17 +1,31 @@
 package com.example.final_project_semb;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.core.FirestoreClient;
 
 import java.util.regex.Pattern;
 
@@ -21,6 +35,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     String emailTxt,passwordTxt,nameTxt,phoneNumberTxt;
     Bitmap bitmapImage;
+    FirebaseAuth mAuth;
+    FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +50,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     private void initValues() {
         toLogin_btn = findViewById(R.id.tv_toLogin);
-//        register_btn = findViewById(R.id.btn_register);
-//        email_et = findViewById(R.id.et_emailRegister);
-//        password_et = findViewById(R.id.et_passwordRegister);
-//        passwordConfirm_et = findViewById(R.id.et_passwordAgain);
+            mAuth=FirebaseAuth.getInstance();
+            db=FirebaseFirestore.getInstance();
+
     }
 
 //    @Override
@@ -113,13 +128,57 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     Toast.makeText(this,"מספר טלפון לא תקין",Toast.LENGTH_LONG).show();
                     return;
                 }
-        }
-    }
 
+        }
+        User user=new User(emailTxt,bitmapImage,nameTxt,phoneNumberTxt);
+        SignUpToFireBase(emailTxt,passwordTxt,user);
+
+
+
+    }
+    private void SignUpToFireBase(String email,String password,User user){
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            //save user to the database
+                            addUserToFireStore(user);
+                            // Sign in success, update UI with the signed-in user's information
+                            Toast.makeText(RegisterActivity.this, "Authentication Success.",
+                                    Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(RegisterActivity.this,MainActivity.class));
+                        } else {
+                            // If sign in fails, display a message to the user.
+
+                            Toast.makeText(RegisterActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
     private boolean fieldValidation(String field,String regex){
             if (!field.matches(regex)){
                 return false;
             }
         return true;
+    }
+
+    private void addUserToFireStore(User user){
+        // Add a new document with a generated ID
+        db.collection("users").document(mAuth.getUid())
+                .set(user);
+//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//                    @Override
+//                    public void onSuccess(DocumentReference documentReference) {
+//                        Log.d("hiush", "DocumentSnapshot added with ID: " + documentReference.getId());
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Log.w("Bayush", "Error adding document", e);
+//                    }
+//                });
     }
 }

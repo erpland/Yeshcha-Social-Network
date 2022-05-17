@@ -1,27 +1,29 @@
 package com.example.final_project_semb;
 
 
+import android.graphics.Bitmap;
+
 import java.util.ArrayList;
 
 public class User {
     int flow_level;
     String email;
-    String image;
+    Bitmap image;
     String name;
-    int phoneNumber;
+    String phoneNumber;
     ArrayList preferences;
     ArrayList replies;
     ArrayList requests;
 
-    public User(int flow_level, String email, String image, String name, int phoneNumber, ArrayList preferences, ArrayList replies, ArrayList requests) {
-        this.flow_level = flow_level;
+    public User(String email, Bitmap image, String name, String phoneNumber) {
+        this.flow_level = 0;
         this.email = email;
         this.image = image;
         this.name = name;
         this.phoneNumber = phoneNumber;
-        this.preferences = preferences;
-        this.replies = replies;
-        this.requests = requests;
+        this.preferences = new ArrayList();
+        this.replies = new ArrayList();
+        this.requests = new ArrayList();
     }
     public User(){
 
@@ -43,11 +45,11 @@ public class User {
         this.email = email;
     }
 
-    public String getImage() {
+    public Bitmap getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(Bitmap image) {
         this.image = image;
     }
 
@@ -59,11 +61,11 @@ public class User {
         this.name = name;
     }
 
-    public int getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
