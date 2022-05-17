@@ -43,7 +43,7 @@
         android:drawableRight="@drawable/ic_phone"
         android:drawablePadding="5sp"
         android:hint="מספר טלפון"
-        android:inputType="text"
+        android:inputType="phone"
         android:layoutDirection="rtl" />
 
     <Space
@@ -60,7 +60,6 @@
         android:drawablePadding="5sp"
         android:ems="10"
         android:hint="שם מלא"
-        android:inputType="text"
         android:layoutDirection="rtl" />
 
     <Space

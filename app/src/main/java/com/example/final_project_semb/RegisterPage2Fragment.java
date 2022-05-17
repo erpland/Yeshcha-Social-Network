@@ -1,20 +1,29 @@
 package com.example.final_project_semb;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link RegisterPage2Fragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RegisterPage2Fragment extends Fragment {
-
+public class RegisterPage2Fragment extends Fragment implements View.OnClickListener {
+    Button register,goBack;
+    ViewGroup root;
+    CallBackInterface callBackInterface;
+    EditText full_name,phone_number;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -54,11 +63,39 @@ public class RegisterPage2Fragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
-
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        callBackInterface = (CallBackInterface) context;
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_register_page2, container, false);
+        root = (ViewGroup) inflater.inflate(R.layout.fragment_register_page2,null);
+        initViews();
+        register.setOnClickListener(this);
+        goBack.setOnClickListener(this);
+        return root;
+//        return inflater.inflate(R.layout.fragment_register_page2, container, false);
+    }
+
+    private void initViews() {
+        register = root.findViewById(R.id.btn_registerFinish);
+        goBack = root.findViewById(R.id.btn_registerBack);
+        full_name = root.findViewById(R.id.et_nameRegister);
+        phone_number =root.findViewById(R.id.et_phoneRegister);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.btn_registerBack:
+                getParentFragmentManager().popBackStackImmediate();
+                break;
+            case R.id.btn_registerFinish:
+                callBackInterface.callBackReg2(view.getId(),full_name.getText().toString(),phone_number.getText().toString(),null);
+
+        }
     }
 }

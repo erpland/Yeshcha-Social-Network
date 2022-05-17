@@ -89,6 +89,6 @@ public class RegisterPage1Fragment extends Fragment implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        callBackInterface.callBack(view.getId());
+        callBackInterface.callBackReg1(view.getId(),email_et.getText().toString(),password_et.getText().toString(),passwordConfirm_et.getText().toString());
     }
 }
