@@ -61,16 +61,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             case R.id.tv_toLogin:
                 startActivity(new Intent(RegisterActivity.this,LoginActivity.class));
                 break;
-//            case R.id.btn_register:
-//                FragmentManager fragmentManager = getSupportFragmentManager();
-//                fragmentManager.beginTransaction()
-//                        .replace(R.id.fc_registerFgmntMngr, RegisterPage2Fragment.class, null)
-//                        .setReorderingAllowed(true)
-//                        .addToBackStack("name") // name can be null
-//                        .commit();
-//                break;
         }
     }
+
     public void callBackReg1(int viewId,String email,String password,String confirmPass){
         emailTxt=email;
         passwordTxt=password;
@@ -89,18 +82,17 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     Toast.makeText(this,"אימייל לא תקין",Toast.LENGTH_LONG).show();
                     return;
                 }
-                if (!fieldValidation(password,"^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{4,}$")) {
+                if (!fieldValidation(password,"^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#!-_$%^&+=])(?=\\S+$).{4,}$")) {
                     Toast.makeText(this,"סיסמא נדרשת להכיל לפחות אות אחת גדולה,אות קטנה, מספר,סימן מיוחד",Toast.LENGTH_LONG).show();
                     return;
                 }
-
-//
                 else {
                     FragmentManager fragmentManager = getSupportFragmentManager();
                     fragmentManager.beginTransaction()
+                            .setCustomAnimations(R.anim.slide_to_right,R.anim.slide_to_left,R.anim.slide_from_right,R.anim.slide_from_left)
                             .replace(R.id.frgCntr_fregments, RegisterPage2Fragment.class, null)
                             .setReorderingAllowed(true)
-                            .addToBackStack("name") // name can be null
+                            .addToBackStack(null) // name can be null
                             .commit();
 
                     break;
