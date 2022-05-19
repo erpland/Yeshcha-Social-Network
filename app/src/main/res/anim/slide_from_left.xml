@@ -7,5 +7,4 @@
     android:toXDelta="-110%"
     android:duration="500"
     />
-
 </set>

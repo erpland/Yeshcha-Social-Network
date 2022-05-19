@@ -9,10 +9,17 @@
         android:id="@+id/page_2"
         android:enabled="true"
         android:icon="@drawable/ic_user_icon"
-        android:title="פרופיל"/>
+        android:title="פרופיל"
+        />
     <item
         android:id="@+id/page_3"
         android:enabled="true"
         android:icon="@drawable/ic_post_add"
-        android:title="הוסף בקשה"/>
+        android:title="הוסף בקשה" />
+
+    <item
+        android:id="@+id/page_4"
+        android:enabled="true"
+        android:icon="@drawable/ic_settings"
+        android:title="הגדרות" />
 </menu>
