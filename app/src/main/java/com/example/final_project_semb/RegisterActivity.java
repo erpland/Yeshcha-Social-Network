@@ -27,6 +27,9 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.core.FirestoreClient;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener,CallBackInterface {
@@ -123,19 +126,39 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         }
         User user=new User(emailTxt,bitmapImage,nameTxt,phoneNumberTxt);
-        SignUpToFireBase(emailTxt,passwordTxt,user);
+        Map<String,Object>preferences=new HashMap<>();
+        Reply reply=new Reply();
+        Requests requests=new Requests();
+        createPreferencesList(preferences);
+        SignUpToFireBase(emailTxt,passwordTxt,user,preferences,reply,requests);
 
 
 
     }
-    private void SignUpToFireBase(String email,String password,User user){
+
+    private void createPreferencesList(@NonNull Map<String,Object> preferences) {
+        BasicProductsEqt basicEqt=new BasicProductsEqt(true,1,"Basics");
+        ComputerAndMobileEqt computerMobilEqt=new ComputerAndMobileEqt(true,2,"Computers and mobile");
+        OfficeEqt officeEqt=new OfficeEqt(true,3,"Office");
+        OthersEqt othersEqt=new OthersEqt(true,4,"Others");
+        PersonalHygieneEqt personalHygieneEqt=new PersonalHygieneEqt(true,5,"Personal hygiene");
+        PetEqt petEqt=new PetEqt(true,6,"Pets");
+        preferences.put("1",basicEqt);
+        preferences.put("2",computerMobilEqt);
+        preferences.put("3",officeEqt);
+        preferences.put("4",othersEqt);
+        preferences.put("5",personalHygieneEqt);
+        preferences.put("6",petEqt);
+    }
+
+    private void SignUpToFireBase(String email,String password,User user,Map<String,Object> preferences,Reply reply,Requests requests){
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             //save user to the database
-                            addUserToFireStore(user);
+                            addUserToFireStore(user,preferences,reply,requests);
                             // Sign in success, update UI with the signed-in user's information
                             Toast.makeText(RegisterActivity.this, "Authentication Success.",
                                     Toast.LENGTH_SHORT).show();
@@ -156,21 +179,16 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         return true;
     }
 
-    private void addUserToFireStore(User user){
+    private void addUserToFireStore(User user,Map<String,Object> preferences,Reply reply,Requests requests){
         // Add a new document with a generated ID
         db.collection("users").document(mAuth.getUid())
                 .set(user);
-//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//                    @Override
-//                    public void onSuccess(DocumentReference documentReference) {
-//                        Log.d("hiush", "DocumentSnapshot added with ID: " + documentReference.getId());
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Log.w("Bayush", "Error adding document", e);
-//                    }
-//                });
+        db.collection("Preferences").document(mAuth.getUid()).set(preferences);
+        db.collection("Replies").document(mAuth.getUid()).set(reply);
+        db.collection("Requests").document(mAuth.getUid()).set(requests);
+
+
+
+
     }
 }
