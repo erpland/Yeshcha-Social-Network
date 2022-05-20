@@ -11,9 +11,7 @@ public class User {
     Bitmap image;
     String name;
     String phoneNumber;
-    ArrayList preferences;
-    ArrayList replies;
-    ArrayList requests;
+
 
     public User(String email, Bitmap image, String name, String phoneNumber) {
         this.flow_level = 0;
@@ -21,9 +19,7 @@ public class User {
         this.image = image;
         this.name = name;
         this.phoneNumber = phoneNumber;
-        this.preferences = new ArrayList();
-        this.replies = new ArrayList();
-        this.requests = new ArrayList();
+
     }
     public User(){
 
@@ -69,27 +65,4 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public ArrayList getPreferences() {
-        return preferences;
-    }
-
-    public void setPreferences(ArrayList preferences) {
-        this.preferences = preferences;
-    }
-
-    public ArrayList getReplies() {
-        return replies;
-    }
-
-    public void setReplies(ArrayList replies) {
-        this.replies = replies;
-    }
-
-    public ArrayList getRequests() {
-        return requests;
-    }
-
-    public void setRequests(ArrayList requests) {
-        this.requests = requests;
-    }
 }
