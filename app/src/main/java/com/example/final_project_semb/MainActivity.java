@@ -1,14 +1,20 @@
 package com.example.final_project_semb;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
 import android.widget.ListView;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     ListView lstPosts;
+    BottomNavigationView bottomNavigation_ly;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,5 +31,27 @@ public class MainActivity extends AppCompatActivity {
 
         PostAdapter adapter = new PostAdapter(this,0,list);
         lstPosts.setAdapter(adapter);
+
+        bottomNavigation_ly = findViewById(R.id.bottom_navigation);
+        bottomNavigation_ly.setOnItemSelectedListener(item -> {
+            switch (item.getItemId()){
+                case R.id.settings_page:
+                    replaceFragment(new SettingsFragment());
+                    break;
+            }
+            return true;
+        });
+
+    }
+
+    private void replaceFragment(Fragment fragment){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+//                .setCustomAnimations(R.anim.slide_to_right,R.anim.slide_to_left,R.anim.slide_from_right,R.anim.slide_from_left)
+                .replace(R.id.fl_content, fragment, null)
+                .setReorderingAllowed(true)
+                .addToBackStack(null) // name can be null
+                .commit();
+
     }
 }

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="options">dropDownMenuExample</string>
+    <string-array name="distance_options">
+        <item>קילומטר</item>
+        <item>שני קילומטרים</item>
+        <item>שלושה קילומטרים</item>
+        <item>ארבעה קילומטרים</item>
+    </string-array>
+</resources>

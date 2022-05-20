@@ -9,6 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Final_Project_semB">
+
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="false" />
         <activity
             android:name=".StartActivity"
             android:exported="true">
@@ -26,8 +30,8 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="false" />
-
+            android:exported="false">
+        </activity>
 
         <meta-data
             android:name="preloaded_fonts"

@@ -13,6 +13,9 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+    <style parent="android:Widget.TextView" name="regularText">
+        <item name="android:fontFamily">@font/givert_levin</item>
+    </style>
     <style name="roundedCornersImageView" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
