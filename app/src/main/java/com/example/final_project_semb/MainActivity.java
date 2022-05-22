@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -155,8 +156,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void replaceFragment(Fragment fragment){
-        Bundle bundle =new Bundle();
-
+        // TODO: 22/05/2022 figure out how to send user object to fragment 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
 //                .setCustomAnimations(R.anim.slide_to_right,R.anim.slide_to_left,R.anim.slide_from_right,R.anim.slide_from_left)

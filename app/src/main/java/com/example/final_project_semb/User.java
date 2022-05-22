@@ -4,9 +4,10 @@ package com.example.final_project_semb;
 import android.graphics.Bitmap;
 import android.net.Uri;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class User {
+public class User implements Serializable {
     int flow_level;
     String email;
     String image;
