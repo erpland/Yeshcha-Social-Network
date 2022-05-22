@@ -1,25 +1,49 @@
 package com.example.final_project_semb;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     ListView lstPosts;
     BottomNavigationView bottomNavigation_ly;
+    FirebaseAuth mAuth;
+    FirebaseFirestore db;
+    DocumentReference userDocument;
+    User user=null;
+    Reply reply=null;
+    Requests requests=null;
+    Map<String,PreferencesManager>preferences=new HashMap<>();
+    Map<String,Object>test=new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         lstPosts = findViewById(R.id.lst_posts);
+        initVars();
+        initUser();
+        initReplies();
+        initPreferences();
+        initRequests();
         ArrayList<Post> list = new ArrayList<>();
 
         list.add(new Post("שלומי ואן סטפן","ישך ריזלה?!","מחפש ריזלה דחוף",R.drawable.user1,"חיפה"));
@@ -38,13 +62,101 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.settings_page:
                     replaceFragment(new SettingsFragment());
                     break;
+                case R.id.profile_page:
+                    replaceFragment(new ProfileFragment());
+                    break;
             }
             return true;
         });
 
     }
+    private void initVars(){
+        mAuth=FirebaseAuth.getInstance();
+        db=FirebaseFirestore.getInstance();
+
+
+    }
+
+    private void initUser(){
+        userDocument=db.collection("users").document(mAuth.getUid());
+        userDocument.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        user=document.toObject(User.class);
+                    } else {
+                        Log.d("tag1", "userNotExist", task.getException());
+                    }
+                } else {
+                    Log.d("tag1", "userNotSucess ", task.getException());
+                }
+            }
+        });
+    }
+
+
+
+    private void initReplies(){
+        userDocument=db.collection("Replies").document(mAuth.getUid());
+        userDocument.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        reply=document.toObject(Reply.class);
+                    } else {
+                        Log.d("tag1", "get failed with Replies", task.getException());
+                    }
+                } else {
+                    Log.d("tag1", "RepliesNotFound", task.getException());
+                }
+            }
+        });
+    }
+    private void initRequests(){
+        userDocument=db.collection("Requests").document(mAuth.getUid());
+        userDocument.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        requests=document.toObject(Requests.class);
+                    } else {
+                        Log.d("tag1", "get failed with Requests ", task.getException());
+                    }
+                } else {
+                    Log.d("tag1", "RequestsNotFound", task.getException());
+                }
+            }
+        });
+    }
+    private void initPreferences(){
+        userDocument=db.collection("Preferences").document(mAuth.getUid());
+        userDocument.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        test=document.getData();
+                    } else {
+                        Log.d("tag1", "get failed with Preferences ", task.getException());
+                    }
+                } else {
+                    Log.d("tag1", "PreferencesNotFOUND ", task.getException());
+                }
+            }
+        });
+    }
+
 
     private void replaceFragment(Fragment fragment){
+        Bundle bundle =new Bundle();
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
 //                .setCustomAnimations(R.anim.slide_to_right,R.anim.slide_to_left,R.anim.slide_from_right,R.anim.slide_from_left)

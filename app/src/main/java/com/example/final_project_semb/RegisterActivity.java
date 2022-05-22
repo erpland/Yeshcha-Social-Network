@@ -31,6 +31,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.core.FirestoreClient;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -117,7 +118,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     public void callBackReg2(int viewId, String name, String phoneNumber, Uri image) {
         nameTxt=name;
         phoneNumberTxt=phoneNumber;
-        imagePath=image;
         switch (viewId){
             case R.id.btn_registerFinish:
                 if (name.isEmpty()||phoneNumber.isEmpty())
@@ -134,15 +134,17 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     return;
                 }
                 break;
-
-
         }
-        User user=new User(emailTxt,imagePath,nameTxt,phoneNumberTxt);
+
+
+        User user=new User(emailTxt,null,nameTxt,phoneNumberTxt);
         Map<String,Object>preferences=new HashMap<>();
         Reply reply=new Reply();
         Requests requests=new Requests();
         createPreferencesList(preferences);
-        SignUpToFireBase(emailTxt,passwordTxt,user,preferences,reply,requests);
+        SignUpToFireBase(emailTxt,passwordTxt,user,preferences,reply,requests,image);
+
+
 
 
 
@@ -168,13 +170,26 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         preferences.put("6",petEqt);
     }
 
-    private void SignUpToFireBase(String email,String password,User user,Map<String,Object> preferences,Reply reply,Requests requests){
+    private void SignUpToFireBase(String email,String password,User user,Map<String,Object> preferences,Reply reply,Requests requests,Uri image){
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             //save user to the database
+                            UploadTask imageUpload=storageReference.child(mAuth.getUid()).child("Profile_"+System.currentTimeMillis()+".jpg").putFile(image);
+                            imageUpload.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        imagePath=uri;
+                                    }
+                                });
+                                }
+                            });
+                            user.setImage(imagePath.toString());
                             addUserToFireStore(user,preferences,reply,requests);
                             // Sign in success, update UI with the signed-in user's information
                             Toast.makeText(RegisterActivity.this, "Authentication Success.",
@@ -209,27 +224,37 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
-
+    //upload image
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (resultCode){
+
+        switch (requestCode){
+
             case GALLERY_PHOTO:
                 if (resultCode==RESULT_OK) {
-                    Toast.makeText(this, "Image captured", Toast.LENGTH_LONG).show();
-                    Uri uri = data.getData();
-                    storageReference.putFile(uri);
+
+//                    Toast.makeText(this, "Image captured", Toast.LENGTH_LONG).show();
+                    imagePath = data.getData();
+                    Toast.makeText(this,"first time uri"+imagePath.toString(),Toast.LENGTH_SHORT).show();
                 }
                 else{
+                    Toast.makeText(this,"hi3",Toast.LENGTH_LONG).show();
                     Toast.makeText(this,"Operation failed",Toast.LENGTH_LONG).show();
                 }
                 break;
 
         }
     }
-
+    //open gallery
     private void takeGalleryAction(){
         Intent pickPhoto=new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(pickPhoto,GALLERY_PHOTO);
     }
+
+    public Uri getImageUri(){
+
+        return imagePath;
+    }
+
 }

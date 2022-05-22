@@ -9,12 +9,12 @@ import java.util.ArrayList;
 public class User {
     int flow_level;
     String email;
-    Uri image;
+    String image;
     String name;
     String phoneNumber;
 
 
-    public User(String email, Uri image, String name, String phoneNumber) {
+    public User(String email, String image, String name, String phoneNumber) {
         this.flow_level = 0;
         this.email = email;
         this.image = image;
@@ -42,11 +42,11 @@ public class User {
         this.email = email;
     }
 
-    public Uri getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(Uri image) {
+    public void setImage(String image) {
         this.image = image;
     }
 

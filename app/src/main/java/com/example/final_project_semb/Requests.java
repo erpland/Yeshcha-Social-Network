@@ -11,6 +11,13 @@ public class Requests {
         posts=new ArrayList<>();
     }
 
+    public Requests(int requestAmount,ArrayList<Post>postsParam) {
+        this.requestAmount=requestAmount;
+        for (int i=0;i<postsParam.size();i++){
+            SetPosts(postsParam.get(i));
+        }
+    }
+
     public int getRequestAmount() {
         return requestAmount;
     }

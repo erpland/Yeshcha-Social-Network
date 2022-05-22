@@ -4,12 +4,17 @@ import java.util.ArrayList;
 
 public class Reply {
     int replyAmount;
-    ArrayList<Post> posts;
+
 
     public Reply() {
         this.replyAmount=0;
-        posts=new ArrayList<>();
+
     }
+
+    public Reply(int replyAmount) {
+        this.replyAmount=replyAmount;
+    }
+
 
     public int getReplyAmount() {
         return replyAmount;
@@ -19,16 +24,6 @@ public class Reply {
         this.replyAmount++;
     }
 
-    public ArrayList<Post> getPostList() {
-        return this.posts;
-    }
 
-    public void SetPosts(Post pst) {
-        if (pst!=null) {
-            posts.add(pst);
-        }
-        else{
-            return;
-        }
-    }
+
 }

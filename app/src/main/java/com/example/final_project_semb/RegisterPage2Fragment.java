@@ -1,6 +1,8 @@
 package com.example.final_project_semb;
 
+import android.app.Activity;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,9 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,11 +27,14 @@ import java.util.Objects;
  * create an instance of this fragment.
  */
 public class RegisterPage2Fragment extends Fragment implements View.OnClickListener {
-    Button register,goBack;
+    Button register, goBack;
     ViewGroup root;
     CallBackInterface callBackInterface;
-    EditText full_name,phone_number;
+    EditText full_name, phone_number;
     RelativeLayout imageSection;
+    RegisterActivity registerActivity;
+    Uri imagePathReceivedFromActivity;
+    ImageView profilePic;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -65,16 +74,18 @@ public class RegisterPage2Fragment extends Fragment implements View.OnClickListe
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         callBackInterface = (CallBackInterface) context;
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        root = (ViewGroup) inflater.inflate(R.layout.fragment_register_page2,null);
+        root = (ViewGroup) inflater.inflate(R.layout.fragment_register_page2, null);
         initViews();
         register.setOnClickListener(this);
         goBack.setOnClickListener(this);
@@ -87,21 +98,39 @@ public class RegisterPage2Fragment extends Fragment implements View.OnClickListe
         register = root.findViewById(R.id.btn_registerFinish);
         goBack = root.findViewById(R.id.btn_registerBack);
         full_name = root.findViewById(R.id.et_nameRegister);
-        phone_number =root.findViewById(R.id.et_phoneRegister);
-        imageSection=root.findViewById(R.id.rly_addPhoto);
+        phone_number = root.findViewById(R.id.et_phoneRegister);
+        imageSection = root.findViewById(R.id.rly_addPhoto);
+        profilePic = root.findViewById(R.id.iv_avatar);
+
+        registerActivity = (RegisterActivity) getActivity();
     }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.btn_registerBack:
                 getParentFragmentManager().popBackStackImmediate();
                 break;
             case R.id.btn_registerFinish:
-                callBackInterface.callBackReg2(view.getId(),full_name.getText().toString(),phone_number.getText().toString(),null);
+                callBackInterface.callBackReg2(view.getId(), full_name.getText().toString(), phone_number.getText().toString(), imagePathReceivedFromActivity);
                 break;
             case R.id.rly_addPhoto:
                 callBackInterface.callBackImageMethod(view.getId());
+
+                new Timer().schedule(new TimerTask() {
+                    // TODO: 22/05/2022 change timer to async/await
+                                         @Override
+                                         public void run() {
+                                             getActivity().runOnUiThread(new Runnable() {
+                                                 @Override
+                                                 public void run() {
+                                                     imagePathReceivedFromActivity = registerActivity.getImageUri();
+                                                     profilePic.setImageURI(imagePathReceivedFromActivity);
+                                                 }
+                                             });
+                                         }
+                                     }, 5000
+                );
 
 
         }
