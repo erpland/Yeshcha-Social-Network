@@ -1,12 +1,15 @@
 package com.example.final_project_semb;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
@@ -26,6 +29,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.core.FirestoreClient;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,10 +42,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     TextView toLogin_btn;
 
     String emailTxt,passwordTxt,nameTxt,phoneNumberTxt;
-    Bitmap bitmapImage;
+    private final static int GALLERY_PHOTO=99;
     FirebaseAuth mAuth;
     FirebaseFirestore db;
-
+    FirebaseStorage firebaseStorage;
+    StorageReference storageReference;
+    Uri imagePath;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +62,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         toLogin_btn = findViewById(R.id.tv_toLogin);
             mAuth=FirebaseAuth.getInstance();
             db=FirebaseFirestore.getInstance();
+            firebaseStorage=FirebaseStorage.getInstance();
+            storageReference=firebaseStorage.getReference("Users");
+
 
     }
 
@@ -104,10 +114,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     @Override
-    public void callBackReg2(int viewId, String name, String phoneNumber, Bitmap imageMap) {
+    public void callBackReg2(int viewId, String name, String phoneNumber, Uri image) {
         nameTxt=name;
         phoneNumberTxt=phoneNumber;
-        bitmapImage=imageMap;
+        imagePath=image;
         switch (viewId){
             case R.id.btn_registerFinish:
                 if (name.isEmpty()||phoneNumber.isEmpty())
@@ -123,9 +133,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     Toast.makeText(this,"מספר טלפון לא תקין",Toast.LENGTH_LONG).show();
                     return;
                 }
+                break;
+
 
         }
-        User user=new User(emailTxt,bitmapImage,nameTxt,phoneNumberTxt);
+        User user=new User(emailTxt,imagePath,nameTxt,phoneNumberTxt);
         Map<String,Object>preferences=new HashMap<>();
         Reply reply=new Reply();
         Requests requests=new Requests();
@@ -134,6 +146,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
 
 
+    }
+
+    @Override
+    public void callBackImageMethod(int viewId) {
+        takeGalleryAction();
     }
 
     private void createPreferencesList(@NonNull Map<String,Object> preferences) {
@@ -190,5 +207,29 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
 
 
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode){
+            case GALLERY_PHOTO:
+                if (resultCode==RESULT_OK) {
+                    Toast.makeText(this, "Image captured", Toast.LENGTH_LONG).show();
+                    Uri uri = data.getData();
+                    storageReference.putFile(uri);
+                }
+                else{
+                    Toast.makeText(this,"Operation failed",Toast.LENGTH_LONG).show();
+                }
+                break;
+
+        }
+    }
+
+    private void takeGalleryAction(){
+        Intent pickPhoto=new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(pickPhoto,GALLERY_PHOTO);
     }
 }

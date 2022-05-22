@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 
 import java.util.Objects;
 
@@ -24,6 +25,7 @@ public class RegisterPage2Fragment extends Fragment implements View.OnClickListe
     ViewGroup root;
     CallBackInterface callBackInterface;
     EditText full_name,phone_number;
+    RelativeLayout imageSection;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -76,6 +78,7 @@ public class RegisterPage2Fragment extends Fragment implements View.OnClickListe
         initViews();
         register.setOnClickListener(this);
         goBack.setOnClickListener(this);
+        imageSection.setOnClickListener(this);
         return root;
 //        return inflater.inflate(R.layout.fragment_register_page2, container, false);
     }
@@ -85,6 +88,7 @@ public class RegisterPage2Fragment extends Fragment implements View.OnClickListe
         goBack = root.findViewById(R.id.btn_registerBack);
         full_name = root.findViewById(R.id.et_nameRegister);
         phone_number =root.findViewById(R.id.et_phoneRegister);
+        imageSection=root.findViewById(R.id.rly_addPhoto);
     }
 
     @Override
@@ -95,6 +99,10 @@ public class RegisterPage2Fragment extends Fragment implements View.OnClickListe
                 break;
             case R.id.btn_registerFinish:
                 callBackInterface.callBackReg2(view.getId(),full_name.getText().toString(),phone_number.getText().toString(),null);
+                break;
+            case R.id.rly_addPhoto:
+                callBackInterface.callBackImageMethod(view.getId());
+
 
         }
     }

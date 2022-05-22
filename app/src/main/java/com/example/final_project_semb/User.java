@@ -2,18 +2,19 @@ package com.example.final_project_semb;
 
 
 import android.graphics.Bitmap;
+import android.net.Uri;
 
 import java.util.ArrayList;
 
 public class User {
     int flow_level;
     String email;
-    Bitmap image;
+    Uri image;
     String name;
     String phoneNumber;
 
 
-    public User(String email, Bitmap image, String name, String phoneNumber) {
+    public User(String email, Uri image, String name, String phoneNumber) {
         this.flow_level = 0;
         this.email = email;
         this.image = image;
@@ -41,11 +42,11 @@ public class User {
         this.email = email;
     }
 
-    public Bitmap getImage() {
+    public Uri getImage() {
         return image;
     }
 
-    public void setImage(Bitmap image) {
+    public void setImage(Uri image) {
         this.image = image;
     }
 
