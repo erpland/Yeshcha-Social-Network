@@ -6,6 +6,9 @@ public class BasicProductsEqt extends PreferencesManager {
     public BasicProductsEqt(boolean isActive, int preferenceCode,String preferenceName) {
         super(isActive,preferenceCode,preferenceName);
     }
+    public BasicProductsEqt(BasicProductsEqt obj) {
+        super(obj);
+    }
 
 
 }

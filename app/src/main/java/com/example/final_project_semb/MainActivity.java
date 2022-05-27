@@ -19,6 +19,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,8 +33,9 @@ public class MainActivity extends AppCompatActivity {
     User user=null;
     Reply reply=null;
     Requests requests=null;
-    Map<String,PreferencesManager>preferences=new HashMap<>();
-    Map<String,Object>test=new HashMap<>();
+    Map<String,Object>preferences=new HashMap<>();
+
+    Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +63,15 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigation_ly.setOnItemSelectedListener(item -> {
             switch (item.getItemId()){
                 case R.id.settings_page:
-                    replaceFragment(new SettingsFragment());
+                    Fragment settingsFragment=new SettingsFragment();
+                    bundle=new Bundle();
+                    bundle.putSerializable("settingParcel", (Serializable) preferences);
+                    settingsFragment.setArguments(bundle);
+                    replaceFragment(settingsFragment);
                     break;
                 case R.id.profile_page:
                     Fragment profile=new ProfileFragment();
-                    Bundle bundle=new Bundle();
+                   bundle=new Bundle();
                     bundle.putParcelable("userParcel",user);
                     profile.setArguments(bundle);
                     replaceFragment(profile);
@@ -147,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        test=document.getData();
+                        preferences=document.getData();
                     } else {
                         Log.d("tag1", "get failed with Preferences ", task.getException());
                     }

@@ -6,6 +6,9 @@ public class PersonalHygieneEqt extends PreferencesManager {
     public PersonalHygieneEqt(boolean isActive, int preferenceCode ,String preferenceName) {
         super(isActive,preferenceCode,preferenceName);
     }
+    public PersonalHygieneEqt(PersonalHygieneEqt obj){
+        super(obj);
+    }
 
 
 }

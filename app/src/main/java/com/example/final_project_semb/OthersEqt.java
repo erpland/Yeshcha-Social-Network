@@ -6,7 +6,9 @@ public class OthersEqt extends PreferencesManager {
     public OthersEqt(boolean isActive, int preferenceCode ,String preferenceName) {
         super(isActive,preferenceCode,preferenceName);
     }
-
+    public OthersEqt(OthersEqt obj){
+        super(obj);
+    }
 
 
 }

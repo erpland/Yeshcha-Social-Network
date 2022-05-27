@@ -6,5 +6,8 @@ public class ComputerAndMobileEqt extends PreferencesManager {
     public ComputerAndMobileEqt(boolean isActive, int preferenceCode,String preferenceName) {
         super(isActive,preferenceCode,preferenceName);
     }
+    public ComputerAndMobileEqt(ComputerAndMobileEqt obj){
+        super(obj);
+    }
 
 }

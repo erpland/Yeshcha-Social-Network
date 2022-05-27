@@ -6,6 +6,8 @@ public class OfficeEqt extends PreferencesManager {
     public OfficeEqt(boolean isActive, int preferenceCode,String preferenceName){
         super(isActive,preferenceCode,preferenceName);
     }
-
+    public OfficeEqt(OfficeEqt obj){
+        super(obj);
+    }
 
 }
