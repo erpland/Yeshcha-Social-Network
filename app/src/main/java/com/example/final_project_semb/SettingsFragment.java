@@ -61,7 +61,8 @@ public class SettingsFragment extends Fragment {
         switches[3] = root.findViewById(R.id.switch4);
         switches[4] = root.findViewById(R.id.switch5);
         switches[5] = root.findViewById(R.id.switch6);
-        // TODO: 27/05/2022 figure out how to cast hash map objects 
+        // TODO: 27/05/2022 figure out how to cast hash map objects
+        //test
 //        basicEqt = new BasicProductsEqt((BasicProductsEqt) preferences.get("1").;
 
 //        computerMobilEqt =new ComputerAndMobileEqt ((ComputerAndMobileEqt) preferences.get("2"));

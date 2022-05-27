@@ -4,6 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -60,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
         lstPosts.setAdapter(adapter);
 
         bottomNavigation_ly = findViewById(R.id.bottom_navigation);
+        NavController navController = Navigation.findNavController(this,R.id.fl_content);
+        NavigationUI.setupWithNavController(bottomNavigation_ly,navController);
         bottomNavigation_ly.setOnItemSelectedListener(item -> {
             switch (item.getItemId()){
                 case R.id.settings_page:
