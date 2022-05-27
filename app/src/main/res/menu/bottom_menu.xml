@@ -10,6 +10,7 @@
         android:enabled="true"
         android:icon="@drawable/ic_user_icon"
         android:title="פרופיל"
+
         />
     <item
         android:id="@+id/post_page"
@@ -22,5 +23,5 @@
         android:enabled="true"
         android:icon="@drawable/ic_settings"
         android:title="הגדרות"
-        android:actionLayout="@layout/activity_settings"/>
+        />
 </menu>

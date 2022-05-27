@@ -121,6 +121,7 @@ public class RegisterPage2Fragment extends Fragment implements View.OnClickListe
                     // TODO: 22/05/2022 change timer to async/await
                                          @Override
                                          public void run() {
+                                             // TODO: 27/05/2022 fixed timer with async func 
                                              getActivity().runOnUiThread(new Runnable() {
                                                  @Override
                                                  public void run() {

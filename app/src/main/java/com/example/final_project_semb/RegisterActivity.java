@@ -3,6 +3,7 @@ package com.example.final_project_semb;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
@@ -49,6 +50,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     FirebaseStorage firebaseStorage;
     StorageReference storageReference;
     Uri imagePath;
+    FragmentManager fragmentManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +68,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             db=FirebaseFirestore.getInstance();
             firebaseStorage=FirebaseStorage.getInstance();
             storageReference=firebaseStorage.getReference("Users");
+
 
 
     }
@@ -101,12 +105,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     return;
                 }
                 else {
-                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    fragmentManager = getSupportFragmentManager();
                     fragmentManager.beginTransaction()
                             .setCustomAnimations(R.anim.slide_to_right,R.anim.slide_to_left,R.anim.slide_from_right,R.anim.slide_from_left)
                             .replace(R.id.frgCntr_fregments, RegisterPage2Fragment.class, null)
                             .setReorderingAllowed(true)
-                            .addToBackStack(null) // name can be null
+                            .addToBackStack("f1") // name can be null
                             .commit();
 
                     break;
@@ -178,22 +182,29 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                         if (task.isSuccessful()) {
                             //save user to the database
                             UploadTask imageUpload=storageReference.child(mAuth.getUid()).child("Profile_"+System.currentTimeMillis()+".jpg").putFile(image);
+
                             imageUpload.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                 @Override
                                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
                                 storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                     @Override
                                     public void onSuccess(Uri uri) {
-                                        imagePath=uri;
+                                        imagePath=taskSnapshot.getUploadSessionUri();
+
+
                                     }
                                 });
                                 }
                             });
+
                             user.setImage(imagePath.toString());
                             addUserToFireStore(user,preferences,reply,requests);
                             // Sign in success, update UI with the signed-in user's information
                             Toast.makeText(RegisterActivity.this, "Authentication Success.",
                                     Toast.LENGTH_SHORT).show();
+
+
                             startActivity(new Intent(RegisterActivity.this,MainActivity.class));
                         } else {
                             // If sign in fails, display a message to the user.
@@ -234,12 +245,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             case GALLERY_PHOTO:
                 if (resultCode==RESULT_OK) {
 
-//                    Toast.makeText(this, "Image captured", Toast.LENGTH_LONG).show();
+//
                     imagePath = data.getData();
-                    Toast.makeText(this,"first time uri"+imagePath.toString(),Toast.LENGTH_SHORT).show();
+
                 }
                 else{
-                    Toast.makeText(this,"hi3",Toast.LENGTH_LONG).show();
+
                     Toast.makeText(this,"Operation failed",Toast.LENGTH_LONG).show();
                 }
                 break;

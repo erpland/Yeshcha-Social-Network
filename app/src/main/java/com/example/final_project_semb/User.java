@@ -3,11 +3,13 @@ package com.example.final_project_semb;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class User implements Serializable {
+public class User implements Parcelable {
     int flow_level;
     String email;
     String image;
@@ -26,6 +28,26 @@ public class User implements Serializable {
     public User(){
 
     }
+
+    protected User(Parcel in) {
+        flow_level = in.readInt();
+        email = in.readString();
+        image = in.readString();
+        name = in.readString();
+        phoneNumber = in.readString();
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 
     public int getFlow_level() {
         return flow_level;
@@ -67,4 +89,17 @@ public class User implements Serializable {
         this.phoneNumber = phoneNumber;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(flow_level);
+        parcel.writeString(email);
+        parcel.writeString(image);
+        parcel.writeString(name);
+        parcel.writeString(phoneNumber);
+    }
 }

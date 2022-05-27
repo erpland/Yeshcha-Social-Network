@@ -64,7 +64,11 @@ public class MainActivity extends AppCompatActivity {
                     replaceFragment(new SettingsFragment());
                     break;
                 case R.id.profile_page:
-                    replaceFragment(new ProfileFragment());
+                    Fragment profile=new ProfileFragment();
+                    Bundle bundle=new Bundle();
+                    bundle.putParcelable("userParcel",user);
+                    profile.setArguments(bundle);
+                    replaceFragment(profile);
                     break;
             }
             return true;
@@ -156,11 +160,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void replaceFragment(Fragment fragment){
-        // TODO: 22/05/2022 figure out how to send user object to fragment 
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
 //                .setCustomAnimations(R.anim.slide_to_right,R.anim.slide_to_left,R.anim.slide_from_right,R.anim.slide_from_left)
-                .replace(R.id.fl_content, fragment, null)
+                .replace(R.id.fl_content, fragment)
                 .setReorderingAllowed(true)
                 .addToBackStack(null) // name can be null
                 .commit();
