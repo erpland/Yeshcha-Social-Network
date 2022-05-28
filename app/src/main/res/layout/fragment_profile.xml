@@ -13,7 +13,7 @@
         android:id="@+id/textView8"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/givert_levin"
         android:gravity="center"
         android:text="פרופיל"
@@ -42,21 +42,24 @@
             android:id="@+id/textView20"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="64dp"
             android:text="מדד הזרימה שלך"
+            app:layout_constraintBottom_toTopOf="@+id/rb_profileStars"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/profile_phone" />
+            app:layout_constraintTop_toBottomOf="@+id/profile_phone"
+            app:layout_constraintVertical_chainStyle="packed" />
 
         <RatingBar
             android:id="@+id/rb_profileStars"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:isIndicator="true"
             android:max="5"
             android:numStars="5"
             android:progress="0"
             android:progressTint="@color/sub_headline"
             android:rating="2"
+            app:layout_constraintBottom_toTopOf="@+id/tv_profileStarsTitle"
             app:layout_constraintEnd_toEndOf="@+id/textView20"
             app:layout_constraintHorizontal_bias="0.503"
             app:layout_constraintStart_toStartOf="@+id/textView20"
@@ -104,6 +107,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="זורם חלקית"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/rb_profileStars"
             app:layout_constraintStart_toStartOf="@+id/rb_profileStars"
             app:layout_constraintTop_toBottomOf="@+id/rb_profileStars" />

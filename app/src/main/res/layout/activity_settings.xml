@@ -6,14 +6,13 @@
     android:layout_height="match_parent"
     android:background="@color/main_green"
     android:elevation="5dp"
-    app:circularflow_radiusInDP="50dp"
-    tools:context=".SettingsActivity">
+    app:circularflow_radiusInDP="50dp">
 
     <TextView
         android:id="@+id/textView8"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/givert_levin"
         android:gravity="center"
         android:text="הגדרות"
