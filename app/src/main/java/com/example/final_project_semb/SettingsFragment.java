@@ -21,59 +21,35 @@ import java.util.Map;
 
 public class SettingsFragment extends Fragment {
     ViewGroup root;
-    Map<String, Object> preferences = new HashMap<>();
     SwitchMaterial[] switches = new SwitchMaterial[6];
-    BasicProductsEqt basicEqt;
-    ComputerAndMobileEqt computerMobilEqt;
-    OfficeEqt officeEqt;
-    PersonalHygieneEqt personalHygieneEqt;
-    PetEqt petEqt;
-    OthersEqt othersEqt;
-    ArrayList<PreferencesManager>preferencesManagers;
+    PreferencesManager preferencesManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         root = (ViewGroup) inflater.inflate(R.layout.fragment_settings, null);
+        preferencesManager = getArguments().getParcelable("settingsParcel");
         Spinner spinnerLanguages = root.findViewById(R.id.spinner_distance);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(root.getContext(), R.array.distance_options, android.R.layout.simple_spinner_item);
-
-        preferences = (Map<String, Object>) getArguments().getSerializable("settingParcel");
-        initValues();
-//        setSwitches();
-        Toast.makeText(root.getContext(), preferences.get("1").toString(), Toast.LENGTH_LONG).show();
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         spinnerLanguages.setAdapter(adapter);
+        initValues();
+        setSwitches();
         return root;
     }
 
     private void setSwitches() {
-    for (int i=0;i<switches.length;i++){
-        switches[i].setChecked(preferencesManagers.get(i+1).getIsActive());
-    }
+        ArrayList<Boolean> activeStates = preferencesManager.GetArrayOfActiveState();
+        for (int i = 0; i < switches.length; i++) {
+            switches[i].setChecked(activeStates.get(i));
+        }
     }
 
     private void initValues() {
-        switches[0] = root.findViewById(R.id.switch1);
-        switches[1] = root.findViewById(R.id.switch2);
-        switches[2] = root.findViewById(R.id.switch3);
-        switches[3] = root.findViewById(R.id.switch4);
-        switches[4] = root.findViewById(R.id.switch5);
-        switches[5] = root.findViewById(R.id.switch6);
-        // TODO: 27/05/2022 figure out how to cast hash map objects
-        //test
-//        basicEqt = new BasicProductsEqt((BasicProductsEqt) preferences.get("1").;
-
-//        computerMobilEqt =new ComputerAndMobileEqt ((ComputerAndMobileEqt) preferences.get("2"));
-//        officeEqt = new OfficeEqt((OfficeEqt) preferences.get("3"));
-//        othersEqt = new OthersEqt((OthersEqt) preferences.get("4"));
-//        personalHygieneEqt =new PersonalHygieneEqt ((PersonalHygieneEqt) preferences.get("5"));
-//        petEqt = new PetEqt((PetEqt) preferences.get("6"));
-//        preferencesManagers=new ArrayList<>(){
-//            {add(basicEqt);add(computerMobilEqt);add(officeEqt);add(othersEqt);add(personalHygieneEqt);add(petEqt);
-//            }
-//        };
-
+        for (int i = 0; i < switches.length; i++) {
+            int resID = getResources().getIdentifier("switch" + (i + 1), "id", root.getContext().getPackageName());
+            switches[i] = root.findViewById(resID);
+        }
     }
 }

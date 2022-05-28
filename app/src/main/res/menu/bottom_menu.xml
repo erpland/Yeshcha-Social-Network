@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/home_page"
+        android:id="@+id/homeFragment"
         android:enabled="true"
         android:icon="@drawable/ic_home_icon"
         android:title="עמוד ראשי"/>
     <item
-        android:id="@+id/profile_page"
+        android:id="@+id/profileFragment"
         android:enabled="true"
         android:icon="@drawable/ic_user_icon"
         android:title="פרופיל"
@@ -19,7 +19,7 @@
         android:title="הוסף בקשה" />
 
     <item
-        android:id="@+id/settings_page"
+        android:id="@+id/settingsFragment"
         android:enabled="true"
         android:icon="@drawable/ic_settings"
         android:title="הגדרות"

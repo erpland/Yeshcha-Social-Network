@@ -3,41 +3,29 @@ package com.example.final_project_semb;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.core.FirestoreClient;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener,CallBackInterface {
 
@@ -160,18 +148,18 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void createPreferencesList(@NonNull Map<String,Object> preferences) {
-        BasicProductsEqt basicEqt=new BasicProductsEqt(true,1,"Basics");
-        ComputerAndMobileEqt computerMobilEqt=new ComputerAndMobileEqt(true,2,"Computers and mobile");
-        OfficeEqt officeEqt=new OfficeEqt(true,3,"Office");
-        OthersEqt othersEqt=new OthersEqt(true,4,"Others");
-        PersonalHygieneEqt personalHygieneEqt=new PersonalHygieneEqt(true,5,"Personal hygiene");
-        PetEqt petEqt=new PetEqt(true,6,"Pets");
-        preferences.put("1",basicEqt);
-        preferences.put("2",computerMobilEqt);
-        preferences.put("3",officeEqt);
-        preferences.put("4",othersEqt);
-        preferences.put("5",personalHygieneEqt);
-        preferences.put("6",petEqt);
+        Preference basicEqt=new Preference(true,0,"Basics");
+        Preference computerMobilEqt=new Preference(true,1,"Computers and mobile");
+        Preference officeEqt=new Preference(true,2,"Office");
+        Preference othersEqt=new Preference(true,3,"Others");
+        Preference personalHygieneEqt=new Preference(true,4,"Personal hygiene");
+        Preference petEqt=new Preference(true,5,"Pets");
+        preferences.put("basicEqt",basicEqt);
+        preferences.put("computerMobilEqt",computerMobilEqt);
+        preferences.put("officeEqt",officeEqt);
+        preferences.put("othersEqt",othersEqt);
+        preferences.put("personalHygieneEqt",personalHygieneEqt);
+        preferences.put("petEqt",petEqt);
     }
 
     private void SignUpToFireBase(String email,String password,User user,Map<String,Object> preferences,Reply reply,Requests requests,Uri image){
@@ -205,7 +193,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                     Toast.LENGTH_SHORT).show();
 
 
-                            startActivity(new Intent(RegisterActivity.this,MainActivity.class));
+                            startActivity(new Intent(RegisterActivity.this, MainActivity.class));
                         } else {
                             // If sign in fails, display a message to the user.
 
