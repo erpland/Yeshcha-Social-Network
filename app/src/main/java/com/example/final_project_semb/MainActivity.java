@@ -41,9 +41,9 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        demoData();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        demoData();
         initVars();
         initUser();
         initReplies();
