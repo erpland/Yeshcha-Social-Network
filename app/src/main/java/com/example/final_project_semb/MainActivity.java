@@ -7,6 +7,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+import android.app.FragmentManager;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -32,7 +34,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener, HomeFragment.PostCallback {
+public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener, HomeFragment.PostCallback, OpenPostFragment.OpenPostCallback {
     BottomNavigationView bottomNavigation_ly;
     FirebaseAuth mAuth;
     FirebaseFirestore db;
@@ -44,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     NavController navController;
     PreferencesManager preferencesManager;
     BottomNavigationView bottomNavigationView;
+    FrameLayout postsHost;
 
 
     ArrayList<Post> list = new ArrayList<>(); // demo
@@ -55,18 +58,15 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
         demoData();
         initVars();
+        initViews();
         initUser();
         initReplies();
         initPreferences();
         initRequests();
+        initNavbar();
 
-        //DEMO!
-
-
-        navController = Navigation.findNavController(this, R.id.activity_main_nav_host_fragment);
-        bottomNavigationView = findViewById(R.id.activity_main_bottom_navigation_view);
-        NavigationUI.setupWithNavController(bottomNavigationView, navController);
         bottomNavigationView.setOnItemSelectedListener(this);
+
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask(){
             @Override
@@ -109,7 +109,14 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
     }
-
+    private void initViews(){
+        postsHost = findViewById(R.id.fl_postsHost);
+        bottomNavigationView = findViewById(R.id.activity_main_bottom_navigation_view);
+    }
+    private void initNavbar(){
+        navController = Navigation.findNavController(this, R.id.activity_main_nav_host_fragment);
+        NavigationUI.setupWithNavController(bottomNavigationView, navController);
+    }
     private void initUser() {
         userDocument = db.collection("users").document(mAuth.getUid());
         userDocument.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -211,11 +218,16 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
     @Override
     public void getClickedPost(View id, Post post) {
-        FrameLayout postsHost = findViewById(R.id.fl_postsHost);
+
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.fl_postsHost, new OpenPostFragment(), null)
                 .setReorderingAllowed(true)
-                .addToBackStack("f1") // name can be null
+                .addToBackStack("openPostFragment") // name can be null
                 .commit();
+    }
+
+    @Override
+    public void closeOpenPostFragment() {
+        getSupportFragmentManager().popBackStack("openPostFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 }

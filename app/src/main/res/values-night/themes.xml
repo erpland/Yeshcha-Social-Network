@@ -12,6 +12,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+
     </style>
     <style parent="android:Widget.TextView" name="regularText">
         <item name="android:fontFamily">@font/givert_levin</item>
@@ -19,5 +20,19 @@
     <style name="roundedCornersImageView" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
+    </style>
+    <style name="Divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">?android:attr/listDivider</item>
+    </style>
+    <style name="Widget.App.Button.OutlinedButton.IconOnly" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="iconPadding">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:minWidth">28dp</item>
+        <item name="android:minHeight">28dp</item>
+        <item name="iconTint">#C55757</item>
     </style>
 </resources>

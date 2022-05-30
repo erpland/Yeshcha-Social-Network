@@ -9,11 +9,13 @@
     tools:context=".OpenPostFragment">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cv_postCardView"
         android:layout_width="match_parent"
         android:layout_height="400dp"
         android:layout_marginHorizontal="10dp"
         android:layout_marginVertical="10dp"
         android:elevation="5dp"
+        android:translationZ="10dp"
         app:cardBackgroundColor="#e7e7e7"
         app:cardCornerRadius="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -28,17 +30,34 @@
             android:orientation="vertical"
             android:weightSum="12">
 
-            <com.google.android.gms.maps.MapView
-                android:id="@+id/mapView"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="5" />
+                android:layout_weight="6">
+
+                <com.google.android.gms.maps.MapView
+                    android:id="@+id/mapView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="5" />
+
+                <Button
+                    android:id="@+id/btn_closePostFrmnt"
+                    style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="13dp"
+                    app:icon="@drawable/ic_baseline_close_24" />
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginHorizontal="10dp"
-                android:layout_weight="5"
+                android:layout_weight="4"
                 android:layoutDirection="rtl"
                 android:orientation="horizontal"
                 android:weightSum="8">
