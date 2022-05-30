@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/loaderFragment">
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.final_project_semb.HomeFragment"
@@ -19,4 +19,9 @@
         android:name="com.example.final_project_semb.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/loaderFragment"
+        android:name="com.example.final_project_semb.LoaderFragment"
+        android:label="fragment_loader"
+        tools:layout="@layout/fragment_loader" />
 </navigation>

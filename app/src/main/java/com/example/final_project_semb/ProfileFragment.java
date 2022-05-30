@@ -39,8 +39,6 @@ public class ProfileFragment extends Fragment {
         initValues();
         name.setText(user.getName());
         phone.setText(user.getPhoneNumber());
-        // TODO: 27/05/2022 ask roie what to do with profile picture-maybe async?
-//        profilePic.setImageURI(Uri.parse(user.getImage()));
         getProfileImage();
         stars.setRating(user.getFlow_level());
         return root;
