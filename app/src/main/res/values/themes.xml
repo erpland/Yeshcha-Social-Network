@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.Final_Project_semB" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimary">@color/main_green</item>
         <item name="colorPrimaryVariant">@color/main_green</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
@@ -34,5 +34,8 @@
         <item name="android:minWidth">28dp</item>
         <item name="android:minHeight">28dp</item>
         <item name="iconTint">#C55757</item>
+    </style>
+    <style name="AlertDialogCustom" parent="ThemeOverlay.AppCompat.Dialog.Alert">
+        <item name="android:layoutDirection">rtl</item>
     </style>
 </resources>

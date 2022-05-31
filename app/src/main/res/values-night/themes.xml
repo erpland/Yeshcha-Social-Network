@@ -35,4 +35,7 @@
         <item name="android:minHeight">28dp</item>
         <item name="iconTint">#C55757</item>
     </style>
+    <style name="AlertDialogCustom" parent="ThemeOverlay.AppCompat.Dialog.Alert">
+        <item name="android:layoutDirection">rtl</item>
+    </style>
 </resources>
