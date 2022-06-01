@@ -53,7 +53,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener, HomeFragment.PostCallback, OpenPostFragment.OpenPostCallback {
+public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener, PostAdapter.PostCallback, OpenPostFragment.OpenPostCallback {
     BottomNavigationView bottomNavigation_ly;
     FirebaseAuth mAuth;
     FirebaseFirestore db;
