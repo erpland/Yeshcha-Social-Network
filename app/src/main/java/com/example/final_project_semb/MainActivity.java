@@ -4,6 +4,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -15,18 +16,13 @@ import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -35,7 +31,6 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -44,16 +39,13 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener, PostAdapter.PostCallback, OpenPostFragment.OpenPostCallback {
+public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener, PostAdapter.PostCallback, FragmentHandler {
     BottomNavigationView bottomNavigation_ly;
     FirebaseAuth mAuth;
     FirebaseFirestore db;
@@ -69,6 +61,10 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     private FusedLocationProviderClient fusedLocationClient;
     Location currentLocation;
     private static final int LOCATION_CODE = 44;
+    FrameLayout postsHost_fl;
+    Fragment openPostFragment;
+    Fragment newPostFragment;
+
 
     ArrayList<Post> list = new ArrayList<>(); // demo
 
@@ -94,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                if (user != null && reply != null && requests != null && preferencesManager != null && currentLocation !=null) {
+                if (user != null && reply != null && requests != null && preferencesManager != null && currentLocation != null) {
                     closeLoader();
                     timer.cancel();
                 }
@@ -149,17 +145,10 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                             if ((fineLocationGranted != null && fineLocationGranted) || (coarseLocationGranted != null && coarseLocationGranted)) {
                                 getCurrentLocation();
                             } else {
-                                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},LOCATION_CODE);
+                                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_CODE);
                             }
                         }
                 );
-
-
-// ...
-
-// Before you perform the actual permission request, check whether your app
-// already has the permissions, and whether your app needs to show a permission
-// rationale dialog. For more details, see Request permissions.
         locationPermissionRequest.launch(new String[]{
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION
@@ -169,13 +158,12 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode){
+        switch (requestCode) {
             case LOCATION_CODE:
-                if(grantResults[0] == PackageManager.PERMISSION_GRANTED || grantResults[1] == PackageManager.PERMISSION_GRANTED){
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED || grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                     getCurrentLocation();
-                }
-                else{
-                    new AlertDialog.Builder(this,R.style.AlertDialogCustom)
+                } else {
+                    new AlertDialog.Builder(this, R.style.AlertDialogCustom)
                             .setTitle("בעיה...")
                             .setMessage("לא אישרת הרשאת גישה למיקום שלך לכן לא ניתן להמשיך")
                             .setNegativeButton("אני אפס...", new DialogInterface.OnClickListener() {
@@ -219,6 +207,12 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         list.add(new Post("מוטי אבנר", "ישך מחק?!", "מחפש מחק למחוק משהו", R.drawable.user4, "כפר סבא"));
         list.add(new Post("דודו אהרון", "ישך סיר לחץ?!", "מחפש סיר לחץ לבישול בשר בקר", R.drawable.user5, "הרצליה"));
         list.add(new Post("הדר בירקנשטוק", "ישך פקק?!", "מחפש מחק פקק לבקבוק קוקה קולה", R.drawable.user6, "כוכב יאיר"));
+        list.add(new Post("שלומי ואן סטפן", "ישך ריזלה?!", "מחפש ריזלה דחוף", R.drawable.user1, "חיפה"));
+        list.add(new Post("סמי עופר", "ישך סובארו אימפרזה?!", "מחפש סובארו אימפרזה טורבו לשוד", R.drawable.user2, "רופין"));
+        list.add(new Post("דליה רביץ", "ישך מחשב נייד?!", "מחפשת נייד לפרוץ לפנטגון", R.drawable.user3, "אשדוד"));
+        list.add(new Post("מוטי אבנר", "ישך מחק?!", "מחפש מחק למחוק משהו", R.drawable.user4, "כפר סבא"));
+        list.add(new Post("דודו אהרון", "ישך סיר לחץ?!", "מחפש סיר לחץ לבישול בשר בקר", R.drawable.user5, "הרצליה"));
+        list.add(new Post("הדר בירקנשטוק", "ישך פקק?!", "מחפש מחק פקק לבקבוק קוקה קולה", R.drawable.user6, "כוכב יאיר"));
     }
 
     private void initVars() {
@@ -229,6 +223,9 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     private void initViews() {
         postsHost = findViewById(R.id.fl_postsHost);
         bottomNavigationView = findViewById(R.id.activity_main_bottom_navigation_view);
+        openPostFragment = new OpenPostFragment();
+        newPostFragment = new NewPostFragment();
+        postsHost_fl = findViewById(R.id.fl_postsHost);
     }
 
     private void initNavbar() {
@@ -317,6 +314,11 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        if (openPostFragment.isVisible())
+            closeFragments(openPostFragment);
+        else if (newPostFragment.isVisible())
+            closeFragments(newPostFragment);
+
         Bundle bundle = new Bundle();
         switch (item.getItemId()) {
             case R.id.homeFragment:
@@ -331,22 +333,32 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 bundle.putParcelable("settingsParcel", preferencesManager);
                 Navigation.findNavController(this, R.id.activity_main_nav_host_fragment).navigate(R.id.settingsFragment, bundle);
                 break;
+            case R.id.newPostFragment:
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.fl_postsHost, newPostFragment, null)
+                        .setReorderingAllowed(true)
+                        .addToBackStack("openPostFragment") // name can be null
+                        .commit();
+//                Navigation.findNavController(this, R.id.activity_main_nav_host_fragment).navigate(R.id.newPostFragment, bundle);
         }
         return true;
     }
 
     @Override
     public void getClickedPost(View id, Post post) {
-
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fl_postsHost, new OpenPostFragment(), null)
+        ft.replace(R.id.fl_postsHost, openPostFragment, null)
                 .setReorderingAllowed(true)
                 .addToBackStack("openPostFragment") // name can be null
                 .commit();
     }
 
     @Override
-    public void closeOpenPostFragment() {
+    public void closeAllFragment() {
         getSupportFragmentManager().popBackStack("openPostFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+    }
+
+    public void closeFragments(Fragment f) {
+       getSupportFragmentManager().beginTransaction().remove(f).commit();
     }
 }

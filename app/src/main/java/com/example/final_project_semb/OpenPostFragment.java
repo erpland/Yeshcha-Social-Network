@@ -27,21 +27,31 @@ public class OpenPostFragment extends Fragment implements View.OnClickListener, 
     MapView mapView;
     ViewGroup root;
     Button close_btn;
-    OpenPostCallback openPostCallback;
+    FragmentHandler fragmentHandler;
+    CardView postCardView;
+    ConstraintLayout openPostOverlay;
     private GoogleMap mMap;
+
     @Override
 
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        openPostCallback = (OpenPostCallback) context;
+        fragmentHandler = (FragmentHandler) context;
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        root = (ViewGroup)inflater.inflate(R.layout.fragment_open_post, container, false);
+        root = (ViewGroup) inflater.inflate(R.layout.fragment_open_post, container, false);
         initViews();
         close_btn.setOnClickListener(this);
+        postCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        openPostOverlay.setOnClickListener(this);
         mapView.getMapAsync(this);
         mapView.onCreate(savedInstanceState);
         return root;
@@ -50,13 +60,16 @@ public class OpenPostFragment extends Fragment implements View.OnClickListener, 
     private void initViews() {
         mapView = root.findViewById(R.id.mapView);
         close_btn = root.findViewById(R.id.btn_closePostFrmnt);
+        postCardView = root.findViewById(R.id.cv_postCardView);
+        openPostOverlay = root.findViewById(R.id.cl_openPostOverlay);
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btn_closePostFrmnt:
-                openPostCallback.closeOpenPostFragment();
+            case R.id.cl_openPostOverlay:
+                fragmentHandler.closeAllFragment();
                 break;
         }
     }
@@ -64,17 +77,14 @@ public class OpenPostFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
-        LatLng telAviv = new LatLng(32.0853,34.7818);
+        LatLng telAviv = new LatLng(32.0853, 34.7818);
         mMap.addMarker(new MarkerOptions()
                 .position(telAviv)
                 .title("אני פה"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(telAviv,16f));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(telAviv, 16f));
     }
 
 
-    public interface OpenPostCallback{
-        public void closeOpenPostFragment();
-    }
 
     @Override
     public void onResume() {
