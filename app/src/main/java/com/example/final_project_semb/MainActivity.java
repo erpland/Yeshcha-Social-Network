@@ -38,6 +38,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,9 +51,11 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     BottomNavigationView bottomNavigation_ly;
     FirebaseAuth mAuth;
     FirebaseFirestore db;
-    DocumentReference userDocument;
+    DocumentReference userDocument, postsDocument;
+    ArrayList<Post> posts;
     User user = null;
     Reply reply = null;
+    Post post = null;
     Requests requests = null;
     Map<String, Object> preferences = new HashMap<>();
     NavController navController;
@@ -66,8 +70,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     Fragment newPostFragment;
 
 
-    ArrayList<Post> list = new ArrayList<>(); // demo
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,10 +77,11 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         askLocationPermission();
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        demoData();
+//        demoData();
         initVars();
         initViews();
         initUser();
+        initPosts();
         initReplies();
         initPreferences();
         initRequests();
@@ -191,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             @Override
             public void run() {
                 Bundle bundle = new Bundle();
-                bundle.putParcelableArrayList("postParcel", (ArrayList<? extends Parcelable>) list);
+                bundle.putParcelableArrayList("postParcel", (ArrayList<? extends Parcelable>) posts);
                 bottomNavigationView.setVisibility(View.VISIBLE);
                 Navigation.findNavController(MainActivity.this, R.id.activity_main_nav_host_fragment).navigate(R.id.homeFragment, bundle);
             }
@@ -200,20 +203,20 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
     }
 
-    private void demoData() {
-        list.add(new Post("שלומי ואן סטפן", "ישך ריזלה?!", "מחפש ריזלה דחוף", R.drawable.user1, "חיפה"));
-        list.add(new Post("סמי עופר", "ישך סובארו אימפרזה?!", "מחפש סובארו אימפרזה טורבו לשוד", R.drawable.user2, "רופין"));
-        list.add(new Post("דליה רביץ", "ישך מחשב נייד?!", "מחפשת נייד לפרוץ לפנטגון", R.drawable.user3, "אשדוד"));
-        list.add(new Post("מוטי אבנר", "ישך מחק?!", "מחפש מחק למחוק משהו", R.drawable.user4, "כפר סבא"));
-        list.add(new Post("דודו אהרון", "ישך סיר לחץ?!", "מחפש סיר לחץ לבישול בשר בקר", R.drawable.user5, "הרצליה"));
-        list.add(new Post("הדר בירקנשטוק", "ישך פקק?!", "מחפש מחק פקק לבקבוק קוקה קולה", R.drawable.user6, "כוכב יאיר"));
-        list.add(new Post("שלומי ואן סטפן", "ישך ריזלה?!", "מחפש ריזלה דחוף", R.drawable.user1, "חיפה"));
-        list.add(new Post("סמי עופר", "ישך סובארו אימפרזה?!", "מחפש סובארו אימפרזה טורבו לשוד", R.drawable.user2, "רופין"));
-        list.add(new Post("דליה רביץ", "ישך מחשב נייד?!", "מחפשת נייד לפרוץ לפנטגון", R.drawable.user3, "אשדוד"));
-        list.add(new Post("מוטי אבנר", "ישך מחק?!", "מחפש מחק למחוק משהו", R.drawable.user4, "כפר סבא"));
-        list.add(new Post("דודו אהרון", "ישך סיר לחץ?!", "מחפש סיר לחץ לבישול בשר בקר", R.drawable.user5, "הרצליה"));
-        list.add(new Post("הדר בירקנשטוק", "ישך פקק?!", "מחפש מחק פקק לבקבוק קוקה קולה", R.drawable.user6, "כוכב יאיר"));
-    }
+//    private void demoData() {
+//        list.add(new Post("שלומי ואן סטפן", "ישך ריזלה?!", "מחפש ריזלה דחוף", R.drawable.user1, "חיפה"));
+//        list.add(new Post("סמי עופר", "ישך סובארו אימפרזה?!", "מחפש סובארו אימפרזה טורבו לשוד", R.drawable.user2, "רופין"));
+//        list.add(new Post("דליה רביץ", "ישך מחשב נייד?!", "מחפשת נייד לפרוץ לפנטגון", R.drawable.user3, "אשדוד"));
+//        list.add(new Post("מוטי אבנר", "ישך מחק?!", "מחפש מחק למחוק משהו", R.drawable.user4, "כפר סבא"));
+//        list.add(new Post("דודו אהרון", "ישך סיר לחץ?!", "מחפש סיר לחץ לבישול בשר בקר", R.drawable.user5, "הרצליה"));
+//        list.add(new Post("הדר בירקנשטוק", "ישך פקק?!", "מחפש מחק פקק לבקבוק קוקה קולה", R.drawable.user6, "כוכב יאיר"));
+//        list.add(new Post("שלומי ואן סטפן", "ישך ריזלה?!", "מחפש ריזלה דחוף", R.drawable.user1, "חיפה"));
+//        list.add(new Post("סמי עופר", "ישך סובארו אימפרזה?!", "מחפש סובארו אימפרזה טורבו לשוד", R.drawable.user2, "רופין"));
+//        list.add(new Post("דליה רביץ", "ישך מחשב נייד?!", "מחפשת נייד לפרוץ לפנטגון", R.drawable.user3, "אשדוד"));
+//        list.add(new Post("מוטי אבנר", "ישך מחק?!", "מחפש מחק למחוק משהו", R.drawable.user4, "כפר סבא"));
+//        list.add(new Post("דודו אהרון", "ישך סיר לחץ?!", "מחפש סיר לחץ לבישול בשר בקר", R.drawable.user5, "הרצליה"));
+//        list.add(new Post("הדר בירקנשטוק", "ישך פקק?!", "מחפש מחק פקק לבקבוק קוקה קולה", R.drawable.user6, "כוכב יאיר"));
+//    }
 
     private void initVars() {
         mAuth = FirebaseAuth.getInstance();
@@ -250,6 +253,28 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 }
             }
         });
+    }
+
+    private void initPosts() {
+        posts = new ArrayList<>();
+        db.collection("Posts")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d("TAG", document.getId() + " => " + document.getData());
+                                post = document.toObject(Post.class);
+                                posts.add(post);
+                            }
+                        } else {
+                            Log.d("TAG", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
+
     }
 
     private void initReplies() {
@@ -322,7 +347,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         Bundle bundle = new Bundle();
         switch (item.getItemId()) {
             case R.id.homeFragment:
-                bundle.putParcelableArrayList("postParcel", (ArrayList<? extends Parcelable>) list);
+                bundle.putParcelableArrayList("postParcel", (ArrayList<? extends Parcelable>) posts);
                 Navigation.findNavController(this, R.id.activity_main_nav_host_fragment).navigate(R.id.homeFragment, bundle);
                 break;
             case R.id.profileFragment:
@@ -359,6 +384,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     }
 
     public void closeFragments(Fragment f) {
-       getSupportFragmentManager().beginTransaction().remove(f).commit();
+        getSupportFragmentManager().beginTransaction().remove(f).commit();
     }
 }

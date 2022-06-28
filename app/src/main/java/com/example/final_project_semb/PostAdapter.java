@@ -38,7 +38,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         postCallback = (PostCallback) context;
         Post p = arr.get(position);
-        holder.imgPost.setImageResource(p.userImage);
+        holder.imgPost.setImageResource(Integer.parseInt(p.image));
         holder.title.setText(p.title);
         holder.body.setText(p.body);
         holder.name.setText(p.name);
@@ -57,25 +57,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         public void getClickedPost(View id,Post post);
     }
 
-//    @NonNull
-//    @Override
-//    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-//        if (convertView == null) {
-//            LayoutInflater i = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//            convertView = i.inflate(R.layout.post_layout, null);
-//        }
-//        if (arr.size() > 0) {
-//            Post p = arr.get(position);
-//            ImageView imgPost = convertView.findViewById(R.id.userImg);
-//            TextView title = convertView.findViewById(R.id.title);
-//            TextView body = convertView.findViewById(R.id.body);
-//            TextView name = convertView.findViewById(R.id.userName);
-//            TextView location = convertView.findViewById(R.id.location);
-//
-//
-//        }
-//        return convertView;
-//    }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView title, body, name, location;
