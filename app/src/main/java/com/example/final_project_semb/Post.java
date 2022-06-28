@@ -1,8 +1,18 @@
 package com.example.final_project_semb;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.Date;
 
@@ -13,6 +23,8 @@ public class Post implements Parcelable {
     boolean isActive;
     Date date;
     Location geoLocation;
+
+
 public Post(){}
     public Post(String body, Date date, Location geoLocation, String image,boolean isActive,String name,String phoneNumber,String title) {
         this.name = name;
@@ -23,18 +35,21 @@ public Post(){}
         this.isActive=isActive;
         this.geoLocation = geoLocation;
         this.phoneNumber=phoneNumber;
+
     }
+
+
 
     protected Post(Parcel in) {
         name = in.readString();
         title = in.readString();
         body = in.readString();
-//        location = in.readString();
         image = in.readString();
         user = in.readParcelable(User.class.getClassLoader());
         isActive = in.readByte() != 0;
         geoLocation = in.readParcelable(Location.class.getClassLoader());
         phoneNumber=in.readString();
+
     }
 
     public static final Creator<Post> CREATOR = new Creator<Post>() {
@@ -61,7 +76,7 @@ public Post(){}
         return body;
     }
 
-    public String getUserImage() {
+    public String getImage() {
         return image;
     }
 
@@ -91,7 +106,7 @@ public Post(){}
         this.location = location;
     }
 
-    public void setUserImage(String image) {
+    public void setImage(String image) {
         this.image = image;
     }
 
@@ -121,7 +136,6 @@ public Post(){}
         dest.writeString(name);
         dest.writeString(title);
         dest.writeString(body);
-//        dest.writeString(location);
         dest.writeString(image);
         dest.writeParcelable(user, flags);
         dest.writeByte((byte) (isActive ? 1 : 0));
