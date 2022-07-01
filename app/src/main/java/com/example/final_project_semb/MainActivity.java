@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     FrameLayout postsHost_fl;
     Fragment openPostFragment;
     Fragment newPostFragment;
+    Fragment publicProfileFragment;
 
 
     @Override
@@ -229,6 +230,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         bottomNavigationView = findViewById(R.id.activity_main_bottom_navigation_view);
         openPostFragment = new OpenPostFragment();
         newPostFragment = new NewPostFragment();
+        publicProfileFragment=new PublicProfileFragment();
         postsHost_fl = findViewById(R.id.fl_postsHost);
     }
 
@@ -388,10 +390,21 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
     @Override
     public void getClickedPost(View id, Post post) {
+        Log.d("TAG", "getClickedPost:post ");
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.fl_postsHost, openPostFragment, null)
                 .setReorderingAllowed(true)
                 .addToBackStack("openPostFragment") // name can be null
+                .commit();
+    }
+
+    @Override
+    public void getClickedUser(View id, User user) {
+        Log.d("TAG", "getClickedUser:User ");
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.fl_postsHost, publicProfileFragment, null)
+                .setReorderingAllowed(true)
+                .addToBackStack("publicProfile") // name can be null
                 .commit();
     }
 

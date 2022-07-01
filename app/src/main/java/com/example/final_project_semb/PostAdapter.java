@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -50,18 +51,27 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         postCallback = (PostCallback) context;
         Post p = arr.get(position);
-        getBitMapedImage(p.image,holder);
+        getBitMapedImage(p.user.image,holder);
 //        Bitmap bmp = BitmapFactory.decodeByteArray(imgBytes, 0, imgBytes.length);
 
 //        holder.imgPost.setImageResource(Integer.parseInt(p.image));
         holder.title.setText(p.title);
         holder.body.setText(p.body);
-        holder.name.setText(p.name);
+        holder.name.setText(p.user.name);
         holder.location.setText(p.location);
+        holder.imgPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                postCallback.getClickedUser(holder.itemView,p.user);
+
+            }
+        });
         holder.parentView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 postCallback.getClickedPost(holder.itemView, p);
+
             }
         });
     }
@@ -72,6 +82,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
     public interface PostCallback {
         public void getClickedPost(View id, Post post);
+        public void getClickedUser(View id,User user);
 
     }
 
@@ -80,6 +91,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         private TextView title, body, name, location;
         private ImageView imgPost;
         private View parentView;
+
 
 
         public ViewHolder(@NonNull View view) {
