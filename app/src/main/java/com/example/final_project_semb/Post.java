@@ -1,31 +1,22 @@
 package com.example.final_project_semb;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
-
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.Date;
 
 public class Post implements Parcelable {
     String name,title,body,location,phoneNumber;
     String image;
-    User user;
+    String userUid;
     boolean isActive;
     Date date;
+    User user;
     Location geoLocation;
 
 
-public Post(){}
+    public Post(){}
     public Post(String body, Date date, Location geoLocation, String image,boolean isActive,String name,String phoneNumber,String title) {
         this.name = name;
         this.title = title;
@@ -45,8 +36,9 @@ public Post(){}
         title = in.readString();
         body = in.readString();
         image = in.readString();
-        user = in.readParcelable(User.class.getClassLoader());
+        userUid = in.readString();
         isActive = in.readByte() != 0;
+        user = in.readParcelable(User.class.getClassLoader());
         geoLocation = in.readParcelable(Location.class.getClassLoader());
         phoneNumber=in.readString();
 
@@ -86,6 +78,9 @@ public Post(){}
         return phoneNumber;
     }
 
+    public String getUserUid(){return userUid;}
+    public User getUser(){return user;}
+
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
@@ -110,7 +105,10 @@ public Post(){}
         this.image = image;
     }
 
-    public void setUser(User user) {
+    public void setUserUid(String userUid) {
+        this.userUid = userUid;
+    }
+    public void setUser(User user){
         this.user = user;
     }
 
@@ -137,8 +135,9 @@ public Post(){}
         dest.writeString(title);
         dest.writeString(body);
         dest.writeString(image);
-        dest.writeParcelable(user, flags);
+        dest.writeString(userUid);
         dest.writeByte((byte) (isActive ? 1 : 0));
         dest.writeParcelable(geoLocation, flags);
+        dest.writeParcelable(user,flags);
     }
 }

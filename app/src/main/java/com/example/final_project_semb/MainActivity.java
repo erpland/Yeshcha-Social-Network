@@ -93,7 +93,8 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                if (user != null && reply != null && requests != null && preferencesManager != null && currentLocation != null) {
+                //&& reply != null && requests != null && preferencesManager != null && currentLocation != null
+                if (user != null ) {
                     closeLoader();
                     timer.cancel();
                 }
@@ -264,9 +265,25 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d("TAG", document.getId() + " => " + document.getData());
                                 post = document.toObject(Post.class);
-                                posts.add(post);
+                                DocumentReference docRef = db.collection("users").document(post.userUid);
+                                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            DocumentSnapshot document = task.getResult();
+                                            if (document != null) {
+                                                post.setUser(document.toObject(User.class));
+                                                posts.add(post);
+                                            } else {
+                                                Log.d("LOGGER", "No such document");
+                                            }
+                                        } else {
+                                            Log.d("LOGGER", "get failed with ", task.getException());
+                                        }
+                                    }
+                                });
+
                             }
                         } else {
                             Log.d("TAG", "Error getting documents: ", task.getException());
