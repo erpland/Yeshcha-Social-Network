@@ -23,6 +23,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Parcelable;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -35,25 +36,30 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener, PostAdapter.PostCallback, FragmentHandler, OpenPostFragment.OpenPostInterface {
+public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener, PostAdapter.PostCallback, FragmentHandler, OpenPostFragment.OpenPostInterface, NewPostFragment.AddPostInterface {
     BottomNavigationView bottomNavigation_ly;
     FirebaseAuth mAuth;
     FirebaseFirestore db;
@@ -389,6 +395,9 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 Navigation.findNavController(this, R.id.activity_main_nav_host_fragment).navigate(R.id.settingsFragment, bundle);
                 break;
             case R.id.newPostFragment:
+                bundle.putParcelable("userParcel", user);
+                bundle.putParcelable("currentLocation",currentLocation);
+                newPostFragment.setArguments(bundle);
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.fl_postsHost, newPostFragment, null)
                         .setReorderingAllowed(true)
@@ -444,28 +453,17 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
     @Override
     public void openChat(View view, String phoneNumber) {
-//        try{
-//            PackageManager packageManager = this.getPackageManager();
-//            Intent i = new Intent(Intent.ACTION_VIEW);
-//            String url = "https://api.whatsapp.com/send?phone="+ "0549828502" +"&text=" + URLEncoder.encode("היי,יש לי!", "UTF-8");
-//            i.setPackage("com.whatsapp");
-//            i.setData(Uri.parse(url));
-//            if (i.resolveActivity(packageManager) != null) {
-//                startActivity(i);
-//            }else {
-//              Toast.makeText(this,"לא הצלחנו להמשיך הלאה...",Toast.LENGTH_SHORT).show();
-//            }
-//        } catch(Exception e) {
-//            Toast.makeText(this,"אירעה שגיאה בעת שליחת ההודעה!!!",Toast.LENGTH_SHORT).show();
-//
-//        }
+        reply.increaseReplyAmount();
+        db.collection("Replies").document(mAuth.getUid()).set(reply);
         boolean installed = appInstalledOrNot("com.whatsapp");
         if (installed){
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(Uri.parse("http://api.whatsapp.com/send?phone="+"+972"+"0549828502" + "&text="+"Hi there!!!"));
             startActivity(intent);
         }else {
-            Toast.makeText(MainActivity.this, "Whats app not installed on your device", Toast.LENGTH_SHORT).show();
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage("+972"+phoneNumber, null, "אשמח לעזור!!", null, null);
+            Toast.makeText(this,"הודעת אס אם אס נשלחה ליעד",Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -481,4 +479,28 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         }
         return app_installed;
     }
+
+    @Override
+    public void addNewPost(View view, String title, String body, Location location, Date date) {
+      Post post=new Post(body,date,location.getLatitude(),location.getLongitude(),title,mAuth.getUid());
+        addPostToFireStore(post);
+        requests.increaseRequestAmount();
+        requests.SetPosts(post);
+        db.collection("Requests").document(mAuth.getUid()).set(requests);
+
+    }
+
+
+    private void addPostToFireStore(Post post) {
+        // Add a new document with a generated ID
+         db.collection("Posts").document(mAuth.getUid()+"$$"+System.currentTimeMillis())
+                .set(post);
+        getSupportFragmentManager().popBackStack("openPostFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+
+
+
+    }
+
+
 }

@@ -58,6 +58,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView16">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/new_post_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/heebo"
@@ -81,6 +82,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/et_newPostTitle">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/new_post_body"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/heebo"
@@ -95,15 +97,15 @@
                 android:id="@+id/imageView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignEnd="@id/textView19"
+                android:layout_alignEnd="@id/new_post_location"
                 android:layout_alignParentRight="true"
                 android:src="@drawable/ic_location_wrapper"
-                app:layout_constraintBottom_toTopOf="@+id/button2"
+                app:layout_constraintBottom_toTopOf="@+id/new_post_cancel"
                 app:layout_constraintEnd_toEndOf="@+id/et_newPostDesc"
                 app:layout_constraintTop_toBottomOf="@+id/et_newPostDesc" />
 
             <TextView
-                android:id="@+id/textView19"
+                android:id="@+id/new_post_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
@@ -115,7 +117,7 @@
                 app:layout_constraintTop_toTopOf="@+id/imageView3" />
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/new_post_cancel"
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -125,12 +127,12 @@
                 android:textColor="#C83939"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/button4"
+                app:layout_constraintBottom_toBottomOf="@+id/new_post_add"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/button4" />
+                app:layout_constraintTop_toTopOf="@+id/new_post_add" />
 
             <Button
-                android:id="@+id/button4"
+                android:id="@+id/new_post_add"
                 style="@style/Widget.Material3.Button.ElevatedButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

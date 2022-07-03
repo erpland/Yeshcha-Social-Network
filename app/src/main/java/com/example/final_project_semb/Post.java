@@ -9,12 +9,12 @@ import com.google.type.LatLng;
 import java.util.Date;
 
 public class Post implements Parcelable {
-    String title, body, location;
+    String title, body;
     String userUid;
     boolean isActive;
     Date date;
     User user;
-    LatLng geoLocation;
+//    LatLng geoLocation;
     double distanceFromUser;
 
     double lat,lng;
@@ -26,13 +26,15 @@ public class Post implements Parcelable {
     public void setDistanceFromUser(double distanceFromUser) {
         this.distanceFromUser = distanceFromUser;
     }
-    public Post(String body, Date date, LatLng geoLocation, boolean isActive, String title) {
+    public Post(String body, Date date, double lat,double lng, String title, String userUid) {
 
         this.title = title;
         this.body = body;
         this.date = date;
-        this.isActive = isActive;
-        this.geoLocation = geoLocation;
+        this.isActive = true;
+        this.lat=lat;
+        this.lng=lng;
+        this.userUid=userUid;
     }
 
 
@@ -42,7 +44,7 @@ public class Post implements Parcelable {
         userUid = in.readString();
         isActive = in.readByte() != 0;
         user = in.readParcelable(User.class.getClassLoader());
-        geoLocation = in.readParcelable(LatLng.class.getClassLoader());
+//        geoLocation = in.readParcelable(LatLng.class.getClassLoader());
     }
 
     public static final Creator<Post> CREATOR = new Creator<Post>() {
@@ -80,11 +82,9 @@ public class Post implements Parcelable {
         return body;
     }
 
-    public String getLocation() {
-        return location;
-    }
 
-    public LatLng getGeoLocation(){return geoLocation;}
+
+//    public LatLng getGeoLocation(){return geoLocation;}
 
     public String getUserUid() {
         return userUid;
@@ -102,9 +102,7 @@ public class Post implements Parcelable {
         this.body = body;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
-    }
+
 
     public void setUserUid(String userUid) {
         this.userUid = userUid;
@@ -122,9 +120,9 @@ public class Post implements Parcelable {
         this.date = date;
     }
 
-    public void setGeoLocation(LatLng geoLocation) {
-        this.geoLocation = geoLocation;
-    }
+//    public void setGeoLocation(LatLng geoLocation) {
+//        this.geoLocation = geoLocation;
+//    }
 
     @Override
     public int describeContents() {
