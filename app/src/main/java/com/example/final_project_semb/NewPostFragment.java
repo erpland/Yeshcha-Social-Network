@@ -47,7 +47,7 @@ FragmentHandler fragmentHandler;
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.newPostOverlay:
-                fragmentHandler.closeAllFragment();
+                fragmentHandler.closeAllFragment(this);
         }
     }
 }

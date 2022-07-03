@@ -27,6 +27,7 @@ public class OpenPostFragment extends Fragment implements View.OnClickListener, 
     MapView mapView;
     ViewGroup root;
     Button close_btn;
+    Post post;
     FragmentHandler fragmentHandler;
     CardView postCardView;
     ConstraintLayout openPostOverlay;
@@ -43,6 +44,7 @@ public class OpenPostFragment extends Fragment implements View.OnClickListener, 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         root = (ViewGroup) inflater.inflate(R.layout.fragment_open_post, container, false);
+        post = (Post) getArguments().getParcelable("post");
         initViews();
         close_btn.setOnClickListener(this);
         postCardView.setOnClickListener(new View.OnClickListener() {
@@ -69,7 +71,7 @@ public class OpenPostFragment extends Fragment implements View.OnClickListener, 
         switch (v.getId()) {
             case R.id.btn_closePostFrmnt:
             case R.id.cl_openPostOverlay:
-                fragmentHandler.closeAllFragment();
+                fragmentHandler.closeAllFragment(this);
                 break;
         }
     }
@@ -77,11 +79,11 @@ public class OpenPostFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
-        LatLng telAviv = new LatLng(32.0853, 34.7818);
+        LatLng location = new LatLng(post.getLat(),post.getLng());
         mMap.addMarker(new MarkerOptions()
-                .position(telAviv)
+                .position(location)
                 .title("אני פה"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(telAviv, 16f));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 16f));
     }
 
 

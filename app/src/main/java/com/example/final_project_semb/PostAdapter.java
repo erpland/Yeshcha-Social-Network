@@ -44,7 +44,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         this.context = context;
         this.arr = new ArrayList<>(posts);
         bmp=BitmapFactory.decodeResource(context.getResources(),R.drawable.green_noise);
-
     }
 
     @Override
@@ -52,13 +51,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         postCallback = (PostCallback) context;
         Post p = arr.get(position);
         getBitMapedImage(p.user.image,holder);
-//        Bitmap bmp = BitmapFactory.decodeByteArray(imgBytes, 0, imgBytes.length);
-
-//        holder.imgPost.setImageResource(Integer.parseInt(p.image));
         holder.title.setText(p.title);
         holder.body.setText(p.body);
         holder.name.setText(p.user.name);
-        holder.location.setText(p.location);
+        holder.location.setText("" + p.distanceFromUser);
         holder.imgPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -67,7 +63,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
             }
         });
-        holder.parentView.setOnClickListener(new View.OnClickListener() {
+        holder.postView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 postCallback.getClickedPost(holder.itemView, p);
@@ -83,20 +79,16 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     public interface PostCallback {
         public void getClickedPost(View id, Post post);
         public void getClickedUser(View id,User user);
-
     }
-
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView title, body, name, location;
         private ImageView imgPost;
-        private View parentView;
-
-
+        private View postView;
 
         public ViewHolder(@NonNull View view) {
             super(view);
-            this.parentView = view.findViewById(R.id.post_arrow);
+            this.postView = view.findViewById(R.id.post_arrow);
             this.imgPost = view.findViewById(R.id.userImg);
             this.title = view.findViewById(R.id.title);
             this.body = view.findViewById(R.id.body);
