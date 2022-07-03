@@ -16,12 +16,15 @@ import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Parcelable;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -43,13 +46,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener, PostAdapter.PostCallback, FragmentHandler {
+public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener, PostAdapter.PostCallback, FragmentHandler, OpenPostFragment.OpenPostInterface {
     BottomNavigationView bottomNavigation_ly;
     FirebaseAuth mAuth;
     FirebaseFirestore db;
@@ -436,5 +440,45 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     //why?
     public void closeFragments(Fragment f) {
         getSupportFragmentManager().beginTransaction().remove(f).commit();
+    }
+
+    @Override
+    public void openChat(View view, String phoneNumber) {
+//        try{
+//            PackageManager packageManager = this.getPackageManager();
+//            Intent i = new Intent(Intent.ACTION_VIEW);
+//            String url = "https://api.whatsapp.com/send?phone="+ "0549828502" +"&text=" + URLEncoder.encode("היי,יש לי!", "UTF-8");
+//            i.setPackage("com.whatsapp");
+//            i.setData(Uri.parse(url));
+//            if (i.resolveActivity(packageManager) != null) {
+//                startActivity(i);
+//            }else {
+//              Toast.makeText(this,"לא הצלחנו להמשיך הלאה...",Toast.LENGTH_SHORT).show();
+//            }
+//        } catch(Exception e) {
+//            Toast.makeText(this,"אירעה שגיאה בעת שליחת ההודעה!!!",Toast.LENGTH_SHORT).show();
+//
+//        }
+        boolean installed = appInstalledOrNot("com.whatsapp");
+        if (installed){
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse("http://api.whatsapp.com/send?phone="+"+972"+"0549828502" + "&text="+"Hi there!!!"));
+            startActivity(intent);
+        }else {
+            Toast.makeText(MainActivity.this, "Whats app not installed on your device", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+    //Create method appInstalledOrNot
+    private boolean appInstalledOrNot(String url){
+        PackageManager packageManager =getPackageManager();
+        boolean app_installed;
+        try {
+            packageManager.getPackageInfo(url,PackageManager.GET_ACTIVITIES);
+            app_installed = true;
+        }catch (PackageManager.NameNotFoundException e){
+            app_installed = false;
+        }
+        return app_installed;
     }
 }
