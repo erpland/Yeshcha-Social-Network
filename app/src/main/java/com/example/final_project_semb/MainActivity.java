@@ -3,6 +3,7 @@ package com.example.final_project_semb;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -45,7 +46,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.StorageReference;
@@ -59,7 +62,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener, PostAdapter.PostCallback, FragmentHandler, OpenPostFragment.OpenPostInterface, NewPostFragment.AddPostInterface {
+public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener, PostAdapter.PostCallback, FragmentHandler, OpenPostFragment.OpenPostInterface, NewPostFragment.AddPostInterface,SettingsFragment.SettingsManager {
     BottomNavigationView bottomNavigation_ly;
     FirebaseAuth mAuth;
     FirebaseFirestore db;
@@ -95,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         initViews();
         initUser();
         initReplies();
-        initPreferences();
+
         initRequests();
         initNavbar();
 
@@ -164,8 +167,10 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
                     }
                 }
-                if (posts == null)
+                if (posts == null) {
+                    initPreferences();
                     initPosts();
+                }
             }
         };
         LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(mLocationRequest, mLocationCallback, null);
@@ -263,6 +268,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         user = document.toObject(User.class);
+
                     } else {
                         Log.d("tag1", "userNotExist", task.getException());
                     }
@@ -271,8 +277,26 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 }
             }
         });
+
     }
 
+    //private void listenToChanges(){
+//    userDocument.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+//        @Override
+//        public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+//            if (error != null) {
+//                Toast.makeText(getApplicationContext(), "update here!", Toast.LENGTH_LONG).show();
+//                return;
+//            }
+//            if (value != null && value.exists()) {
+//                Toast.makeText(getApplicationContext(), "value:"+value.getData(), Toast.LENGTH_LONG).show();
+//            } else {
+//                Toast.makeText(getApplicationContext(), "value:null", Toast.LENGTH_LONG).show();
+//            }
+//
+//        }
+//    });
+//}
     private void initPosts() {
         posts = new ArrayList<>();
         db.collection("Posts")
@@ -283,8 +307,10 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 post = document.toObject(Post.class);
-                                post.setDistanceFromUser(calcDistanceFromUser(post.getLat(), post.getLng()));
-                                getUserForPost(post);
+                                if (isPostFit(post)) {
+                                    post.convertLatLngToString(calcDistanceFromUser(post.getLat(), post.getLng()));
+                                    getUserForPost(post);
+                                }
 
                             }
                         } else {
@@ -292,6 +318,24 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                         }
                     }
                 });
+    }
+
+    private boolean isPostFit(Post post) {
+        switch (post.getCategoryCode()){
+            case 0:return preferencesManager.basicEqt.getActive();
+
+            case 1:return preferencesManager.computerMobilEqt.getActive();
+
+            case 2:return preferencesManager.officeEqt.getActive();
+
+            case 3:return preferencesManager.othersEqt.getActive();
+
+            case 4:return preferencesManager.personalHygieneEqt.getActive();
+
+            case 5:return preferencesManager.petEqt.getActive();
+
+        }
+        return false;
     }
 
     private void getUserForPost(Post post) {
@@ -362,6 +406,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                     if (document.exists()) {
                         Log.d("test1", document.getData() + "");
                         preferencesManager = document.toObject(PreferencesManager.class);
+
                     } else {
                         Log.d("tag1", "get failed with Preferences ", task.getException());
                     }
@@ -385,6 +430,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             case R.id.homeFragment:
                 bundle.putParcelableArrayList("postParcel", (ArrayList<? extends Parcelable>) posts);
                 Navigation.findNavController(this, R.id.activity_main_nav_host_fragment).navigate(R.id.homeFragment, bundle);
+                openLoaderOnUpdate();
                 break;
             case R.id.profileFragment:
                 bundle.putParcelable("userParcel", user);
@@ -396,7 +442,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 break;
             case R.id.newPostFragment:
                 bundle.putParcelable("userParcel", user);
-                bundle.putParcelable("currentLocation",currentLocation);
+                bundle.putParcelable("currentLocation", currentLocation);
                 newPostFragment.setArguments(bundle);
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.fl_postsHost, newPostFragment, null)
@@ -452,29 +498,43 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     }
 
     @Override
-    public void openChat(View view, String phoneNumber) {
+    public void replyOnPost(View view, String phoneNumber) {
         reply.increaseReplyAmount();
         db.collection("Replies").document(mAuth.getUid()).set(reply);
-        boolean installed = appInstalledOrNot("com.whatsapp");
-        if (installed){
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse("http://api.whatsapp.com/send?phone="+"+972"+"0549828502" + "&text="+"Hi there!!!"));
-            startActivity(intent);
-        }else {
-            SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage("+972"+phoneNumber, null, "אשמח לעזור!!", null, null);
-            Toast.makeText(this,"הודעת אס אם אס נשלחה ליעד",Toast.LENGTH_SHORT).show();
-        }
+        user.setFlow_level(reply.getReplyAmount());
+        db.collection("users").document(mAuth.getUid()).update("flow_level", user.getFlow_level());
+        openChat(phoneNumber);
+        closeAllFragment(openPostFragment);
+        openLoaderOnUpdate();
 
     }
+
+    private void openChat(String phoneNumber) {
+        boolean installed = appInstalledOrNot("com.whatsapp");
+        if (installed) {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse("http://api.whatsapp.com/send?phone=" + "+972" + "0549828502" + "&text=" + "Hi there!!!"));
+            startActivity(intent);
+        } else {
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage("+972" + phoneNumber, null, "אשמח לעזור!!", null, null);
+            Toast.makeText(this, "הודעת אס אם אס נשלחה ליעד", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void openLoaderOnUpdate() {
+        Navigation.findNavController(this, R.id.activity_main_nav_host_fragment).navigate(R.id.loaderFragment);
+        recreate();
+    }
+
     //Create method appInstalledOrNot
-    private boolean appInstalledOrNot(String url){
-        PackageManager packageManager =getPackageManager();
+    private boolean appInstalledOrNot(String url) {
+        PackageManager packageManager = getPackageManager();
         boolean app_installed;
         try {
-            packageManager.getPackageInfo(url,PackageManager.GET_ACTIVITIES);
+            packageManager.getPackageInfo(url, PackageManager.GET_ACTIVITIES);
             app_installed = true;
-        }catch (PackageManager.NameNotFoundException e){
+        } catch (PackageManager.NameNotFoundException e) {
             app_installed = false;
         }
         return app_installed;
@@ -482,7 +542,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
     @Override
     public void addNewPost(View view, String title, String body, Location location, Date date) {
-      Post post=new Post(body,date,location.getLatitude(),location.getLongitude(),title,mAuth.getUid());
+        Post post = new Post(body, date, location.getLatitude(), location.getLongitude(), title, mAuth.getUid());
         addPostToFireStore(post);
         requests.increaseRequestAmount();
         requests.SetPosts(post);
@@ -493,14 +553,17 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
     private void addPostToFireStore(Post post) {
         // Add a new document with a generated ID
-         db.collection("Posts").document(mAuth.getUid()+"$$"+System.currentTimeMillis())
+        db.collection("Posts").document(mAuth.getUid() + "$$" + System.currentTimeMillis())
                 .set(post);
         getSupportFragmentManager().popBackStack("openPostFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
-
 
 
     }
 
 
+    @Override
+    public void updatePreferences(View v, PreferencesManager pManager) {
+        preferencesManager=pManager;
+        db.collection("Preferences").document(mAuth.getUid()).set(preferencesManager);
+    }
 }

@@ -86,97 +86,8 @@
                 android:orientation="vertical"
                 android:paddingVertical="10dp"
                 android:weightSum="6">
-
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/switch1"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/heebo"
-                    android:layoutDirection="rtl"
-                    android:minHeight="48dp"
-                    android:text="ציוד משרדי"
-                    android:textColor="@color/main_green"
-                    android:textDirection="rtl"
-                    app:thumbTint="@color/main_green" />
-
-                <com.google.android.material.divider.MaterialDivider
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginVertical="5dp"
-                    android:layout_weight="0"
-                    app:dividerColor="#d7d7d7"
-                    app:dividerInsetEnd="32dp"
-                    app:dividerInsetStart="32dp" />
-
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/switch2"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/heebo"
-                    android:layoutDirection="rtl"
-                    android:minHeight="48dp"
-                    android:text="חיות מחמד"
-                    android:textColor="@color/main_green"
-                    android:textDirection="rtl"
-                    app:thumbTint="@color/main_green" />
-
-                <com.google.android.material.divider.MaterialDivider
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginVertical="5dp"
-                    android:layout_weight="0"
-                    app:dividerColor="#d7d7d7"
-                    app:dividerInsetEnd="32dp"
-                    app:dividerInsetStart="32dp" />
-
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/switch3"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/heebo"
-                    android:layoutDirection="rtl"
-                    android:minHeight="48dp"
-                    android:text="אביזרי מחשב ומובייל"
-                    android:textColor="@color/main_green"
-                    android:textDirection="rtl"
-                    app:thumbTint="@color/main_green" />
-
-                <com.google.android.material.divider.MaterialDivider
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginVertical="5dp"
-                    android:layout_weight="0"
-                    app:dividerColor="#d7d7d7"
-                    app:dividerInsetEnd="32dp"
-                    app:dividerInsetStart="32dp" />
-
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/switch4"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/heebo"
-                    android:layoutDirection="rtl"
-                    android:minHeight="48dp"
-                    android:text="היגיינה אישית"
-                    android:textColor="@color/main_green"
-                    android:textDirection="rtl"
-                    app:thumbTint="@color/main_green" />
-
-                <com.google.android.material.divider.MaterialDivider
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginVertical="5dp"
-                    android:layout_weight="0"
-                    app:dividerColor="#d7d7d7"
-                    app:dividerInsetEnd="32dp"
-                    app:dividerInsetStart="32dp" />
-
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/switch5"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
@@ -196,9 +107,50 @@
                     app:dividerColor="#d7d7d7"
                     app:dividerInsetEnd="32dp"
                     app:dividerInsetStart="32dp" />
-
                 <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/switch6"
+                    android:id="@+id/switch2"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/heebo"
+                    android:layoutDirection="rtl"
+                    android:minHeight="48dp"
+                    android:text="אביזרי מחשב ומובייל"
+                    android:textColor="@color/main_green"
+                    android:textDirection="rtl"
+                    app:thumbTint="@color/main_green" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="5dp"
+                    android:layout_weight="0"
+                    app:dividerColor="#d7d7d7"
+                    app:dividerInsetEnd="32dp"
+                    app:dividerInsetStart="32dp" />
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switch3"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/heebo"
+                    android:layoutDirection="rtl"
+                    android:minHeight="48dp"
+                    android:text="ציוד משרדי"
+                    android:textColor="@color/main_green"
+                    android:textDirection="rtl"
+                    app:thumbTint="@color/main_green" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="5dp"
+                    android:layout_weight="0"
+                    app:dividerColor="#d7d7d7"
+                    app:dividerInsetEnd="32dp"
+                    app:dividerInsetStart="32dp" />
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switch4"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
@@ -209,6 +161,58 @@
                     android:textColor="@color/main_green"
                     android:textDirection="rtl"
                     app:thumbTint="@color/main_green" />
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="5dp"
+                    android:layout_weight="0"
+                    app:dividerColor="#d7d7d7"
+                    app:dividerInsetEnd="32dp"
+                    app:dividerInsetStart="32dp" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switch5"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/heebo"
+                    android:layoutDirection="rtl"
+                    android:minHeight="48dp"
+                    android:text="היגיינה אישית"
+                    android:textColor="@color/main_green"
+                    android:textDirection="rtl"
+                    app:thumbTint="@color/main_green" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="5dp"
+                    android:layout_weight="0"
+                    app:dividerColor="#d7d7d7"
+                    app:dividerInsetEnd="32dp"
+                    app:dividerInsetStart="32dp" />
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switch6"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/heebo"
+                    android:layoutDirection="rtl"
+                    android:minHeight="48dp"
+                    android:text="חיות מחמד"
+                    android:textColor="@color/main_green"
+                    android:textDirection="rtl"
+                    app:thumbTint="@color/main_green" />
+
+
+
+
+
+
+
+
+
+
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>

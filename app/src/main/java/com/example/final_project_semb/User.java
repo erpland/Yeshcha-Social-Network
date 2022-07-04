@@ -53,8 +53,22 @@ public class User implements Parcelable {
         return flow_level;
     }
 
-    public void setFlow_level(int flow_level) {
-        this.flow_level = flow_level;
+    public void setFlow_level(int replies) {
+        if (replies<=2){
+            this.flow_level=1;
+        }
+        else if(replies<=6){
+            this.flow_level=2;
+        }
+        else if(replies<=10){
+            this.flow_level=3;
+        }
+        else if(replies<=15){
+            this.flow_level=4;
+        }
+        else if(replies<=20){
+            this.flow_level=5;
+        }
     }
 
     public String getEmail() {

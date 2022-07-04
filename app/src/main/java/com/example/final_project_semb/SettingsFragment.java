@@ -1,7 +1,9 @@
 package com.example.final_project_semb;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -9,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -19,11 +22,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class SettingsFragment extends Fragment {
+public class SettingsFragment extends Fragment implements CompoundButton.OnCheckedChangeListener {
     ViewGroup root;
     SwitchMaterial[] switches = new SwitchMaterial[6];
     PreferencesManager preferencesManager;
+    SettingsManager settingsManager;
+    public interface SettingsManager{
+        void updatePreferences(View v,PreferencesManager preferencesManager);
+    }
 
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        settingsManager = (SettingsManager) context;
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -43,6 +54,7 @@ public class SettingsFragment extends Fragment {
         ArrayList<Boolean> activeStates = preferencesManager.GetArrayOfActiveState();
         for (int i = 0; i < switches.length; i++) {
             switches[i].setChecked(activeStates.get(i));
+            switches[i].setOnCheckedChangeListener(this);
         }
     }
 
@@ -51,5 +63,32 @@ public class SettingsFragment extends Fragment {
             int resID = getResources().getIdentifier("switch" + (i + 1), "id", root.getContext().getPackageName());
             switches[i] = root.findViewById(resID);
         }
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        switch (compoundButton.getId()){
+            case R.id.switch1:
+                preferencesManager.basicEqt.setActive(compoundButton.isChecked());
+                break;
+            case R.id.switch2:
+                preferencesManager.computerMobilEqt.setActive(compoundButton.isChecked());
+                break;
+            case R.id.switch3:
+                preferencesManager.officeEqt.setActive(compoundButton.isChecked());
+                break;
+            case R.id.switch4:
+                preferencesManager.othersEqt.setActive(compoundButton.isChecked());
+                break;
+            case R.id.switch5:
+                preferencesManager.personalHygieneEqt.setActive(compoundButton.isChecked());
+                break;
+            case R.id.switch6:
+                preferencesManager.petEqt.setActive(compoundButton.isChecked());
+                break;
+
+
+        }
+        settingsManager.updatePreferences(compoundButton,preferencesManager);
     }
 }

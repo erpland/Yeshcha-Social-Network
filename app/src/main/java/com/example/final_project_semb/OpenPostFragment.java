@@ -83,14 +83,14 @@ public class OpenPostFragment extends Fragment implements View.OnClickListener, 
         name.setText(post.user.getName());
         body.setText(post.getBody());
         title.setText(post.getTitle());
-        location.setText(Double.toString(post.getDistanceFromUser()));
+        location.setText(post.getDistanceFromUser());
         setProfileImage();
 
 
     }
 
     public interface OpenPostInterface {
-        void openChat(View view, String phoneNumber);
+        void replyOnPost(View view, String phoneNumber);
     }
 
     private void initViews() {
@@ -132,7 +132,7 @@ public class OpenPostFragment extends Fragment implements View.OnClickListener, 
                 fragmentHandler.closeAllFragment(this);
                 break;
             case R.id.chatButton:
-                openPostInterface.openChat(v,post.user.getPhoneNumber());
+                openPostInterface.replyOnPost(v,post.user.getPhoneNumber());
                 break;
         }
     }

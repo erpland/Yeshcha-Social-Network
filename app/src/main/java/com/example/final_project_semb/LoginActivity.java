@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                             Toast.makeText(LoginActivity.this, "Authentication Success.",
                                     Toast.LENGTH_SHORT).show();
-                            //stop intro music to make sure profile set his theme music
+
 
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
 

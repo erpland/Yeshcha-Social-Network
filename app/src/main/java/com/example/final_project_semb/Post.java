@@ -14,17 +14,42 @@ public class Post implements Parcelable {
     boolean isActive;
     Date date;
     User user;
-//    LatLng geoLocation;
-    double distanceFromUser;
+    int categoryCode;
+
+    public int getCategoryCode() {
+        return categoryCode;
+    }
+
+    public void setCategoryCode(int categoryCode) {
+        this.categoryCode = categoryCode;
+    }
+
+    //    LatLng geoLocation;
+    String distanceFromUser;
 
     double lat,lng;
 
     public Post() {
     }
-    public double getDistanceFromUser() {return distanceFromUser;}
+    public String getDistanceFromUser() {return distanceFromUser;}
 
-    public void setDistanceFromUser(double distanceFromUser) {
-        this.distanceFromUser = distanceFromUser;
+    public void setDistanceFromUser(String distance) {
+        this.distanceFromUser = distance;
+    }
+    public void convertLatLngToString(double distanceFromUser){
+        if(distanceFromUser<=1.5){
+            setDistanceFromUser("עד קילומטר וחצי ממך");
+        }
+       else if(distanceFromUser<=2.5){
+            setDistanceFromUser("עד 2 קילומטר ממך");
+        }
+       else if(distanceFromUser<=5){
+            setDistanceFromUser("עד 5 קילומטר ממך");
+        }
+       else{
+            setDistanceFromUser("מעל 5 קילומטר ממך");
+        }
+
     }
     public Post(String body, Date date, double lat,double lng, String title, String userUid) {
 
