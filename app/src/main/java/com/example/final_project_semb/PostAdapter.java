@@ -51,7 +51,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         postCallback = (PostCallback) context;
         Post p = arr.get(position);
         getBitMapedImage(p.user.image,holder);
-        holder.title.setText(p.title);
+        holder.title.setText("ישך " + p.title + "?!");
         holder.body.setText(p.body);
         holder.name.setText(p.user.name);
         holder.location.setText("" + p.distanceFromUser);

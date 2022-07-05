@@ -104,6 +104,30 @@
                 app:layout_constraintEnd_toEndOf="@+id/et_newPostDesc"
                 app:layout_constraintTop_toBottomOf="@+id/et_newPostDesc" />
 
+            <RelativeLayout
+                android:id="@+id/rl_catogries"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:paddingVertical="10dp"
+                app:layout_constraintBottom_toTopOf="@+id/new_post_add"
+                app:layout_constraintEnd_toStartOf="@+id/textView16"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/et_newPostDesc"
+                app:layout_constraintVertical_bias="0.0">
+
+                <Spinner
+                    android:layoutDirection="rtl"
+                    android:id="@+id/spinner_category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:spinnerMode="dropdown" />
+
+
+            </RelativeLayout>
+
             <TextView
                 android:id="@+id/new_post_location"
                 android:layout_width="wrap_content"

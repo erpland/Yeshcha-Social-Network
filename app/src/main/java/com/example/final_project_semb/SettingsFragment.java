@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -22,13 +23,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class SettingsFragment extends Fragment implements CompoundButton.OnCheckedChangeListener {
+public class SettingsFragment extends Fragment implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
     ViewGroup root;
     SwitchMaterial[] switches = new SwitchMaterial[6];
     PreferencesManager preferencesManager;
     SettingsManager settingsManager;
+    ImageView logout_btn;
+
+    @Override
+    public void onClick(View v) {
+        settingsManager.logOut();
+    }
+
     public interface SettingsManager{
         void updatePreferences(View v,PreferencesManager preferencesManager);
+        void logOut();
     }
 
     public void onAttach(@NonNull Context context) {
@@ -41,12 +50,15 @@ public class SettingsFragment extends Fragment implements CompoundButton.OnCheck
         // Inflate the layout for this fragment
         root = (ViewGroup) inflater.inflate(R.layout.fragment_settings, null);
         preferencesManager = getArguments().getParcelable("settingsParcel");
+
         Spinner spinnerLanguages = root.findViewById(R.id.spinner_distance);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(root.getContext(), R.array.distance_options, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         spinnerLanguages.setAdapter(adapter);
+
         initValues();
         setSwitches();
+        logout_btn.setOnClickListener(this);
         return root;
     }
 
@@ -63,6 +75,7 @@ public class SettingsFragment extends Fragment implements CompoundButton.OnCheck
             int resID = getResources().getIdentifier("switch" + (i + 1), "id", root.getContext().getPackageName());
             switches[i] = root.findViewById(resID);
         }
+        logout_btn = root.findViewById(R.id.iv_logout);
     }
 
     @Override

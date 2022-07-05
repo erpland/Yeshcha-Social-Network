@@ -24,7 +24,6 @@ public class Post implements Parcelable {
         this.categoryCode = categoryCode;
     }
 
-    //    LatLng geoLocation;
     String distanceFromUser;
 
     double lat,lng;
@@ -51,8 +50,8 @@ public class Post implements Parcelable {
         }
 
     }
-    public Post(String body, Date date, double lat,double lng, String title, String userUid) {
-
+    public Post(String body, Date date, double lat,double lng, String title, String userUid,int categoryCode) {
+        this.categoryCode = categoryCode;
         this.title = title;
         this.body = body;
         this.date = date;
@@ -69,6 +68,7 @@ public class Post implements Parcelable {
         userUid = in.readString();
         isActive = in.readByte() != 0;
         user = in.readParcelable(User.class.getClassLoader());
+        categoryCode = in.readInt();
 //        geoLocation = in.readParcelable(LatLng.class.getClassLoader());
     }
 
@@ -106,11 +106,7 @@ public class Post implements Parcelable {
     public String getBody() {
         return body;
     }
-
-
-
-//    public LatLng getGeoLocation(){return geoLocation;}
-
+    public Date getDate(){return date;}
     public String getUserUid() {
         return userUid;
     }
@@ -160,7 +156,7 @@ public class Post implements Parcelable {
         dest.writeString(body);
         dest.writeString(userUid);
         dest.writeByte((byte) (isActive ? 1 : 0));
-//        dest.writeParcelable(geoLocation, flags);
         dest.writeParcelable(user, flags);
+        dest.writeInt(categoryCode);
     }
 }

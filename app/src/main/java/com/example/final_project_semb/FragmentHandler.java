@@ -6,4 +6,5 @@ import androidx.fragment.app.Fragment;
 
 public interface FragmentHandler {
     public void closeAllFragment(Fragment f);
+    public void popNavBackStack();
 }

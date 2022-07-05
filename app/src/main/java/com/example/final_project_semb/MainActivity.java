@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import android.Manifest;
@@ -56,13 +57,16 @@ import com.google.firebase.storage.UploadTask;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener, PostAdapter.PostCallback, FragmentHandler, OpenPostFragment.OpenPostInterface, NewPostFragment.AddPostInterface,SettingsFragment.SettingsManager {
+public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener, PostAdapter.PostCallback, FragmentHandler, OpenPostFragment.OpenPostInterface, NewPostFragment.AddPostInterface, SettingsFragment.SettingsManager {
     BottomNavigationView bottomNavigation_ly;
     FirebaseAuth mAuth;
     FirebaseFirestore db;
@@ -84,6 +88,24 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     Fragment openPostFragment;
     Fragment newPostFragment;
     Fragment publicProfileFragment;
+    View host;
+
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+
+            if (navController.getCurrentDestination().getId() == R.id.homeFragment) {
+                logOut();
+            } else if (navController.getCurrentDestination().getId() == R.id.loaderFragment) {
+                return;
+            } else {
+                navController.popBackStack();
+            }
+        } else {
+            closeFragments(getVisibleFragment());
+        }
+
+    }
 
 
     @Override
@@ -98,7 +120,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         initViews();
         initUser();
         initReplies();
-
         initRequests();
         initNavbar();
 
@@ -137,6 +158,12 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             @Override
             public void run() {
                 if (user != null && reply != null && requests != null && preferencesManager != null && currentLocation != null) {
+                    Collections.sort(posts, new Comparator<Post>() {
+                        @Override
+                        public int compare(Post o1, Post o2) {
+                            return o2.getDate().compareTo(o1.getDate());
+                        }
+                    });
                     closeLoader();
                     count.cancel();
                     timer.cancel();
@@ -164,7 +191,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                     if (location != null) {
                         currentLocation = location;
                         Log.d("locationtest", location.getLatitude() + " " + location.getLongitude());
-
                     }
                 }
                 if (posts == null) {
@@ -321,18 +347,24 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     }
 
     private boolean isPostFit(Post post) {
-        switch (post.getCategoryCode()){
-            case 0:return preferencesManager.basicEqt.getActive();
+        switch (post.getCategoryCode()) {
+            case 0:
+                return preferencesManager.basicEqt.getActive();
 
-            case 1:return preferencesManager.computerMobilEqt.getActive();
+            case 1:
+                return preferencesManager.computerMobilEqt.getActive();
 
-            case 2:return preferencesManager.officeEqt.getActive();
+            case 2:
+                return preferencesManager.officeEqt.getActive();
 
-            case 3:return preferencesManager.othersEqt.getActive();
+            case 3:
+                return preferencesManager.othersEqt.getActive();
 
-            case 4:return preferencesManager.personalHygieneEqt.getActive();
+            case 4:
+                return preferencesManager.personalHygieneEqt.getActive();
 
-            case 5:return preferencesManager.petEqt.getActive();
+            case 5:
+                return preferencesManager.petEqt.getActive();
 
         }
         return false;
@@ -420,11 +452,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        if (openPostFragment.isVisible())
-            closeFragments(openPostFragment);
-        else if (newPostFragment.isVisible())
-            closeFragments(newPostFragment);
-
+        closeFragments(getVisibleFragment());
         Bundle bundle = new Bundle();
         switch (item.getItemId()) {
             case R.id.homeFragment:
@@ -443,12 +471,13 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             case R.id.newPostFragment:
                 bundle.putParcelable("userParcel", user);
                 bundle.putParcelable("currentLocation", currentLocation);
-                newPostFragment.setArguments(bundle);
-                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                ft.replace(R.id.fl_postsHost, newPostFragment, null)
-                        .setReorderingAllowed(true)
-                        .addToBackStack("openPostFragment") // name can be null
-                        .commit();
+                Navigation.findNavController(this, R.id.activity_main_nav_host_fragment).navigate(R.id.newPostFragment, bundle);
+//                newPostFragment.setArguments(bundle);
+//                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//                ft.replace(R.id.fl_postsHost, newPostFragment, null)
+//                        .setReorderingAllowed(true)
+//                        .addToBackStack("openPostFragment") // name can be null
+//                        .commit();
 //                Navigation.findNavController(this, R.id.activity_main_nav_host_fragment).navigate(R.id.newPostFragment, bundle);
         }
         return true;
@@ -485,6 +514,11 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         getSupportFragmentManager().beginTransaction().remove(f).commit();
     }
 
+    @Override
+    public void popNavBackStack() {
+        navController.popBackStack();
+    }
+
     public double calcDistanceFromUser(double lat, double lng) {
         Location endPoint = new Location("post");
         endPoint.setLatitude(lat);
@@ -494,7 +528,18 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
     //why?
     public void closeFragments(Fragment f) {
-        getSupportFragmentManager().beginTransaction().remove(f).commit();
+        if (f != null)
+            getSupportFragmentManager().beginTransaction().remove(f).commit();
+    }
+
+    public Fragment getVisibleFragment() {
+        if (openPostFragment.isVisible())
+            return openPostFragment;
+        else if (newPostFragment.isVisible())
+            return newPostFragment;
+        else if (publicProfileFragment.isVisible())
+            return publicProfileFragment;
+        return null;
     }
 
     @Override
@@ -541,12 +586,13 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     }
 
     @Override
-    public void addNewPost(View view, String title, String body, Location location, Date date) {
-        Post post = new Post(body, date, location.getLatitude(), location.getLongitude(), title, mAuth.getUid());
+    public void addNewPost(View view, String title, String body, Location location, Date date, int categoryCode) {
+        Post post = new Post(body, date, location.getLatitude(), location.getLongitude(), title, mAuth.getUid(), categoryCode);
         addPostToFireStore(post);
         requests.increaseRequestAmount();
         requests.SetPosts(post);
         db.collection("Requests").document(mAuth.getUid()).set(requests);
+        openLoaderOnUpdate();
 
     }
 
@@ -563,7 +609,29 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
     @Override
     public void updatePreferences(View v, PreferencesManager pManager) {
-        preferencesManager=pManager;
+        preferencesManager = pManager;
         db.collection("Preferences").document(mAuth.getUid()).set(preferencesManager);
     }
+
+    @Override
+    public void logOut() {
+        new AlertDialog.Builder(this, R.style.AlertDialogCustom)
+                .setTitle("עצור!")
+                .setMessage("אתה בטוח שאתה רוצה להתנתק?!")
+                .setNegativeButton("לא לא תשאיר פה", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .setPositiveButton("כן תעיף אותי מפה", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        mAuth.signOut();
+                        startActivity(new Intent(MainActivity.this, StartActivity.class));
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
+
 }

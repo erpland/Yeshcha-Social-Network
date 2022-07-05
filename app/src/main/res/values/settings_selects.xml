@@ -7,4 +7,14 @@
         <item>שלושה קילומטרים</item>
         <item>ארבעה קילומטרים</item>
     </string-array>
+
+    <string-array name="category_options">
+        <item>מוצרי יסוד</item>
+        <item>אביזרי מחשב ומובייל</item>
+        <item>ציוד משרדי</item>
+        <item>שונות</item>
+        <item>היגיינה אישית</item>
+        <item>חיות מחמד</item>
+    </string-array>
+
 </resources>
