@@ -3,31 +3,28 @@ package com.example.final_project_semb;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Parcelable;
 import android.telephony.SmsManager;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -38,26 +35,18 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -115,10 +104,8 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         askLocationPermission();
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-//        demoData();
         initVars();
         initViews();
-        initUser();
         initReplies();
         initRequests();
         initNavbar();
@@ -133,7 +120,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
             @Override
             public void onFinish() {
-
                 new AlertDialog.Builder(MainActivity.this, R.style.AlertDialogCustom)
                         .setTitle("בעיה...")
                         .setMessage("לא הצלחנו לקבל את הנתונים,נסה שוב עם הבעיה ממשיכה אנה צור קשר איתנו")
@@ -193,13 +179,17 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                         Log.d("locationtest", location.getLatitude() + " " + location.getLongitude());
                     }
                 }
-                if (posts == null) {
-                    initPreferences();
-                    initPosts();
+                if (user == null) {
+                    initUser();
                 }
             }
         };
         LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(mLocationRequest, mLocationCallback, null);
+    }
+
+    public void uploadTask() {
+        InitFireBaseData initFireBaseData = new InitFireBaseData();
+        initFireBaseData.execute();
     }
 
     private void askLocationPermission() {
@@ -294,35 +284,20 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         user = document.toObject(User.class);
-
+                        initPreferences();
                     } else {
                         Log.d("tag1", "userNotExist", task.getException());
                     }
                 } else {
                     Log.d("tag1", "userNotSucess ", task.getException());
                 }
+
             }
         });
 
     }
 
-    //private void listenToChanges(){
-//    userDocument.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-//        @Override
-//        public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-//            if (error != null) {
-//                Toast.makeText(getApplicationContext(), "update here!", Toast.LENGTH_LONG).show();
-//                return;
-//            }
-//            if (value != null && value.exists()) {
-//                Toast.makeText(getApplicationContext(), "value:"+value.getData(), Toast.LENGTH_LONG).show();
-//            } else {
-//                Toast.makeText(getApplicationContext(), "value:null", Toast.LENGTH_LONG).show();
-//            }
-//
-//        }
-//    });
-//}
+
     private void initPosts() {
         posts = new ArrayList<>();
         db.collection("Posts")
@@ -438,6 +413,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                     if (document.exists()) {
                         Log.d("test1", document.getData() + "");
                         preferencesManager = document.toObject(PreferencesManager.class);
+                        initPosts();
 
                     } else {
                         Log.d("tag1", "get failed with Preferences ", task.getException());
@@ -633,5 +609,26 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 .show();
     }
 
+    private class InitFireBaseData extends AsyncTask<Void, Void, Void> {
 
+        @Override
+        protected Void doInBackground(Void... voids) {
+//        initUser();
+//        initPreferences();
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void s) {
+//        Toast.makeText(getBaseContext(),"Finished",Toast.LENGTH_LONG).show();
+//        initPosts();
+//        Collections.sort(posts, new Comparator<Post>() {
+//            @Override
+//            public int compare(Post o1, Post o2) {
+//                return o2.getDate().compareTo(o1.getDate());
+//            }
+//        });
+        }
+    }
 }

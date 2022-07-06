@@ -5,7 +5,7 @@ import android.net.Uri;
 
 public interface CallBackInterface {
     public void callBackReg1(int viewId,String email,String password,String confirmPass);
-    public void callBackReg2(int viewId, String name, String phoneNumber, Uri image);
-    public void callBackImageMethod(int viewId);
+    public void callBackReg2(int viewId, String name, String phoneNumber);
+    public void callBackImageMethod(int viewId,int imageView);
 
 }

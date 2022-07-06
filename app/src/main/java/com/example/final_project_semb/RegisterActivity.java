@@ -8,11 +8,13 @@ import androidx.fragment.app.FragmentManager;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +44,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     StorageReference storageReference;
     Uri imagePath,imageUri;
     FragmentManager fragmentManager;
+    int imageViewId=0;
+    ImageView profilePicture;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +111,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     @Override
-    public void callBackReg2(int viewId, String name, String phoneNumber, Uri image) {
+    public void callBackReg2(int viewId, String name, String phoneNumber) {
         nameTxt = name;
         phoneNumberTxt = phoneNumber;
         switch (viewId) {
@@ -132,18 +137,19 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         Requests requests = new Requests();
         createPreferencesList(preferences);
 
-        if (image == null){ // אם לא העלו תמנו נעלה תמונה דיפולטיבית
+        if (imagePath == null){ // אם לא העלו תמנו נעלה תמונה דיפולטיבית
             Resources resources = this.getResources();
             int resId = R.drawable.default_avatar;
-            image = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + resources.getResourcePackageName(resId) + '/' + resources.getResourceTypeName(resId) + '/' + resources.getResourceEntryName(resId) );
+            imagePath = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + resources.getResourcePackageName(resId) + '/' + resources.getResourceTypeName(resId) + '/' + resources.getResourceEntryName(resId) );
 
         }
-        SignUpToFireBase(emailTxt, passwordTxt, user, preferences, reply, requests, image);
+        SignUpToFireBase(emailTxt, passwordTxt, user, preferences, reply, requests,imagePath);
 
     }
 
     @Override
-    public void callBackImageMethod(int viewId) {
+    public void callBackImageMethod(int viewId,int imageView) {
+        imageViewId=imageView;
         takeGalleryAction();
     }
 
@@ -201,20 +207,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                     }
                                 }
                             });
-//                            imageUpload.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//                                @Override
-//                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                                    storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//                                        @Override
-//                                        public void onSuccess(Uri uri) {
-//
-//                                            imagePath = taskSnapshot.getUploadSessionUri();
-//
-//
-//                                        }
-//                                    });
-//                                }
-//                            });
 
 
                         } else {
@@ -254,7 +246,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
             case GALLERY_PHOTO:
                 if (resultCode == RESULT_OK) {
-                    imagePath = data.getData();
+                    imagePath=data.getData();
+                    profilePicture=findViewById(imageViewId);
+                    profilePicture.setImageURI(imagePath);
+
                 } else {
                     Toast.makeText(this, "Operation failed", Toast.LENGTH_LONG).show();
                 }
@@ -267,10 +262,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private void takeGalleryAction() {
         Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(pickPhoto, GALLERY_PHOTO);
+
     }
 
-    public Uri getImageUri() {
-        return imagePath;
-    }
+
 
 }
