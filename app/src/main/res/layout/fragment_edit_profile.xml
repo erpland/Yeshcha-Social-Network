@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_openPostOverlay"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#D7000000"
+    tools:context=".OpenPostFragment">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_postCardView"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="10dp"
+        android:elevation="5dp"
+        android:translationZ="10dp"
+        app:cardBackgroundColor="#e7e7e7"
+        app:cardCornerRadius="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.32999998">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/et_editName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:fontFamily="@font/heebo"
+                android:inputType="textPersonName"
+                android:minHeight="48dp"
+                android:text="שם של מישהו"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_editName"
+                app:layout_constraintEnd_toEndOf="@+id/et_editPhone"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_editName" />
+
+            <TextView
+                android:id="@+id/tv_editPhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="48dp"
+                android:fontFamily="@font/heebo"
+                android:text="טלפון"
+                app:layout_constraintEnd_toEndOf="@+id/tv_editName"
+                app:layout_constraintTop_toBottomOf="@+id/tv_editName" />
+
+            <EditText
+                android:id="@+id/et_editPhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:ems="10"
+                android:fontFamily="@font/heebo"
+                android:inputType="phone"
+                android:minHeight="48dp"
+                android:text="0549998344"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_editPhone"
+                app:layout_constraintEnd_toStartOf="@+id/tv_editPhone"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_editPhone" />
+
+            <TextView
+                android:id="@+id/tv_editName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="32dp"
+                android:fontFamily="@font/heebo"
+                android:text="שם"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/openPostProfilePic"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="24dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/user4"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/roundedCornersImageView" />
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/heebo"
+                android:text="בחר תמונה"
+                android:textColor="@color/main_green"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/openPostProfilePic"
+                app:layout_constraintStart_toStartOf="@+id/openPostProfilePic"
+                app:layout_constraintTop_toBottomOf="@+id/openPostProfilePic" />
+
+            <Button
+                android:id="@+id/button3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="32dp"
+                android:fontFamily="@font/heebo"
+                android:text="שמור"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/button4"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/button4"
+                style="?attr/materialButtonOutlinedStyle"
+                android:textColor="#C83939"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/heebo"
+                android:text="לא משנה"
+                app:layout_constraintBottom_toBottomOf="@+id/button3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/button3"
+                app:layout_constraintTop_toTopOf="@+id/button3" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

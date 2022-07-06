@@ -187,10 +187,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(mLocationRequest, mLocationCallback, null);
     }
 
-    public void uploadTask() {
-        InitFireBaseData initFireBaseData = new InitFireBaseData();
-        initFireBaseData.execute();
-    }
 
     private void askLocationPermission() {
         ActivityResultLauncher<String[]> locationPermissionRequest =
@@ -609,26 +605,4 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 .show();
     }
 
-    private class InitFireBaseData extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-//        initUser();
-//        initPreferences();
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void s) {
-//        Toast.makeText(getBaseContext(),"Finished",Toast.LENGTH_LONG).show();
-//        initPosts();
-//        Collections.sort(posts, new Comparator<Post>() {
-//            @Override
-//            public int compare(Post o1, Post o2) {
-//                return o2.getDate().compareTo(o1.getDate());
-//            }
-//        });
-        }
-    }
 }
