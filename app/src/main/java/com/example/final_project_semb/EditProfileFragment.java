@@ -62,6 +62,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         overlay.setOnClickListener(this);
         update.setOnClickListener(this);
         close.setOnClickListener(this);
+        profilePic.setOnClickListener(this);
 
         return root;
     }
@@ -126,6 +127,6 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     }
     public interface EditUserHandler{
         void updateUser(String name, String phoneNumber);
-        public void updateImage(int viewId,int imageView);
+        void updateImage(int viewId,int imageView);
     }
 }

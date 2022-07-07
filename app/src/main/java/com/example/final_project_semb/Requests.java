@@ -4,17 +4,17 @@ import java.util.ArrayList;
 
 public class Requests {
     int requestAmount;
-    ArrayList<Post>posts;
+    ArrayList<Post> posts;
 
     public Requests() {
-        this.requestAmount=0;
-        posts=new ArrayList<>();
+        this.requestAmount = 0;
+        posts = new ArrayList<>();
     }
 
-    public Requests(int requestAmount,ArrayList<Post>postsParam) {
-        this.requestAmount=requestAmount;
-        for (int i=0;i<postsParam.size();i++){
-            SetPosts(postsParam.get(i));
+    public Requests(int requestAmount, ArrayList<Post> postsParam) {
+        this.requestAmount = requestAmount;
+        for (int i = 0; i < postsParam.size(); i++) {
+            addPosts(postsParam.get(i));
         }
     }
 
@@ -26,16 +26,23 @@ public class Requests {
         this.requestAmount++;
     }
 
-    public ArrayList<Post> getPostList() {
+    public ArrayList<Post> getPosts() {
         return this.posts;
     }
 
-    public void SetPosts(Post pst) {
-        if (pst!=null) {
-            posts.add(pst);
-        }
-        else{
+
+    public void addPosts(Post pst) {
+        if (pst != null) {
+            this.posts.add(pst);
+        } else {
             return;
         }
+    }
+
+    public void setPosts(ArrayList<Post> pst) {
+
+        this.posts = pst;
+
+
     }
 }

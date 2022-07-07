@@ -167,7 +167,9 @@ public class OpenPostFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mapView.onDestroy();
+        if (mapView!=null) {
+            mapView.onDestroy();
+        }
     }
 
     @Override

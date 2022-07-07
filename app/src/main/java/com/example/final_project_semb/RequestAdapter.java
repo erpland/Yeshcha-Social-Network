@@ -24,8 +24,8 @@ public class RequestAdapter extends ArrayAdapter<Post> {
     private Context context;
     private ArrayList<Post> arr;
 
-    public RequestAdapter(@NonNull Context context, int resource, int textViewResourceId, @NonNull List<Post> objects) {
-        super(context, resource, textViewResourceId, objects);
+    public RequestAdapter(@NonNull Context context, int resource, @NonNull List<Post> objects) {
+        super(context, resource, objects);
         this.context = context;
         this.arr = new ArrayList<>(objects);
     }
@@ -46,13 +46,26 @@ public class RequestAdapter extends ArrayAdapter<Post> {
             Button delete = convertView.findViewById(R.id.privatePostDelete);
             title.setText(p.title);
             body.setText(p.body);
-            date.setText(toCalendar(p.date).toString());
+            DateFormat dateFormat = new SimpleDateFormat("hh:mm dd-mm-yyyy");
+            String strDate = dateFormat.format(p.date);
+            date.setText(strDate);
         }
         return convertView;
     }
-    private Calendar toCalendar(Date date){
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        return cal;
-    }
+//    private String toCalendar(String d){
+////        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+////        Date date = null;
+////        try {
+////            date = sdf.parse(d);
+////        } catch (ParseException e) {
+////            e.printStackTrace();
+////        }
+////        Calendar cal = Calendar.getInstance();
+////        cal.setTime(date);
+////        return cal;
+//        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+//        String strDate = dateFormat.format(d);
+//        re
+//
+//    }
 }

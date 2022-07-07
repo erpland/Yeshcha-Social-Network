@@ -1,5 +1,7 @@
 package com.example.final_project_semb;
 
+import static android.widget.Toast.LENGTH_LONG;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -407,8 +409,13 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
+                    Map<String,Object> postMap=document.getData();
+//                    ArrayList<Post>exampleArr= (ArrayList<Post>)(postMap).get("postList");
+
                     if (document.exists()) {
                         requests = document.toObject(Requests.class);
+//                        requests.setPosts(exampleArr);
+
                     } else {
                         Log.d("tag1", "get failed with Requests ", task.getException());
                     }
@@ -582,7 +589,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         Post post = new Post(body, date, location.getLatitude(), location.getLongitude(), title, mAuth.getUid(), categoryCode);
         addPostToFireStore(post);
         requests.increaseRequestAmount();
-        requests.SetPosts(post);
+        requests.addPosts(post);
         db.collection("Requests").document(mAuth.getUid()).set(requests);
         openLoaderOnUpdate();
 
@@ -640,7 +647,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     @Override
     public void openPrivatePosts() {
         Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList("postParcel", requests.getPostList());
+        bundle.putParcelableArrayList("postParcel", requests.getPosts());
         userRequestFragment.setArguments(bundle);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.fl_postsHost, userRequestFragment, null)
@@ -652,21 +659,27 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     @Override
     public void updateUser(String name, String phoneNumber) {
         if (!ValidateUpdatedInput(name, phoneNumber)) return;
-        if(name!=user.getName()){
+        if (name != user.getName()) {
             user.setName(name);
             db.collection("users").document(mAuth.getUid()).update("name", user.getName());
         }
-        if(phoneNumber!=user.getPhoneNumber()){
+        if (phoneNumber != user.getPhoneNumber()) {
             user.setPhoneNumber(phoneNumber);
             db.collection("users").document(mAuth.getUid()).update("phoneNumber", user.getPhoneNumber());
         }
-        if(editProfileImg == null){
+        if (editProfileImg != null) {
             uploadImage();
+        } else if (editProfileImg == null && (name != user.getName() || phoneNumber != user.getPhoneNumber())) {
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("userParcel", user);
+            navController.navigate(R.id.profileFragment, bundle);
         }
         closeFragments(editProfileFragment);
 
+
     }
-    public void uploadImage(){
+
+    public void uploadImage() {
         final StorageReference ref = storageReference.child(mAuth.getUid()).child("Profile_" + System.currentTimeMillis() + ".jpg");
         UploadTask imageUpload = ref.putFile(updatedImageUri);
         Task<Uri> urlTask = imageUpload.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
@@ -686,6 +699,9 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                     updatedImageUri = task.getResult();
                     user.setImage(updatedImageUri.toString());
                     db.collection("users").document(mAuth.getUid()).update("image", user.getImage());
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("userParcel", user);
+                    navController.navigate(R.id.profileFragment, bundle);
                 } else {
                     Toast.makeText(MainActivity.this, "בעיה בתמונה.",
                             Toast.LENGTH_SHORT).show();
@@ -729,7 +745,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                     editProfileImg.setImageURI(updatedImageUri);
 
                 } else {
-                    Toast.makeText(this, "Operation failed", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Operation failed", LENGTH_LONG).show();
                 }
                 break;
 
@@ -738,6 +754,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
     //open gallery
     private void takeGalleryAction() {
+        Toast.makeText(this, "take gallery action", LENGTH_LONG).show();
         Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(pickPhoto, GALLERY_PHOTO);
     }
