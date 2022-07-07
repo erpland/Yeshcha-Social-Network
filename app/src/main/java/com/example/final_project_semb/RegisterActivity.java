@@ -262,7 +262,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private void takeGalleryAction() {
         Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(pickPhoto, GALLERY_PHOTO);
-
     }
 
 

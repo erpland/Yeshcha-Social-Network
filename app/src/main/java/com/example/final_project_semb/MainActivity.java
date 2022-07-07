@@ -3,6 +3,7 @@ package com.example.final_project_semb;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -23,11 +24,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -35,6 +38,7 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -45,6 +49,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -55,10 +62,12 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener, PostAdapter.PostCallback, FragmentHandler, OpenPostFragment.OpenPostInterface, NewPostFragment.AddPostInterface, SettingsFragment.SettingsManager {
+public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener, PostAdapter.PostCallback, FragmentHandler, OpenPostFragment.OpenPostInterface, NewPostFragment.AddPostInterface, SettingsFragment.SettingsManager, ProfileFragment.PrivateProfileHBtnHandler, EditProfileFragment.EditUserHandler {
     BottomNavigationView bottomNavigation_ly;
     FirebaseAuth mAuth;
     FirebaseFirestore db;
+    FirebaseStorage firebaseStorage;
+    StorageReference storageReference;
     DocumentReference userDocument, postsDocument;
     ArrayList<Post> posts;
     User user = null;
@@ -70,6 +79,10 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     PreferencesManager preferencesManager;
     BottomNavigationView bottomNavigationView;
     FrameLayout postsHost;
+    private final static int GALLERY_PHOTO = 99;
+    Uri updatedImageUri;
+    ImageView editProfileImg;
+    int editProfileImageId;
     private FusedLocationProviderClient fusedLocationClient;
     Location currentLocation;
     private static final int LOCATION_CODE = 44;
@@ -77,6 +90,8 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     Fragment openPostFragment;
     Fragment newPostFragment;
     Fragment publicProfileFragment;
+    Fragment editProfileFragment;
+    Fragment userRequestFragment;
     View host;
 
     @Override
@@ -255,6 +270,8 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     private void initVars() {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+        firebaseStorage = FirebaseStorage.getInstance();
+        storageReference = firebaseStorage.getReference("Users");
     }
 
     private void initViews() {
@@ -263,7 +280,10 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         openPostFragment = new OpenPostFragment();
         newPostFragment = new NewPostFragment();
         publicProfileFragment = new PublicProfileFragment();
+        editProfileFragment = new EditProfileFragment();
+        userRequestFragment = new UserRequestsFragment();
         postsHost_fl = findViewById(R.id.fl_postsHost);
+
     }
 
     private void initNavbar() {
@@ -605,4 +625,120 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 .show();
     }
 
+    @Override
+    public void openEditProfile() {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("userParcel", user);
+        editProfileFragment.setArguments(bundle);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.fl_postsHost, editProfileFragment, null)
+                .setReorderingAllowed(true)
+                .addToBackStack("editProfile")
+                .commit();
+    }
+
+    @Override
+    public void openPrivatePosts() {
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList("postParcel", requests.getPostList());
+        userRequestFragment.setArguments(bundle);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.fl_postsHost, userRequestFragment, null)
+                .setReorderingAllowed(true)
+                .addToBackStack("userPostList")
+                .commit();
+    }
+
+    @Override
+    public void updateUser(String name, String phoneNumber) {
+        if (!ValidateUpdatedInput(name, phoneNumber)) return;
+        if(name!=user.getName()){
+            user.setName(name);
+            db.collection("users").document(mAuth.getUid()).update("name", user.getName());
+        }
+        if(phoneNumber!=user.getPhoneNumber()){
+            user.setPhoneNumber(phoneNumber);
+            db.collection("users").document(mAuth.getUid()).update("phoneNumber", user.getPhoneNumber());
+        }
+        if(editProfileImg == null){
+            uploadImage();
+        }
+        closeFragments(editProfileFragment);
+
+    }
+    public void uploadImage(){
+        final StorageReference ref = storageReference.child(mAuth.getUid()).child("Profile_" + System.currentTimeMillis() + ".jpg");
+        UploadTask imageUpload = ref.putFile(updatedImageUri);
+        Task<Uri> urlTask = imageUpload.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()) {
+                    throw task.getException();
+                }
+
+                // Continue with the task to get the download URL
+                return ref.getDownloadUrl();
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    updatedImageUri = task.getResult();
+                    user.setImage(updatedImageUri.toString());
+                    db.collection("users").document(mAuth.getUid()).update("image", user.getImage());
+                } else {
+                    Toast.makeText(MainActivity.this, "בעיה בתמונה.",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private boolean ValidateUpdatedInput(String name, String phoneNumber) {
+        if (name.isEmpty() || phoneNumber.isEmpty()) {
+            Toast.makeText(this, "אחד או יותר מהשדות ריקים", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (name.length() > 10) {
+            Toast.makeText(this, "שם יכול להכיל עד 10 אותיות", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (!phoneNumber.matches("^(?:(?:(\\+?972|\\(\\+?972\\)|\\+?\\(972\\))(?:\\s|\\.|-)?([1-9]\\d?))|(0[23489]{1})|(0[57]{1}[0-9]))(?:\\s|\\.|-)?([^0\\D]{1}\\d{2}(?:\\s|\\.|-)?\\d{4})$")) {
+            Toast.makeText(this, "מספר טלפון לא תקין", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void updateImage(int viewId, int imageView) {
+        editProfileImageId = imageView;
+        takeGalleryAction();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+
+            case GALLERY_PHOTO:
+                if (resultCode == RESULT_OK) {
+                    updatedImageUri = data.getData();
+                    editProfileImg = findViewById(editProfileImageId);
+                    editProfileImg.setImageURI(updatedImageUri);
+
+                } else {
+                    Toast.makeText(this, "Operation failed", Toast.LENGTH_LONG).show();
+                }
+                break;
+
+        }
+    }
+
+    //open gallery
+    private void takeGalleryAction() {
+        Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(pickPhoto, GALLERY_PHOTO);
+    }
 }

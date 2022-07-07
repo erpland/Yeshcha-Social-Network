@@ -29,7 +29,6 @@ public class RegisterPage2Fragment extends Fragment implements View.OnClickListe
     EditText full_name, phone_number;
     RelativeLayout imageSection;
     RegisterActivity registerActivity;
-
     ImageView profilePic;
 
 

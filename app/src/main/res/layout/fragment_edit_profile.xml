@@ -2,14 +2,14 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/cl_openPostOverlay"
+    android:id="@+id/cl_editProfileOverlay"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#D7000000"
     tools:context=".OpenPostFragment">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cv_postCardView"
+        android:id="@+id/cv_editUserCardView"
         android:layout_width="match_parent"
         android:layout_height="400dp"
         android:layout_marginHorizontal="10dp"
@@ -81,7 +81,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
             <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/openPostProfilePic"
+                android:id="@+id/editProfilePic"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_alignParentTop="true"
@@ -102,34 +102,34 @@
                 android:text="בחר תמונה"
                 android:textColor="@color/main_green"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="@+id/openPostProfilePic"
-                app:layout_constraintStart_toStartOf="@+id/openPostProfilePic"
-                app:layout_constraintTop_toBottomOf="@+id/openPostProfilePic" />
+                app:layout_constraintEnd_toEndOf="@+id/editProfilePic"
+                app:layout_constraintStart_toStartOf="@+id/editProfilePic"
+                app:layout_constraintTop_toBottomOf="@+id/editProfilePic" />
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/btn_editSave"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="32dp"
                 android:fontFamily="@font/heebo"
                 android:text="שמור"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/button4"
+                app:layout_constraintEnd_toStartOf="@+id/btn_editClose"
                 app:layout_constraintHorizontal_chainStyle="spread"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <Button
-                android:id="@+id/button4"
+                android:id="@+id/btn_editClose"
                 style="?attr/materialButtonOutlinedStyle"
                 android:textColor="#C83939"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/heebo"
                 android:text="לא משנה"
-                app:layout_constraintBottom_toBottomOf="@+id/button3"
+                app:layout_constraintBottom_toBottomOf="@+id/btn_editSave"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/button3"
-                app:layout_constraintTop_toTopOf="@+id/button3" />
+                app:layout_constraintStart_toEndOf="@+id/btn_editSave"
+                app:layout_constraintTop_toTopOf="@+id/btn_editSave" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 

@@ -7,33 +7,6 @@
     android:background="@drawable/green_noise"
     android:backgroundTintMode="screen">
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="16dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/btn_toSignup"
-        app:layout_constraintEnd_toEndOf="@+id/btn_toSignup"
-        app:layout_constraintStart_toStartOf="@+id/btn_toSignup">
-
-        <ImageView
-            android:id="@+id/iv_facebook"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/ic_facebook" />
-
-        <ImageView
-            android:id="@+id/iv_google"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/ic_google" />
-    </LinearLayout>
-
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"

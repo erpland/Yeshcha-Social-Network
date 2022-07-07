@@ -7,7 +7,7 @@
     android:background="#D1D1D1">
 
     <TextView
-        android:id="@+id/textView14"
+        android:id="@+id/privatePostTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -18,35 +18,35 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/materialButton3"
-        app:layout_constraintTop_toTopOf="@+id/materialButton3" />
+        app:layout_constraintStart_toEndOf="@+id/privatePostAccept"
+        app:layout_constraintTop_toTopOf="@+id/privatePostAccept" />
 
     <TextView
-        android:id="@+id/textView15"
+        android:id="@+id/privatePostBody"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/heebo"
         android:text="מחפש כותרת וגוף לפוסט"
-        app:layout_constraintEnd_toEndOf="@+id/textView14"
+        app:layout_constraintEnd_toEndOf="@+id/privatePostTitle"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView14" />
+        app:layout_constraintTop_toBottomOf="@+id/privatePostTitle" />
 
     <TextView
-        android:id="@+id/textView17"
+        android:id="@+id/privatePostDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="8dp"
         android:text="10/1/2022"
-        app:layout_constraintBottom_toBottomOf="@+id/materialButton2"
-        app:layout_constraintEnd_toEndOf="@+id/textView15"
+        app:layout_constraintBottom_toBottomOf="@+id/privatePostDelete"
+        app:layout_constraintEnd_toEndOf="@+id/privatePostBody"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/materialButton3"
+        android:id="@+id/privatePostAccept"
         style="@style/Widget.MaterialComponents.Button.Icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -63,7 +63,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/materialButton2"
+        android:id="@+id/privatePostDelete"
         style="?attr/materialButtonOutlinedStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -79,8 +79,8 @@
         app:iconPadding="0dp"
         app:iconTint="#C83939"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/materialButton3"
-        app:layout_constraintStart_toStartOf="@+id/materialButton3"
-        app:layout_constraintTop_toBottomOf="@+id/materialButton3" />
+        app:layout_constraintEnd_toEndOf="@+id/privatePostAccept"
+        app:layout_constraintStart_toStartOf="@+id/privatePostAccept"
+        app:layout_constraintTop_toBottomOf="@+id/privatePostAccept" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
