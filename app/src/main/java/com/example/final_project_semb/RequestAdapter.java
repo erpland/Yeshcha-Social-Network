@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,14 +21,16 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class RequestAdapter extends ArrayAdapter<Post> {
+public class RequestAdapter extends ArrayAdapter<Post>{
     private Context context;
     private ArrayList<Post> arr;
+    PrivatePostHandler privatePostHandler;
 
     public RequestAdapter(@NonNull Context context, int resource, @NonNull List<Post> objects) {
         super(context, resource, objects);
         this.context = context;
         this.arr = new ArrayList<>(objects);
+        privatePostHandler=(PrivatePostHandler)context;
     }
 
     @NonNull
@@ -42,30 +45,36 @@ public class RequestAdapter extends ArrayAdapter<Post> {
             TextView title = convertView.findViewById(R.id.privatePostTitle);
             TextView body = convertView.findViewById(R.id.privatePostBody);
             TextView date  =convertView.findViewById(R.id.privatePostDate);
-            Button accpet = convertView.findViewById(R.id.privatePostAccept);
+            Button accept = convertView.findViewById(R.id.privatePostAccept);
             Button delete = convertView.findViewById(R.id.privatePostDelete);
+
             title.setText(p.title);
             body.setText(p.body);
             DateFormat dateFormat = new SimpleDateFormat("hh:mm dd-mm-yyyy");
             String strDate = dateFormat.format(p.date);
             date.setText(strDate);
+            accept.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    privatePostHandler.deactivePost(p,position);
+
+                }
+            });
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    privatePostHandler.deletePost(p,position);
+                }
+            });
         }
         return convertView;
     }
-//    private String toCalendar(String d){
-////        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-////        Date date = null;
-////        try {
-////            date = sdf.parse(d);
-////        } catch (ParseException e) {
-////            e.printStackTrace();
-////        }
-////        Calendar cal = Calendar.getInstance();
-////        cal.setTime(date);
-////        return cal;
-//        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-//        String strDate = dateFormat.format(d);
-//        re
-//
-//    }
+
+
+
+        public interface PrivatePostHandler{
+        void deactivePost(Post p,int position);
+        void deletePost(Post p,int position);
+
+}
 }

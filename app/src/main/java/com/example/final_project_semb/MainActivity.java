@@ -48,13 +48,14 @@ import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
+import static com.google.firebase.firestore.FieldValue.arrayRemove;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -64,7 +65,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener, PostAdapter.PostCallback, FragmentHandler, OpenPostFragment.OpenPostInterface, NewPostFragment.AddPostInterface, SettingsFragment.SettingsManager, ProfileFragment.PrivateProfileHBtnHandler, EditProfileFragment.EditUserHandler {
+public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener, PostAdapter.PostCallback, FragmentHandler, OpenPostFragment.OpenPostInterface, NewPostFragment.AddPostInterface, SettingsFragment.SettingsManager, ProfileFragment.PrivateProfileHBtnHandler, EditProfileFragment.EditUserHandler, RequestAdapter.PrivatePostHandler {
     BottomNavigationView bottomNavigation_ly;
     FirebaseAuth mAuth;
     FirebaseFirestore db;
@@ -326,7 +327,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 post = document.toObject(Post.class);
-                                if (isPostFit(post)) {
+                                if (isPostFit(post)&&post.getIsActive()) {
                                     post.convertLatLngToString(calcDistanceFromUser(post.getLat(), post.getLng()));
                                     getUserForPost(post);
                                 }
@@ -647,13 +648,23 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     @Override
     public void openPrivatePosts() {
         Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList("postParcel", requests.getPosts());
+       ArrayList<Post>filteredList= filterPostList(requests.getPosts());
+        bundle.putParcelableArrayList("postParcel", filteredList);
         userRequestFragment.setArguments(bundle);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.fl_postsHost, userRequestFragment, null)
                 .setReorderingAllowed(true)
                 .addToBackStack("userPostList")
                 .commit();
+    }
+    private ArrayList<Post>filterPostList(ArrayList<Post>list){
+        ArrayList<Post>filteredList=new ArrayList<>();
+       for (int i=0;i<list.size();i++){
+           if (list.get(i).getIsActive()){
+               filteredList.add(list.get(i));
+           }
+       }
+       return filteredList;
     }
 
     @Override
@@ -757,5 +768,23 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         Toast.makeText(this, "take gallery action", LENGTH_LONG).show();
         Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(pickPhoto, GALLERY_PHOTO);
+    }
+
+
+
+    @Override
+    public void deactivePost(Post p,int position) {
+        db.collection("Requests").document(mAuth.getUid()).update("posts",FieldValue.arrayRemove(p));
+        requests.posts.get(position).setIsActive(false);
+        db.collection("Requests").document(mAuth.getUid()).update("posts",FieldValue.arrayUnion(requests.posts.get(position)));
+        db.collection("Posts").document(mAuth.getUid()+"$$"+p.getDate().getTime()).update("isActive", false);
+
+    }
+
+    @Override
+    public void deletePost(Post p,int position) {
+          db.collection("Posts").document(mAuth.getUid()+"$$"+p.getDate().getTime()).delete();
+          db.collection("Requests").document(mAuth.getUid()).update("posts",FieldValue.arrayRemove(p));
+
     }
 }

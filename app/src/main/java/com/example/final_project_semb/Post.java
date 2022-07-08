@@ -133,7 +133,7 @@ public class Post implements Parcelable {
         this.user = user;
     }
 
-    public void setActive(boolean active) {
+    public void setIsActive(boolean active) {
         isActive = active;
     }
 
@@ -143,6 +143,10 @@ public class Post implements Parcelable {
 
 //    public void setGeoLocation(LatLng geoLocation) {
 //        this.geoLocation = geoLocation;
+
+    public boolean getIsActive() {
+        return isActive;
+    }
 //    }
 
     @Override

@@ -23,12 +23,7 @@ public class HomeFragment extends Fragment {
     ViewGroup root;
     ArrayList<Post> posts;
 
-    //    PostCallback postCallback;
-//    @Override
-//    public void onAttach(@NonNull Context context) {
-//        super.onAttach(context);
-//        postCallback = (PostCallback) context;
-//    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -39,9 +34,7 @@ public class HomeFragment extends Fragment {
         lstPost.setLayoutManager(new LinearLayoutManager(root.getContext()));
         return root;
     }
-//    public interface PostCallback{
-//        public void getClickedPost(View id,Post post);
-//    }
+
 
 
     private void initView() {

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -24,9 +25,11 @@ public class UserRequestsFragment extends Fragment implements View.OnClickListen
     ConstraintLayout overlay;
     FragmentHandler fragmentHandler;
     ConstraintLayout inner;
+    PrivatePostHandler privatePostHandler;
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         fragmentHandler = (FragmentHandler) context;
+//        privatePostHandler=(PrivatePostHandler) context;
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,7 +46,13 @@ public class UserRequestsFragment extends Fragment implements View.OnClickListen
 
             }
         });
-
+//        requestsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+////                privatePostHandler.deactivePost(view,posts.get(i));
+//                Toast.makeText(root.getContext(),""+posts.get(0),Toast.LENGTH_LONG).show();
+//            }
+//        });
         return root;
     }
 
@@ -57,5 +66,12 @@ public class UserRequestsFragment extends Fragment implements View.OnClickListen
     @Override
     public void onClick(View view) {
         fragmentHandler.closeAllFragment(this);
+    }
+
+
+    public interface PrivatePostHandler{
+        void deactivePost(View v,Post p);
+        void deletePost(View v,Post p);
+
     }
 }
