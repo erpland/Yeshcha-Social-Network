@@ -12,6 +12,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,7 +59,8 @@ public class PublicProfileFragment extends Fragment implements View.OnClickListe
     private void setData() {
         name.setText(user.getName());
         setProfileImage();
-        for(int i=0;i<user.flow_level && i < 5;i++){
+        Log.d("publicprofilestars",user.getFlow_level() + "");
+        for(int i=0;i<user.getFlow_level() && i < 5;i++){
             startsArr[i].setColorFilter(ContextCompat.getColor(root.getContext(), R.color.sub_headline));
         }
     }

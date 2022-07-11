@@ -6,8 +6,10 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,24 +27,29 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     User user;
     ImageView profilePic;
     TextView name, phone;
-    RatingBar stars;
     ViewGroup root;
+    ImageView[] startsArr;
     StorageReference storageRef;
     FirebaseStorage firebaseStorage;
     Button editProfileBtn, showPostsBtn;
     PrivateProfileHBtnHandler privateProfileHBtnHandler;
+    boolean hasPosts;
 
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         privateProfileHBtnHandler = (PrivateProfileHBtnHandler) context;
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         root = (ViewGroup) inflater.inflate(R.layout.fragment_profile, null);
         user = (User) getArguments().getParcelable("userParcel");
+        hasPosts = getArguments().getBoolean("hasPosts");
         initViews();
         initVars();
+//        showPostsBtn.setEnabled(hasPosts);
+
         showPostsBtn.setOnClickListener(this);
         editProfileBtn.setOnClickListener(this);
         setData();
@@ -53,7 +60,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         name.setText(user.getName());
         phone.setText(user.getPhoneNumber());
         setProfileImage();
-        stars.setRating(user.getFlow_level());
+        Log.d("startprofile", user.getFlow_level() + "");
+        for (int i = 0; i < user.getFlow_level() && i < 5; i++) {
+            startsArr[i].setColorFilter(ContextCompat.getColor(root.getContext(), R.color.sub_headline));
+        }
     }
 
     private void initVars() {
@@ -83,18 +93,25 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         profilePic = root.findViewById(R.id.publicProfile_picture);
         name = root.findViewById(R.id.profile_name);
         phone = root.findViewById(R.id.profile_phone);
-        stars = root.findViewById(R.id.rb_publicProfileStars);
         editProfileBtn = root.findViewById(R.id.btn_editProfile);
         showPostsBtn = root.findViewById(R.id.btn_showPosts);
+        startsArr = new ImageView[5];
+        startsArr[0] = root.findViewById(R.id.iv_star1_private);
+        startsArr[1] = root.findViewById(R.id.iv_star2_private);
+        startsArr[2] = root.findViewById(R.id.iv_star3_private);
+        startsArr[3] = root.findViewById(R.id.iv_star4_private);
+        startsArr[4] = root.findViewById(R.id.iv_star5_private);
     }
-    public interface PrivateProfileHBtnHandler{
+
+    public interface PrivateProfileHBtnHandler {
         void openEditProfile();
+
         void openPrivatePosts();
     }
 
     @Override
     public void onClick(View v) {
-        switch(v.getId()){
+        switch (v.getId()) {
             case R.id.btn_editProfile:
                 privateProfileHBtnHandler.openEditProfile();
                 break;

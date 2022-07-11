@@ -44,28 +44,73 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="64dp"
             android:text="מדד הזרימה שלך"
-            app:layout_constraintBottom_toTopOf="@+id/rb_publicProfileStars"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profile_phone"
-            app:layout_constraintVertical_bias="0.0"
             app:layout_constraintVertical_chainStyle="packed" />
 
-        <RatingBar
-            android:id="@+id/rb_publicProfileStars"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:isIndicator="true"
-            android:max="5"
-            android:numStars="5"
-            android:progress="0"
-            android:progressTint="@color/sub_headline"
-            android:rating="2"
-            app:layout_constraintBottom_toTopOf="@+id/tv_profileStarsTitle"
-            app:layout_constraintEnd_toEndOf="@+id/textView20"
-            app:layout_constraintHorizontal_bias="0.503"
-            app:layout_constraintStart_toStartOf="@+id/textView20"
+        <ImageView
+            android:id="@+id/iv_star1_private"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/ic_baseline_star_24"
+            android:tint="#C1C1C1"
+            app:layout_constraintEnd_toStartOf="@+id/iv_star2_private"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView20" />
+
+        <ImageView
+            android:id="@+id/iv_star2_private"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@drawable/ic_baseline_star_24"
+            android:tint="#C1C1C1"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_star1_private"
+            app:layout_constraintEnd_toStartOf="@+id/iv_star3_private"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/iv_star1_private"
+            app:layout_constraintTop_toTopOf="@+id/iv_star1_private" />
+
+        <ImageView
+            android:id="@+id/iv_star3_private"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@drawable/ic_baseline_star_24"
+            android:tint="#C1C1C1"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_star2_private"
+            app:layout_constraintEnd_toStartOf="@+id/iv_star4_private"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/iv_star2_private"
+            app:layout_constraintTop_toTopOf="@+id/iv_star2_private" />
+
+        <ImageView
+            android:id="@+id/iv_star4_private"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@drawable/ic_baseline_star_24"
+            android:tint="#C1C1C1"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_star3_private"
+            app:layout_constraintEnd_toStartOf="@+id/iv_star5_private"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/iv_star3_private"
+            app:layout_constraintTop_toTopOf="@+id/iv_star3_private" />
+
+        <ImageView
+            android:id="@+id/iv_star5_private"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginEnd="32dp"
+            android:src="@drawable/ic_baseline_star_24"
+            android:tint="#C1C1C1"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_star4_private"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/iv_star4_private"
+            app:layout_constraintTop_toTopOf="@+id/iv_star4_private" />
 
         <TextView
             android:id="@+id/profile_name"
@@ -73,7 +118,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:fontFamily="@font/heebo"
-            android:text="משה צברי"
+            android:text=""
             android:textColor="@color/main_green"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -87,7 +132,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/heebo"
-            android:text="0502159852"
+            android:text=""
             app:layout_constraintEnd_toEndOf="@+id/profile_name"
             app:layout_constraintStart_toStartOf="@+id/profile_name"
             app:layout_constraintTop_toBottomOf="@+id/profile_name" />
@@ -102,18 +147,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/user1"
-            />
 
-        <TextView
-            android:id="@+id/tv_profileStarsTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="זורם חלקית"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/rb_publicProfileStars"
-            app:layout_constraintStart_toStartOf="@+id/rb_publicProfileStars"
-            app:layout_constraintTop_toBottomOf="@+id/rb_publicProfileStars" />
+            />
 
         <Button
             android:id="@+id/btn_editProfile"
@@ -125,9 +160,7 @@
             android:text="ערוך פרופיל"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btn_showPosts"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_profileStarsTitle"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/btn_showPosts"

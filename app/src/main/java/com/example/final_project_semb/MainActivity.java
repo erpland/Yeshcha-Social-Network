@@ -22,7 +22,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Parcelable;
@@ -55,8 +54,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
-import static com.google.firebase.firestore.FieldValue.arrayRemove;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -98,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     Fragment editProfileFragment;
     Fragment userRequestFragment;
     View host;
+
 
     @Override
     public void onBackPressed() {
@@ -464,6 +462,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 break;
             case R.id.profileFragment:
                 bundle.putParcelable("userParcel", user);
+                bundle.putBoolean("hasPosts", requests.posts.size() != 0);
                 Navigation.findNavController(this, R.id.activity_main_nav_host_fragment).navigate(R.id.profileFragment, bundle);
                 break;
             case R.id.settingsFragment:
@@ -541,8 +540,9 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     public void replyOnPost(View view, String phoneNumber) {
         reply.increaseReplyAmount();
         db.collection("Replies").document(mAuth.getUid()).set(reply);
-        user.setFlow_level(reply.getReplyAmount());
+        user.setFlowLevelByReplies(reply.getReplyAmount());
         db.collection("users").document(mAuth.getUid()).update("flow_level", user.getFlow_level());
+        Log.d("replyOnPost", "replyOnPost: " + reply.getReplyAmount());
         openChat(phoneNumber);
         closeAllFragment(openPostFragment);
         openLoaderOnUpdate();
@@ -773,13 +773,17 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         requests.posts.get(position).setIsActive(false);
         db.collection("Requests").document(mAuth.getUid()).update("posts", FieldValue.arrayUnion(requests.posts.get(position)));
         db.collection("Posts").document(mAuth.getUid() + "$$" + p.getDate().getTime()).update("isActive", false);
+        closeFragments(userRequestFragment);
 
     }
 
     @Override
     public void deletePost(Post p, int position) {
+        posts.remove(p);
+        requests.posts.remove(p);
         db.collection("Posts").document(mAuth.getUid() + "$$" + p.getDate().getTime()).delete();
         db.collection("Requests").document(mAuth.getUid()).update("posts", FieldValue.arrayRemove(p));
+        closeFragments(userRequestFragment);
 
     }
 

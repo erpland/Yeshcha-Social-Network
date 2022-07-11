@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class UserRequestsFragment extends Fragment implements View.OnClickListen
     FragmentHandler fragmentHandler;
     ConstraintLayout inner;
     PrivatePostHandler privatePostHandler;
+    TextView hasPosts_tv;
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         fragmentHandler = (FragmentHandler) context;
@@ -37,6 +39,12 @@ public class UserRequestsFragment extends Fragment implements View.OnClickListen
         root = (ViewGroup) inflater.inflate(R.layout.fragment_user_requests, container, false);
         posts= getArguments().getParcelableArrayList("postParcel");
         initView();
+        if(posts.size() <= 0 || posts == null){
+            hasPosts_tv.setVisibility(View.VISIBLE);
+        }
+        else{
+            hasPosts_tv.setVisibility(View.INVISIBLE);
+        }
         RequestAdapter adapter=new RequestAdapter(root.getContext(),0,posts);
         requestsListView.setAdapter(adapter);
         overlay.setOnClickListener(this);
@@ -46,13 +54,6 @@ public class UserRequestsFragment extends Fragment implements View.OnClickListen
 
             }
         });
-//        requestsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-////                privatePostHandler.deactivePost(view,posts.get(i));
-//                Toast.makeText(root.getContext(),""+posts.get(0),Toast.LENGTH_LONG).show();
-//            }
-//        });
         return root;
     }
 
@@ -60,6 +61,7 @@ public class UserRequestsFragment extends Fragment implements View.OnClickListen
         requestsListView=root.findViewById(R.id.userRequestList);
         overlay=root.findViewById(R.id.cl_requestPostOverlay);
         inner=root.findViewById(R.id.cl_requestPostInner);
+        hasPosts_tv = root.findViewById(R.id.tv_requestsNoPosts);
     }
 
 

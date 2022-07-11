@@ -18,7 +18,7 @@ public class User implements Parcelable {
 
 
     public User(String email, String image, String name, String phoneNumber) {
-        this.flow_level = 0;
+        this.flow_level = 1;
         this.email = email;
         this.image = image;
         this.name = name;
@@ -52,8 +52,9 @@ public class User implements Parcelable {
     public int getFlow_level() {
         return flow_level;
     }
+    public void setFlow_level(int flow_level) { this.flow_level = flow_level;}
 
-    public void setFlow_level(int replies) {
+    public void setFlowLevelByReplies(int replies) {
         if (replies<=2){
             this.flow_level=1;
         }
