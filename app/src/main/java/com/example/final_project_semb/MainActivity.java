@@ -55,7 +55,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
 import static com.google.firebase.firestore.FieldValue.arrayRemove;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -65,7 +67,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener, PostAdapter.PostCallback, FragmentHandler, OpenPostFragment.OpenPostInterface, NewPostFragment.AddPostInterface, SettingsFragment.SettingsManager, ProfileFragment.PrivateProfileHBtnHandler, EditProfileFragment.EditUserHandler, RequestAdapter.PrivatePostHandler {
+public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener, PostAdapter.PostCallback, FragmentHandler, OpenPostFragment.OpenPostInterface, NewPostFragment.AddPostInterface, SettingsFragment.SettingsManager, ProfileFragment.PrivateProfileHBtnHandler, EditProfileFragment.EditUserHandler, RequestAdapter.PrivatePostHandler, HomeFragment.RefreshHandler {
     BottomNavigationView bottomNavigation_ly;
     FirebaseAuth mAuth;
     FirebaseFirestore db;
@@ -327,7 +329,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 post = document.toObject(Post.class);
-                                if (isPostFit(post)&&post.getIsActive()) {
+                                if (isPostFit(post) && post.getIsActive()) {
                                     post.convertLatLngToString(calcDistanceFromUser(post.getLat(), post.getLng()));
                                     getUserForPost(post);
                                 }
@@ -410,7 +412,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
-                    Map<String,Object> postMap=document.getData();
+                    Map<String, Object> postMap = document.getData();
 //                    ArrayList<Post>exampleArr= (ArrayList<Post>)(postMap).get("postList");
 
                     if (document.exists()) {
@@ -472,13 +474,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 bundle.putParcelable("userParcel", user);
                 bundle.putParcelable("currentLocation", currentLocation);
                 Navigation.findNavController(this, R.id.activity_main_nav_host_fragment).navigate(R.id.newPostFragment, bundle);
-//                newPostFragment.setArguments(bundle);
-//                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//                ft.replace(R.id.fl_postsHost, newPostFragment, null)
-//                        .setReorderingAllowed(true)
-//                        .addToBackStack("openPostFragment") // name can be null
-//                        .commit();
-//                Navigation.findNavController(this, R.id.activity_main_nav_host_fragment).navigate(R.id.newPostFragment, bundle);
         }
         return true;
     }
@@ -648,7 +643,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     @Override
     public void openPrivatePosts() {
         Bundle bundle = new Bundle();
-       ArrayList<Post>filteredList= filterPostList(requests.getPosts());
+        ArrayList<Post> filteredList = filterPostList(requests.getPosts());
         bundle.putParcelableArrayList("postParcel", filteredList);
         userRequestFragment.setArguments(bundle);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -657,14 +652,15 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 .addToBackStack("userPostList")
                 .commit();
     }
-    private ArrayList<Post>filterPostList(ArrayList<Post>list){
-        ArrayList<Post>filteredList=new ArrayList<>();
-       for (int i=0;i<list.size();i++){
-           if (list.get(i).getIsActive()){
-               filteredList.add(list.get(i));
-           }
-       }
-       return filteredList;
+
+    private ArrayList<Post> filterPostList(ArrayList<Post> list) {
+        ArrayList<Post> filteredList = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getIsActive()) {
+                filteredList.add(list.get(i));
+            }
+        }
+        return filteredList;
     }
 
     @Override
@@ -771,20 +767,26 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     }
 
 
-
     @Override
-    public void deactivePost(Post p,int position) {
-        db.collection("Requests").document(mAuth.getUid()).update("posts",FieldValue.arrayRemove(p));
+    public void deactivePost(Post p, int position) {
+        db.collection("Requests").document(mAuth.getUid()).update("posts", FieldValue.arrayRemove(p));
         requests.posts.get(position).setIsActive(false);
-        db.collection("Requests").document(mAuth.getUid()).update("posts",FieldValue.arrayUnion(requests.posts.get(position)));
-        db.collection("Posts").document(mAuth.getUid()+"$$"+p.getDate().getTime()).update("isActive", false);
+        db.collection("Requests").document(mAuth.getUid()).update("posts", FieldValue.arrayUnion(requests.posts.get(position)));
+        db.collection("Posts").document(mAuth.getUid() + "$$" + p.getDate().getTime()).update("isActive", false);
 
     }
 
     @Override
-    public void deletePost(Post p,int position) {
-          db.collection("Posts").document(mAuth.getUid()+"$$"+p.getDate().getTime()).delete();
-          db.collection("Requests").document(mAuth.getUid()).update("posts",FieldValue.arrayRemove(p));
+    public void deletePost(Post p, int position) {
+        db.collection("Posts").document(mAuth.getUid() + "$$" + p.getDate().getTime()).delete();
+        db.collection("Requests").document(mAuth.getUid()).update("posts", FieldValue.arrayRemove(p));
 
+    }
+
+
+
+    @Override
+    public void refreshPage() {
+      recreate();
     }
 }

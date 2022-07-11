@@ -51,7 +51,6 @@
             android:contextClickable="true"
             android:divider="@null"
             android:dividerHeight="0dp">
-
         </ListView>
     </FrameLayout>
 
