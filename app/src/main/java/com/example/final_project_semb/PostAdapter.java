@@ -99,7 +99,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
     private void getBitMapedImage(String url,ViewHolder holder) {
         StorageReference httpsReference = firebaseStorage.getReferenceFromUrl(url);
-        final long ONE_MEGABYTE = 512 * 512;
+        final long ONE_MEGABYTE = 1024 * 1024*5;
         httpsReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {

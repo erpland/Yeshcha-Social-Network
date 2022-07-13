@@ -72,7 +72,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     FirebaseStorage firebaseStorage;
     StorageReference storageReference;
     DocumentReference userDocument, postsDocument;
-
     ArrayList<Post> posts;
     User user = null;
     Reply reply = null;
@@ -554,8 +553,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
     @Override
     public void closeAllFragment() {
-//        getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-//        getSupportFragmentManager().beginTransaction().remove(f).commit();
+
         getSupportFragmentManager().popBackStack("modalFragments", androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
@@ -571,20 +569,17 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         return currentLocation.distanceTo(endPoint);
     }
 
-//    public void closeFragments(Fragment f) {
-//        if (f != null)
-//            getSupportFragmentManager().beginTransaction().remove(f).commit();
-//    }
 
-    public Fragment getVisibleFragment() {
-        if (openPostFragment.isVisible())
-            return openPostFragment;
-        else if (newPostFragment.isVisible())
-            return newPostFragment;
-        else if (publicProfileFragment.isVisible())
-            return publicProfileFragment;
-        return null;
-    }
+
+//    public Fragment getVisibleFragment() {
+//        if (openPostFragment.isVisible())
+//            return openPostFragment;
+//        else if (newPostFragment.isVisible())
+//            return newPostFragment;
+//        else if (publicProfileFragment.isVisible())
+//            return publicProfileFragment;
+//        return null;
+//    }
 
     @Override
     public void replyOnPost(View view, String phoneNumber, String title) {
@@ -601,7 +596,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     private void openChat(String phoneNumber, String title) {
         String msg = "אהלן, יש לי " + title + "...";
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse("https://wa.me/" + phoneNumber + "?text=" + msg));
+        intent.setData(Uri.parse("https://wa.me/972" + phoneNumber + "?text=" + msg));
         startActivity(intent);
 //            SmsManager smsManager = SmsManager.getDefault();
 //            smsManager.sendTextMessage("+972" + phoneNumber, null, "אשמח לעזור!!", null, null);
@@ -700,17 +695,17 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     @Override
     public void updateUser(String name, String phoneNumber) {
         if (!ValidateUpdatedInput(name, phoneNumber)) return;
-        if (name != user.getName()) {
+        if (!name.equals(user.getName())) {
             user.setName(name);
             db.collection("users").document(mAuth.getUid()).update("name", user.getName());
         }
-        if (phoneNumber != user.getPhoneNumber()) {
+        if (!phoneNumber.equals(user.getPhoneNumber())) {
             user.setPhoneNumber(phoneNumber);
             db.collection("users").document(mAuth.getUid()).update("phoneNumber", user.getPhoneNumber());
         }
         if (editProfileImg != null) {
             uploadImage();
-        } else if (editProfileImg == null && (name != user.getName() || phoneNumber != user.getPhoneNumber())) {
+        } else if (editProfileImg == null && (!name.equals(user.getName()) || !phoneNumber.equals(user.getPhoneNumber()))) {
             Bundle bundle = new Bundle();
             bundle.putParcelable("userParcel", user);
             navController.navigate(R.id.profileFragment, bundle);
@@ -768,8 +763,8 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     }
 
     @Override
-    public void updateImage(int viewId, int imageView) {
-        editProfileImageId = imageView;
+    public void updateImage(int viewId) {
+        editProfileImageId = viewId;
         takeGalleryAction();
     }
 
@@ -781,10 +776,9 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
             case GALLERY_PHOTO:
                 if (resultCode == RESULT_OK) {
-                    updatedImageUri = data.getData();
+                  updatedImageUri = data.getData();
                     editProfileImg = findViewById(editProfileImageId);
                     editProfileImg.setImageURI(updatedImageUri);
-
                 } else {
                     Toast.makeText(this, "טעינת תמונה נכשלה", LENGTH_LONG).show();
                 }

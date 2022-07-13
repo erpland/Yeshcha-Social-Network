@@ -175,7 +175,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             //save user to the database
-                            final StorageReference ref = storageReference.child(mAuth.getUid()).child("Profile_" + System.currentTimeMillis() + ".jpg");
+                     final StorageReference ref = storageReference.child(mAuth.getUid()).child("Profile_" + System.currentTimeMillis() + ".jpg");
+
                             UploadTask imageUpload = ref.putFile(image);
 
                             Task<Uri> urlTask = imageUpload.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {

@@ -69,7 +69,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 
     private void initVars() {
         firebaseStorage = FirebaseStorage.getInstance();
-        storageRef = firebaseStorage.getReference();
+        storageRef = firebaseStorage.getReference("Users");
     }
 
     private void initData() {
@@ -82,7 +82,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     public void setProfileImage() {
         StorageReference httpsReference = firebaseStorage.getReferenceFromUrl(user.image);
 
-        final long ONE_MEGABYTE = 1024 * 1024;
+        final long ONE_MEGABYTE = 1024 * 1024*5;
         httpsReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
@@ -120,13 +120,13 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
                 editUserHandler.updateUser(nameStr,phoneStr);
                 break;
             case R.id.editProfilePic:
-                editUserHandler.updateImage(v.getId(),profilePic.getId());
+                editUserHandler.updateImage(v.getId());
                 break;
 
         }
     }
     public interface EditUserHandler{
         void updateUser(String name, String phoneNumber);
-        void updateImage(int viewId,int imageView);
+        void updateImage(int viewId);
     }
 }
