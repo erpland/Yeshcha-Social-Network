@@ -99,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     boolean IS_REPLIES_READY;
     boolean IS_PREFERENCES_READY;
     boolean IS_FIRST_RUN = true;
+    boolean IS_IMAGE_CHANGED;
 
     FrameLayout postsHost_fl;
     Fragment openPostFragment;
@@ -106,7 +107,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     Fragment publicProfileFragment;
     Fragment editProfileFragment;
     Fragment userRequestFragment;
-
 
 
     @Override
@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     @Override
     protected void onResume() {
         super.onResume();
-        if(!IS_FIRST_RUN){
+        if (!IS_FIRST_RUN && !IS_IMAGE_CHANGED) {
             openLoaderOnUpdate();
         }
     }
@@ -570,7 +570,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     }
 
 
-
 //    public Fragment getVisibleFragment() {
 //        if (openPostFragment.isVisible())
 //            return openPostFragment;
@@ -608,7 +607,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         Navigation.findNavController(this, R.id.activity_main_nav_host_fragment).navigate(R.id.loaderFragment);
         refreshPage();
     }
-
 
 
     @Override
@@ -705,14 +703,12 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         }
         if (editProfileImg != null) {
             uploadImage();
-        } else if (editProfileImg == null && (!name.equals(user.getName()) || !phoneNumber.equals(user.getPhoneNumber()))) {
-            Bundle bundle = new Bundle();
-            bundle.putParcelable("userParcel", user);
-            navController.navigate(R.id.profileFragment, bundle);
         }
         closeAllFragment();
-
-
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("userParcel", user);
+        navController.navigate(R.id.profileFragment, bundle);
+        IS_IMAGE_CHANGED = false;
     }
 
     public void uploadImage() {
@@ -771,14 +767,15 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         switch (requestCode) {
 
             case GALLERY_PHOTO:
+                IS_IMAGE_CHANGED = true;
                 if (resultCode == RESULT_OK) {
-                  updatedImageUri = data.getData();
+                    updatedImageUri = data.getData();
                     editProfileImg = findViewById(editProfileImageId);
                     editProfileImg.setImageURI(updatedImageUri);
+                    Toast.makeText(this, "תןמהעחןרכק", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(this, "טעינת תמונה נכשלה", LENGTH_LONG).show();
                 }

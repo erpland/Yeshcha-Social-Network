@@ -112,7 +112,7 @@ public class NewPostFragment extends Fragment implements View.OnClickListener {
 
     private boolean validateInputs() {
         return !title.getText().toString().isEmpty() && !body.getText().toString().isEmpty() &&
-                title.getText().toString().length() <= 30 && body.getText().toString().length() <= 100;
+                title.getText().toString().length() <= 15 && body.getText().toString().length() <= 40;
 
     }
 

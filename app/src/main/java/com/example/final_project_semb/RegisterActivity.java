@@ -124,6 +124,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     Toast.makeText(this, "שם יכול להכין אותיות בעברית/אנגלית בלבד", Toast.LENGTH_LONG).show();
                     return;
                 }
+                if(name.length() > 10){
+                    Toast.makeText(this, "שם לא יכול להכיל יותר מ10 תווים", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 if (!fieldValidation(phoneNumber, "^(?:(?:(\\+?972|\\(\\+?972\\)|\\+?\\(972\\))(?:\\s|\\.|-)?([1-9]\\d?))|(0[23489]{1})|(0[57]{1}[0-9]))(?:\\s|\\.|-)?([^0\\D]{1}\\d{2}(?:\\s|\\.|-)?\\d{4})$")) {
                     Toast.makeText(this, "מספר טלפון לא תקין", Toast.LENGTH_LONG).show();
                     return;
