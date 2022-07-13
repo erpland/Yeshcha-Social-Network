@@ -56,7 +56,7 @@ public class HomeFragment extends Fragment {
     private void initView() {
         lstPost = (RecyclerView) root.findViewById(R.id.lst_posts);
         mSwipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.swipeToRefresh);
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.black);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.main_green);
     }
 
     public interface RefreshHandler{

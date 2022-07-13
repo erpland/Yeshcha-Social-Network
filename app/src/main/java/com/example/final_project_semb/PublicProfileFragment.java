@@ -104,7 +104,7 @@ public class PublicProfileFragment extends Fragment implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.cl_publicPostOverlay:
-                fragmentHandler.closeAllFragment(this);
+                fragmentHandler.closeAllFragment();
                 break;
         }
     }

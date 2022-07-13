@@ -196,13 +196,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                         user.setImage(imageUri.toString());
                                         addUserToFireStore(user, preferences, reply, requests);
                                         // Sign in success, update UI with the signed-in user's information
-                                        Toast.makeText(RegisterActivity.this, "Authentication Success.",
+                                        Toast.makeText(RegisterActivity.this, "נרשמת בהצלחה!.",
                                                 Toast.LENGTH_SHORT).show();
 
 
                                         startActivity(new Intent(RegisterActivity.this, MainActivity.class));
                                     } else {
-                                        Toast.makeText(RegisterActivity.this, "Image Could Not Be Uploaded...",
+                                        Toast.makeText(RegisterActivity.this, "טעינת תמונה נכשלה...",
                                                 Toast.LENGTH_SHORT).show();
                                     }
                                 }
@@ -212,7 +212,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                         } else {
                             // If sign in fails, display a message to the user.
 
-                            Toast.makeText(RegisterActivity.this, "Authentication failed.",
+                            Toast.makeText(RegisterActivity.this, "הרשמה נכשלה, בדוק את השדות או שאולי בכלל נרשמת כבר?!",
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -251,7 +251,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     profilePicture.setImageURI(imagePath);
 
                 } else {
-                    Toast.makeText(this, "Operation failed", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "טעינת תמונה נכשלה...", Toast.LENGTH_LONG).show();
                 }
                 break;
 

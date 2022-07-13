@@ -112,7 +112,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         switch(v.getId()){
             case R.id.btn_editClose:
             case R.id.cl_editProfileOverlay:
-                fragmentHandler.closeAllFragment(this);
+                fragmentHandler.closeAllFragment();
                 break;
             case R.id.btn_editSave:
                 String nameStr = name.getText().toString();

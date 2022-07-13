@@ -90,7 +90,7 @@ public class OpenPostFragment extends Fragment implements View.OnClickListener, 
     }
 
     public interface OpenPostInterface {
-        void replyOnPost(View view, String phoneNumber);
+        void replyOnPost(View view, String phoneNumber,String title);
     }
 
     private void initViews() {
@@ -129,10 +129,10 @@ public class OpenPostFragment extends Fragment implements View.OnClickListener, 
         switch (v.getId()) {
             case R.id.btn_closePostFrmnt:
             case R.id.cl_openPostOverlay:
-                fragmentHandler.closeAllFragment(this);
+                fragmentHandler.closeAllFragment();
                 break;
             case R.id.chatButton:
-                openPostInterface.replyOnPost(v,post.user.getPhoneNumber());
+                openPostInterface.replyOnPost(v,post.user.getPhoneNumber(),post.getTitle());
                 break;
         }
     }

@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         String pass=password_et.getText().toString();
         String email=email_et.getText().toString();
         if (pass.isEmpty()||email.isEmpty()){
-            Toast.makeText(this,"Cant leave empty fields!!",Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"לא ניתן להשאיר שדות ריקים",Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -72,7 +72,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                             FirebaseUser user = mAuth.getCurrentUser();
 
-                            Toast.makeText(LoginActivity.this, "Authentication Success.",
+                            Toast.makeText(LoginActivity.this, "אימות בוצע בהצלחה.",
                                     Toast.LENGTH_SHORT).show();
 
 
@@ -82,7 +82,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         } else {
                             // If sign in fails, display a message to the user.
 
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                            Toast.makeText(LoginActivity.this, "אימות נכשל, בדוק את השדות שהזנת....",
                                     Toast.LENGTH_SHORT).show();
                             return;
 

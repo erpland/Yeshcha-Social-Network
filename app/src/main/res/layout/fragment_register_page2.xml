@@ -12,28 +12,32 @@
         android:id="@+id/rly_addPhoto"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_gravity="center"
+        android:layout_gravity="start"
         android:layout_weight="2">
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
+            android:scaleType="centerCrop"
             android:id="@+id/iv_avatar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerHorizontal="true"
+            app:shapeAppearanceOverlay="@style/roundedCornersImageView"
             android:src="@drawable/default_avatar" />
 
         <ImageView
             android:id="@+id/iv_camera"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_alignEnd="@id/iv_avatar"
+            android:layout_alignBottom="@id/iv_avatar"
             android:layout_marginBottom="5dp"
             android:src="@drawable/ic_camera" />
     </RelativeLayout>
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.5" />
+<!--    <Space-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_weight="0.5" />-->
 
     <EditText
         android:id="@+id/et_phoneRegister"
@@ -59,7 +63,8 @@
         android:drawableRight="@drawable/ic_name"
         android:drawablePadding="5sp"
         android:ems="10"
-        android:hint="שם מלא"
+        android:hint="שם"
+        android:singleLine="true"
         android:layoutDirection="rtl" />
 
     <Space
