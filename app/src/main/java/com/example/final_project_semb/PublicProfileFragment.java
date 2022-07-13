@@ -85,7 +85,7 @@ public class PublicProfileFragment extends Fragment implements View.OnClickListe
     public void setProfileImage() {
         StorageReference httpsReference = firebaseStorage.getReferenceFromUrl(user.image);
 
-        final long ONE_MEGABYTE = 1024 * 1024;
+        final long ONE_MEGABYTE = 1024 * 1024*5;
         httpsReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {

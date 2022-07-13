@@ -74,7 +74,7 @@
                         android:layout_height="60dp"
                         android:layout_alignParentTop="true"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/user4"
+                        android:src=""
                         app:shapeAppearanceOverlay="@style/roundedCornersImageView" />
 
                     <TextView
@@ -84,7 +84,6 @@
                         android:layout_below="@id/openPostProfilePic"
                         android:layout_marginTop="2dp"
                         android:fontFamily="@font/heebo"
-                        android:text="טוני בננזה"
                         android:textColor="@color/main_green"
                         android:textStyle="bold" />
 
@@ -105,7 +104,6 @@
                         android:layout_height="0dp"
                         android:layout_weight="2"
                         android:fontFamily="@font/givert_levin"
-                        android:text="ישך ריזלה?!"
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
@@ -121,7 +119,7 @@
                         android:layout_weight="6"
                         android:fontFamily="@font/heebo"
                         android:paddingTop="5dp"
-                        android:text="מחפש ריזלה דחוף! נתקעתי בלי ניירות להלהלה הלהלהחןכקחןכקיוכקיוקכ"
+                        android:text=""
                         android:textColor="@color/text_secondery"
                         android:textSize="16sp" />
                 </LinearLayout>
@@ -158,8 +156,7 @@
                         android:layout_height="20dp"
                         android:layout_alignBottom="@id/post_icLocation"
                         android:layout_toEndOf="@id/post_icLocation"
-                        android:fontFamily="@font/heebo"
-                        android:text="500 מטר ממך" />
+                        android:fontFamily="@font/heebo" />
 
                 </RelativeLayout>
 
