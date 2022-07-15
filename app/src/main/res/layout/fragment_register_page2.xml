@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,19 +10,23 @@
 
     <RelativeLayout
         android:id="@+id/rly_addPhoto"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_gravity="start"
-        android:layout_weight="2">
+        android:layout_marginBottom="32dp"
+        android:layout_weight="2"
+        app:layout_constraintBottom_toTopOf="@+id/et_nameRegister"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:scaleType="centerCrop"
             android:id="@+id/iv_avatar"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_centerHorizontal="true"
-            app:shapeAppearanceOverlay="@style/roundedCornersImageView"
-            android:src="@drawable/default_avatar" />
+            android:scaleType="centerCrop"
+            android:src="@drawable/default_avatar"
+            app:shapeAppearanceOverlay="@style/roundedCornersImageView" />
 
         <ImageView
             android:id="@+id/iv_camera"
@@ -34,50 +38,53 @@
             android:src="@drawable/ic_camera" />
     </RelativeLayout>
 
-<!--    <Space-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:layout_weight="0.5" />-->
+
 
     <EditText
         android:id="@+id/et_phoneRegister"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginBottom="32dp"
         android:layout_weight="1"
         android:drawableRight="@drawable/ic_phone"
         android:drawablePadding="5sp"
         android:hint="מספר טלפון"
         android:inputType="phone"
-        android:layoutDirection="rtl" />
+        android:gravity="right"
+        android:layoutDirection="rtl"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="@+id/rly_addPhoto"
+        app:layout_constraintStart_toStartOf="@+id/rly_addPhoto" />
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.5" />
 
     <EditText
         android:id="@+id/et_nameRegister"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginBottom="32dp"
         android:layout_weight="1"
         android:drawableRight="@drawable/ic_name"
         android:drawablePadding="5sp"
         android:ems="10"
         android:hint="שם"
+        android:layoutDirection="rtl"
         android:singleLine="true"
-        android:layoutDirection="rtl" />
+        app:layout_constraintBottom_toTopOf="@+id/et_phoneRegister"
+        app:layout_constraintEnd_toEndOf="@+id/rly_addPhoto"
+        app:layout_constraintStart_toStartOf="@+id/rly_addPhoto" />
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.5" />
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginBottom="32dp"
         android:layout_weight="1"
         android:orientation="horizontal"
-        android:weightSum="2.4">
+        android:weightSum="2.4"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <Space
             android:layout_width="0dp"
@@ -94,6 +101,7 @@
             android:text="הירשם"
             android:textColor="@color/background"
             android:textSize="18sp" />
+
         <Space
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -111,4 +119,4 @@
             app:strokeColor='@color/main_green' />
     </LinearLayout>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

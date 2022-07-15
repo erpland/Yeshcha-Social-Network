@@ -1,72 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".RegisterPage1Fragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:weightSum="6">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RegisterPage1Fragment">
 
         <EditText
             android:id="@+id/et_emailRegister"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginBottom="32dp"
             android:layout_weight="1"
             android:drawableRight="@drawable/ic_email"
             android:drawablePadding="5sp"
             android:hint="אמייל"
+            android:gravity="right"
             android:inputType="textEmailAddress"
-            android:layoutDirection="rtl" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5" />
+            android:layoutDirection="rtl"
+            app:layout_constraintBottom_toTopOf="@+id/et_passwordRegister"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <EditText
             android:id="@+id/et_passwordRegister"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginBottom="32dp"
             android:layout_weight="1"
             android:drawableRight="@drawable/ic_password"
             android:drawablePadding="5sp"
             android:gravity="right"
             android:hint="סיסמא"
             android:inputType="textPassword"
-            android:layoutDirection="rtl" />
+            android:layoutDirection="rtl"
+            app:layout_constraintBottom_toTopOf="@+id/et_passwordAgain"
+            app:layout_constraintEnd_toEndOf="@+id/et_emailRegister"
+            app:layout_constraintStart_toStartOf="@+id/et_emailRegister" />
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5" />
 
         <EditText
             android:id="@+id/et_passwordAgain"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginBottom="64dp"
             android:layout_weight="1"
             android:drawableRight="@drawable/ic_password"
             android:drawablePadding="5sp"
             android:gravity="right"
             android:hint="סיסמא שוב"
             android:inputType="textPassword"
-            android:layoutDirection="rtl" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5" />
+            android:layoutDirection="rtl"
+            app:layout_constraintBottom_toTopOf="@+id/btn_register1"
+            tools:layout_editor_absoluteX="16dp" />
 
         <Button
             android:id="@+id/btn_register1"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginHorizontal="32dp"
+            android:layout_marginBottom="32dp"
             android:layout_weight="1"
             android:backgroundTint="@color/main_green"
             android:text="המשך"
             android:textColor="@color/background"
-            android:textSize="18sp" />
-    </LinearLayout>
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/et_passwordAgain"
+            app:layout_constraintStart_toStartOf="@+id/et_passwordAgain" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.25"
+            app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

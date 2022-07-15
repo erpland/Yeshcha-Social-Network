@@ -6,31 +6,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 public class RequestAdapter extends ArrayAdapter<Post>{
     private Context context;
     private ArrayList<Post> arr;
-    PrivatePostHandler privatePostHandler;
+    FragmentsCallbacks fragmentsCallbacks;
 
     public RequestAdapter(@NonNull Context context, int resource, @NonNull List<Post> objects) {
         super(context, resource, objects);
         this.context = context;
         this.arr = new ArrayList<>(objects);
-        privatePostHandler=(PrivatePostHandler)context;
+        fragmentsCallbacks=(FragmentsCallbacks) context;
     }
 
     @NonNull
@@ -56,25 +51,17 @@ public class RequestAdapter extends ArrayAdapter<Post>{
             accept.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    privatePostHandler.deactivePost(p,position);
+                    fragmentsCallbacks.deactivatePost(p,position);
 
                 }
             });
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    privatePostHandler.deletePost(p,position);
+                    fragmentsCallbacks.deletePost(p,position);
                 }
             });
         }
         return convertView;
     }
-
-
-
-        public interface PrivatePostHandler{
-        void deactivePost(Post p,int position);
-        void deletePost(Post p,int position);
-
-}
 }

@@ -27,22 +27,18 @@ public class SettingsFragment extends Fragment implements CompoundButton.OnCheck
     ViewGroup root;
     SwitchMaterial[] switches = new SwitchMaterial[6];
     PreferencesManager preferencesManager;
-    SettingsManager settingsManager;
+    FragmentsCallbacks fragmentsCallbacks;
     ImageView logout_btn;
 
     @Override
     public void onClick(View v) {
-        settingsManager.logOut();
+        fragmentsCallbacks.logOut();
     }
 
-    public interface SettingsManager{
-        void updatePreferences(View v,PreferencesManager preferencesManager);
-        void logOut();
-    }
 
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        settingsManager = (SettingsManager) context;
+        fragmentsCallbacks = (FragmentsCallbacks) context;
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,12 +46,10 @@ public class SettingsFragment extends Fragment implements CompoundButton.OnCheck
         // Inflate the layout for this fragment
         root = (ViewGroup) inflater.inflate(R.layout.fragment_settings, null);
         preferencesManager = getArguments().getParcelable("settingsParcel");
-
         Spinner spinnerLanguages = root.findViewById(R.id.spinner_distance);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(root.getContext(), R.array.distance_options, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         spinnerLanguages.setAdapter(adapter);
-
         initValues();
         setSwitches();
         logout_btn.setOnClickListener(this);
@@ -102,6 +96,6 @@ public class SettingsFragment extends Fragment implements CompoundButton.OnCheck
 
 
         }
-        settingsManager.updatePreferences(compoundButton,preferencesManager);
+        fragmentsCallbacks.updatePreferences(compoundButton,preferencesManager);
     }
 }

@@ -35,17 +35,15 @@ public class NewPostFragment extends Fragment implements View.OnClickListener {
     TextView location;
     CardView newPostCardView;
     ConstraintLayout newPostOverlay;
-    FragmentHandler fragmentHandler;
+    FragmentsCallbacks fragmentsCallbacks;
     User user;
     Location currentLocation;
-    AddPostInterface addPostInterface;
     Spinner spinnerCategory;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        fragmentHandler = (FragmentHandler) context;
-        addPostInterface = (AddPostInterface) context;
+        fragmentsCallbacks = (FragmentsCallbacks) context;
     }
 
     @Override
@@ -71,10 +69,6 @@ public class NewPostFragment extends Fragment implements View.OnClickListener {
         close_btn.setOnClickListener(this);
         add_btn.setOnClickListener(this);
         return root;
-    }
-
-    public interface AddPostInterface {
-        void addNewPost(View view, String title, String body, Location location, Date date,int categoryCode);
     }
 
     private void initViews() {
@@ -121,11 +115,11 @@ public class NewPostFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.new_post_cancel:
             case R.id.newPostOverlay:
-                fragmentHandler.popNavBackStack();
+                fragmentsCallbacks.popNavBackStack();
                 break;
             case R.id.new_post_add:
                 if (validateInputs()) {
-                    addPostInterface.addNewPost(v, title.getText().toString(), body.getText().toString(), currentLocation, Calendar.getInstance().getTime(),spinnerCategory.getSelectedItemPosition());
+                    fragmentsCallbacks.addNewPost(v, title.getText().toString(), body.getText().toString(), currentLocation, Calendar.getInstance().getTime(),spinnerCategory.getSelectedItemPosition());
                 } else {
                     Toast.makeText(root.getContext(), "לא ניתן להוסיף פוסט ריק ו/אחד או יותר מהשדות לא תקין", Toast.LENGTH_LONG).show();
                 }

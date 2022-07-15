@@ -24,12 +24,13 @@ public class HomeFragment extends Fragment {
     ViewGroup root;
     ArrayList<Post> posts;
     SwipeRefreshLayout mSwipeRefreshLayout;
-    RefreshHandler refreshHandler;
+    FragmentsCallbacks fragmentsCallbacks;
 
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        refreshHandler = (RefreshHandler) context;
+        fragmentsCallbacks = (FragmentsCallbacks) context;
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -49,18 +50,13 @@ public class HomeFragment extends Fragment {
         return root;
     }
 
-    public void refreshPage(){
-      refreshHandler.refreshPage();
+    public void refreshPage() {
+        fragmentsCallbacks.refreshPage();
     }
 
     private void initView() {
         lstPost = (RecyclerView) root.findViewById(R.id.lst_posts);
         mSwipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.swipeToRefresh);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.main_green);
-    }
-
-    public interface RefreshHandler{
-        void refreshPage();
-
     }
 }

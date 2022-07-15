@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/heebo"
-        android:text="תן וקח בקלות מוגברת"
+        android:text="תן וקח בקלות"
         android:textColor="#F1AD4A"
         android:textSize="20sp"
         android:textStyle="bold"

@@ -3,8 +3,6 @@ package com.example.final_project_semb;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -35,13 +33,12 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     CardView card;
     StorageReference storageRef;
     FirebaseStorage firebaseStorage;
-    FragmentHandler fragmentHandler;
-    EditUserHandler editUserHandler;
+    FragmentsCallbacks fragmentsCallbacks;
+
 
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        fragmentHandler = (FragmentHandler) context;
-        editUserHandler = (EditUserHandler) context;
+        fragmentsCallbacks = (FragmentsCallbacks) context;
     }
 
     @Override
@@ -112,21 +109,17 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         switch(v.getId()){
             case R.id.btn_editClose:
             case R.id.cl_editProfileOverlay:
-                fragmentHandler.closeAllFragment();
+                fragmentsCallbacks.closeAllFragment();
                 break;
             case R.id.btn_editSave:
                 String nameStr = name.getText().toString();
                 String phoneStr = phone.getText().toString();
-                editUserHandler.updateUser(nameStr,phoneStr);
+                fragmentsCallbacks.updateUser(nameStr,phoneStr);
                 break;
             case R.id.editProfilePic:
-                editUserHandler.updateImage(v.getId());
+                fragmentsCallbacks.updateImage(v.getId());
                 break;
-
         }
     }
-    public interface EditUserHandler{
-        void updateUser(String name, String phoneNumber);
-        void updateImage(int viewId);
-    }
+
 }

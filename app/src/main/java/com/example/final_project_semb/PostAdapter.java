@@ -28,7 +28,7 @@ import java.util.List;
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     private Context context;
     private ArrayList<Post> arr;
-    private PostCallback postCallback;
+    private FragmentsCallbacks fragmentsCallbacks;
     FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
     byte[] imgBytes = new byte[64];
     Bitmap bmp;
@@ -48,7 +48,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        postCallback = (PostCallback) context;
+        fragmentsCallbacks = (FragmentsCallbacks) context;
         Post p = arr.get(position);
         getBitMapedImage(p.user.image,holder);
         holder.title.setText("ישך " + p.title + "?!");
@@ -58,27 +58,19 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         holder.imgPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                postCallback.getClickedUser(holder.itemView,p.user);
-
+                fragmentsCallbacks.getClickedUser(holder.itemView,p.user);
             }
         });
         holder.postView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                postCallback.getClickedPost(holder.itemView, p);
-
+                fragmentsCallbacks.getClickedPost(holder.itemView, p);
             }
         });
     }
 
     public int getItemCount() {
         return this.arr.size();
-    }
-
-    public interface PostCallback {
-        public void getClickedPost(View id, Post post);
-        public void getClickedUser(View id,User user);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

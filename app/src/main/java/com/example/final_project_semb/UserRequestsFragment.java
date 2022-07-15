@@ -6,15 +6,12 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -24,13 +21,12 @@ public class UserRequestsFragment extends Fragment implements View.OnClickListen
     ListView requestsListView;
     ArrayList<Post>posts;
     ConstraintLayout overlay;
-    FragmentHandler fragmentHandler;
+    FragmentsCallbacks fragmentsCallbacks;
     ConstraintLayout inner;
-    PrivatePostHandler privatePostHandler;
     TextView hasPosts_tv;
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        fragmentHandler = (FragmentHandler) context;
+        fragmentsCallbacks = (FragmentsCallbacks) context;
 //        privatePostHandler=(PrivatePostHandler) context;
     }
     @Override
@@ -67,13 +63,7 @@ public class UserRequestsFragment extends Fragment implements View.OnClickListen
 
     @Override
     public void onClick(View view) {
-        fragmentHandler.closeAllFragment();
+        fragmentsCallbacks.closeAllFragment();
     }
 
-
-    public interface PrivatePostHandler{
-        void deactivePost(View v,Post p);
-        void deletePost(View v,Post p);
-
-    }
 }

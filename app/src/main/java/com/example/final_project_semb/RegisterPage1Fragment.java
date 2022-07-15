@@ -6,27 +6,24 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import java.util.regex.Pattern;
-
 
 public class RegisterPage1Fragment extends Fragment implements View.OnClickListener {
     Button next_btn;
     EditText email_et,password_et,passwordConfirm_et;
     ViewGroup root;
-    CallBackInterface callBackInterface;
+    RegistrationCallbacks registrationCallbacks;
 
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        callBackInterface = (CallBackInterface) context;
+        registrationCallbacks = (RegistrationCallbacks) context;
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,6 +44,6 @@ public class RegisterPage1Fragment extends Fragment implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        callBackInterface.callBackReg1(view.getId(),email_et.getText().toString(),password_et.getText().toString(),passwordConfirm_et.getText().toString());
+        registrationCallbacks.callBackReg1(view.getId(),email_et.getText().toString(),password_et.getText().toString(),passwordConfirm_et.getText().toString());
     }
 }

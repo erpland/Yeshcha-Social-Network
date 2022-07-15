@@ -1,8 +1,6 @@
 package com.example.final_project_semb;
 
-import android.app.Activity;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,17 +13,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
-
-import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
 
 
 public class RegisterPage2Fragment extends Fragment implements View.OnClickListener {
     Button register, goBack;
     ViewGroup root;
-    CallBackInterface callBackInterface;
+    RegistrationCallbacks registrationCallbacks;
     EditText full_name, phone_number;
     RelativeLayout imageSection;
     RegisterActivity registerActivity;
@@ -37,7 +30,7 @@ public class RegisterPage2Fragment extends Fragment implements View.OnClickListe
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        callBackInterface = (CallBackInterface) context;
+        registrationCallbacks = (RegistrationCallbacks) context;
     }
 
     @Override
@@ -70,10 +63,10 @@ public class RegisterPage2Fragment extends Fragment implements View.OnClickListe
                 getParentFragmentManager().popBackStackImmediate();
                 break;
             case R.id.btn_registerFinish:
-                callBackInterface.callBackReg2(view.getId(), full_name.getText().toString(), phone_number.getText().toString());
+                registrationCallbacks.callBackReg2(view.getId(), full_name.getText().toString(), phone_number.getText().toString());
                 break;
             case R.id.rly_addPhoto:
-                callBackInterface.callBackImageMethod(view.getId(),profilePic.getId());
+                registrationCallbacks.callBackImageMethod(view.getId(),profilePic.getId());
                 break;
 
         }

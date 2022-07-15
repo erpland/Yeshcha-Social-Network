@@ -32,12 +32,12 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     StorageReference storageRef;
     FirebaseStorage firebaseStorage;
     Button editProfileBtn, showPostsBtn;
-    PrivateProfileHBtnHandler privateProfileHBtnHandler;
+    FragmentsCallbacks fragmentsCallbacks;
     boolean hasPosts;
 
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        privateProfileHBtnHandler = (PrivateProfileHBtnHandler) context;
+        fragmentsCallbacks = (FragmentsCallbacks) context;
     }
 
     @Override
@@ -103,20 +103,16 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         startsArr[4] = root.findViewById(R.id.iv_star5_private);
     }
 
-    public interface PrivateProfileHBtnHandler {
-        void openEditProfile();
 
-        void openPrivatePosts();
-    }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_editProfile:
-                privateProfileHBtnHandler.openEditProfile();
+                fragmentsCallbacks.openEditProfile();
                 break;
             case R.id.btn_showPosts:
-                privateProfileHBtnHandler.openPrivatePosts();
+                fragmentsCallbacks.openPrivatePosts();
                 break;
         }
     }

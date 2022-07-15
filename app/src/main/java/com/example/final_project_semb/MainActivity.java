@@ -26,8 +26,8 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -57,27 +57,22 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener, PostAdapter.PostCallback, FragmentHandler, OpenPostFragment.OpenPostInterface, NewPostFragment.AddPostInterface, SettingsFragment.SettingsManager, ProfileFragment.PrivateProfileHBtnHandler, EditProfileFragment.EditUserHandler, RequestAdapter.PrivatePostHandler, HomeFragment.RefreshHandler {
-    BottomNavigationView bottomNavigation_ly;
+public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener, FragmentsCallbacks {
     FirebaseAuth mAuth;
     FirebaseFirestore db;
     FirebaseStorage firebaseStorage;
     StorageReference storageReference;
-    DocumentReference userDocument, postsDocument;
+    DocumentReference userDocument;
     ArrayList<Post> posts;
     User user = null;
     Reply reply = null;
     Post post = null;
     Requests requests = null;
-    Map<String, Object> preferences = new HashMap<>();
     PreferencesManager preferencesManager;
 
     NavController navController;
@@ -88,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     Uri updatedImageUri;
     ImageView editProfileImg;
     int editProfileImageId;
-    private FusedLocationProviderClient fusedLocationClient;
+    FusedLocationProviderClient fusedLocationClient;
     Location currentLocation;
     private static final int LOCATION_CODE = 44;
 
@@ -100,13 +95,16 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     boolean IS_PREFERENCES_READY;
     boolean IS_FIRST_RUN = true;
     boolean IS_IMAGE_CHANGED;
+    boolean IS_GPS_ON;
 
-    FrameLayout postsHost_fl;
     Fragment openPostFragment;
     Fragment newPostFragment;
     Fragment publicProfileFragment;
     Fragment editProfileFragment;
     Fragment userRequestFragment;
+
+    CountDownTimer errorCountdownTimer;
+    Timer isEverythingLoadedTimer;
 
 
     @Override
@@ -139,17 +137,42 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         setContentView(R.layout.activity_main);
         askLocationPermission();
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        boolean IS_GPS_ON = isGpsEnabled();
+        IS_GPS_ON = isGpsEnabled();
 
         initVars();
         initViews();
         initReplies();
         initRequests();
         initNavbar();
-
         bottomNavigationView.setOnItemSelectedListener(this);
-        Timer timer = new Timer();
-        CountDownTimer count = new CountDownTimer(30000, 1000) {
+
+        loadingErrorCountdown();
+        isEverythingLoadedInterval();
+    }
+
+    private void isEverythingLoadedInterval() {
+        isEverythingLoadedTimer = new Timer();
+        isEverythingLoadedTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if (IS_LOCATION_READY && IS_USER_READY && IS_PREFERENCES_READY && IS_REPLIES_READY && IS_REQUESTS_READY && IS_POSTS_READY && IS_GPS_ON) {
+                    IS_FIRST_RUN = false;
+                    posts.sort(new Comparator<Post>() {
+                        @Override
+                        public int compare(Post o1, Post o2) {
+                            return o2.getDate().compareTo(o1.getDate());
+                        }
+                    });
+                    closeLoader();
+                    errorCountdownTimer.cancel();
+                    isEverythingLoadedTimer.cancel();
+                }
+            }
+        }, 0, 1500);
+    }
+
+    private void loadingErrorCountdown() {
+        errorCountdownTimer = new CountDownTimer(30000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
             }
@@ -175,25 +198,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                         .show();
             }
         };
-
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                count.start();
-                if (IS_LOCATION_READY && IS_USER_READY && IS_PREFERENCES_READY && IS_REPLIES_READY && IS_REQUESTS_READY && IS_POSTS_READY && IS_GPS_ON) {
-                    IS_FIRST_RUN = false;
-                    Collections.sort(posts, new Comparator<Post>() {
-                        @Override
-                        public int compare(Post o1, Post o2) {
-                            return o2.getDate().compareTo(o1.getDate());
-                        }
-                    });
-                    closeLoader();
-                    count.cancel();
-                    timer.cancel();
-                }
-            }
-        }, 0, 3000);
+        errorCountdownTimer.start();
     }
 
     public boolean isGpsEnabled() {
@@ -275,31 +280,30 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case LOCATION_CODE:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED || grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                    getCurrentLocation();
-                } else {
-                    new AlertDialog.Builder(this, R.style.AlertDialogCustom)
-                            .setTitle("בעיה...")
-                            .setMessage("לא אישרת הרשאת גישה למיקום שלך לכן לא ניתן להמשיך")
-                            .setNegativeButton("אני אפס...", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    finishAffinity();
-                                    System.exit(0);
-                                }
-                            })
-                            .setPositiveButton("לא יודע איך...", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent i = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + BuildConfig.APPLICATION_ID));
-                                    startActivity(i);
-                                    refreshPage();
-                                }
-                            })
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .show();
-                }
+        if (requestCode == LOCATION_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED || grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                getCurrentLocation();
+            } else {
+                new AlertDialog.Builder(this, R.style.AlertDialogCustom)
+                        .setTitle("בעיה...")
+                        .setMessage("לא אישרת הרשאת גישה למיקום שלך לכן לא ניתן להמשיך")
+                        .setNegativeButton("אני אפס...", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finishAffinity();
+                                System.exit(0);
+                            }
+                        })
+                        .setPositiveButton("לא יודע איך...", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent i = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + BuildConfig.APPLICATION_ID));
+                                startActivity(i);
+                                refreshPage();
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+            }
         }
     }
 
@@ -308,7 +312,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             @Override
             public void run() {
                 Bundle bundle = new Bundle();
-                bundle.putParcelableArrayList("postParcel", (ArrayList<? extends Parcelable>) posts);
+                bundle.putParcelableArrayList("postParcel", posts);
                 bottomNavigationView.setVisibility(View.VISIBLE);
                 Navigation.findNavController(MainActivity.this, R.id.activity_main_nav_host_fragment).navigate(R.id.homeFragment, bundle);
             }
@@ -332,7 +336,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         publicProfileFragment = new PublicProfileFragment();
         editProfileFragment = new EditProfileFragment();
         userRequestFragment = new UserRequestsFragment();
-        postsHost_fl = findViewById(R.id.fl_postsHost);
 
     }
 
@@ -356,12 +359,11 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                         Log.d("tag1", "userNotExist", task.getException());
                     }
                 } else {
-                    Log.d("tag1", "userNotSucess ", task.getException());
+                    Log.d("tag1", "userNotSuccess ", task.getException());
                 }
 
             }
         });
-
     }
 
     private void initPosts() {
@@ -378,7 +380,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                                     post.convertLatLngToString(calcDistanceFromUser(post.getLat(), post.getLng()));
                                     getUserForPost(post);
                                 }
-
                             }
                         } else {
                             Log.d("TAG", "Error getting documents: ", task.getException());
@@ -459,16 +460,14 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
-                    Map<String, Object> postMap = document.getData();
-//                    ArrayList<Post>exampleArr= (ArrayList<Post>)(postMap).get("postList");
+//                    Map<String, Object> postMap = document.getData();
 
                     if (document.exists()) {
                         requests = document.toObject(Requests.class);
-//                        requests.setPosts(exampleArr);
-
                     } else {
                         Log.d("tag1", "get failed with Requests ", task.getException());
                     }
+
                 } else {
                     Log.d("tag1", "RequestsNotFound", task.getException());
                 }
@@ -487,7 +486,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                     if (document.exists()) {
                         preferencesManager = document.toObject(PreferencesManager.class);
                         initPosts();
-
                     } else {
                         Log.d("tag1", "get failed with Preferences ", task.getException());
                     }
@@ -506,7 +504,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         Bundle bundle = new Bundle();
         switch (item.getItemId()) {
             case R.id.homeFragment:
-                bundle.putParcelableArrayList("postParcel", (ArrayList<? extends Parcelable>) posts);
+                bundle.putParcelableArrayList("postParcel", posts);
                 Navigation.findNavController(this, R.id.activity_main_nav_host_fragment).navigate(R.id.homeFragment, bundle);
                 openLoaderOnUpdate();
                 break;
@@ -553,7 +551,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
     @Override
     public void closeAllFragment() {
-
         getSupportFragmentManager().popBackStack("modalFragments", androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
@@ -569,16 +566,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         return currentLocation.distanceTo(endPoint);
     }
 
-
-//    public Fragment getVisibleFragment() {
-//        if (openPostFragment.isVisible())
-//            return openPostFragment;
-//        else if (newPostFragment.isVisible())
-//            return newPostFragment;
-//        else if (publicProfileFragment.isVisible())
-//            return publicProfileFragment;
-//        return null;
-//    }
 
     @Override
     public void replyOnPost(View view, String phoneNumber, String title) {
@@ -597,10 +584,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse("https://wa.me/972" + phoneNumber + "?text=" + msg));
         startActivity(intent);
-//            SmsManager smsManager = SmsManager.getDefault();
-//            smsManager.sendTextMessage("+972" + phoneNumber, null, "אשמח לעזור!!", null, null);
-//            Toast.makeText(this, "הודעת אס אם אס נשלחה ליעד", Toast.LENGTH_SHORT).show();
-//        }
     }
 
     private void openLoaderOnUpdate() {
@@ -617,7 +600,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         requests.addPosts(post);
         db.collection("Requests").document(mAuth.getUid()).set(requests);
         openLoaderOnUpdate();
-
     }
 
     private void addPostToFireStore(Post post) {
@@ -625,8 +607,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         db.collection("Posts").document(mAuth.getUid() + "$$" + System.currentTimeMillis())
                 .set(post);
         getSupportFragmentManager().popBackStack("openPostFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
-
     }
 
     @Override
@@ -720,7 +700,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 if (!task.isSuccessful()) {
                     throw task.getException();
                 }
-
                 // Continue with the task to get the download URL
                 return ref.getDownloadUrl();
             }
@@ -767,37 +746,31 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-
-            case GALLERY_PHOTO:
-                IS_IMAGE_CHANGED = true;
-                if (resultCode == RESULT_OK) {
-                    updatedImageUri = data.getData();
-                    editProfileImg = findViewById(editProfileImageId);
-                    editProfileImg.setImageURI(updatedImageUri);
-                    Toast.makeText(this, "תןמהעחןרכק", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, "טעינת תמונה נכשלה", LENGTH_LONG).show();
-                }
-                break;
-
+        if (requestCode == GALLERY_PHOTO) {
+            IS_IMAGE_CHANGED = true;
+            if (resultCode == RESULT_OK) {
+                updatedImageUri = data.getData();
+                editProfileImg = findViewById(editProfileImageId);
+                editProfileImg.setImageURI(updatedImageUri);
+            } else {
+                Toast.makeText(this, "טעינת תמונה נכשלה", LENGTH_LONG).show();
+            }
         }
     }
 
-    //open gallery
+
     private void takeGalleryAction() {
         Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(pickPhoto, GALLERY_PHOTO);
     }
 
     @Override
-    public void deactivePost(Post p, int position) {
+    public void deactivatePost(Post p, int position) {
         db.collection("Requests").document(mAuth.getUid()).update("posts", FieldValue.arrayRemove(p));
         requests.posts.get(position).setIsActive(false);
         db.collection("Requests").document(mAuth.getUid()).update("posts", FieldValue.arrayUnion(requests.posts.get(position)));
         db.collection("Posts").document(mAuth.getUid() + "$$" + p.getDate().getTime()).update("isActive", false);
         closeAllFragment();
-
     }
 
     @Override
@@ -807,7 +780,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         db.collection("Posts").document(mAuth.getUid() + "$$" + p.getDate().getTime()).delete();
         db.collection("Requests").document(mAuth.getUid()).update("posts", FieldValue.arrayRemove(p));
         closeAllFragment();
-
     }
 
     @Override

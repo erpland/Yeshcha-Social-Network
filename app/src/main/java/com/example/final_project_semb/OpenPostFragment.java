@@ -11,13 +11,11 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -40,18 +38,16 @@ public class OpenPostFragment extends Fragment implements View.OnClickListener, 
     FirebaseStorage firebaseStorage;
     TextView title, body, name, location;
     ImageView profile_pic;
-    FragmentHandler fragmentHandler;
+    FragmentsCallbacks fragmentsCallbacks;
     CardView postCardView;
     ConstraintLayout openPostOverlay;
-    OpenPostInterface openPostInterface;
     private GoogleMap mMap;
 
     @Override
 
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        fragmentHandler = (FragmentHandler) context;
-        openPostInterface = (OpenPostInterface) context;
+        fragmentsCallbacks = (FragmentsCallbacks) context;
     }
 
     @Override
@@ -89,9 +85,7 @@ public class OpenPostFragment extends Fragment implements View.OnClickListener, 
 
     }
 
-    public interface OpenPostInterface {
-        void replyOnPost(View view, String phoneNumber,String title);
-    }
+
 
     private void initViews() {
         mapView = root.findViewById(R.id.mapView);
@@ -129,10 +123,10 @@ public class OpenPostFragment extends Fragment implements View.OnClickListener, 
         switch (v.getId()) {
             case R.id.btn_closePostFrmnt:
             case R.id.cl_openPostOverlay:
-                fragmentHandler.closeAllFragment();
+                fragmentsCallbacks.closeAllFragment();
                 break;
             case R.id.chatButton:
-                openPostInterface.replyOnPost(v,post.user.getPhoneNumber(),post.getTitle());
+                fragmentsCallbacks.replyOnPost(v,post.user.getPhoneNumber(),post.getTitle());
                 break;
         }
     }

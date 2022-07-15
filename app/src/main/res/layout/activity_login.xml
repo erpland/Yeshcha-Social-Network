@@ -52,6 +52,7 @@
         android:drawablePadding="5sp"
         android:ems="10"
         android:hint="אמייל"
+        android:gravity="right"
         android:inputType="textEmailAddress"
         android:layoutDirection="rtl"
         android:text="o@g.com"

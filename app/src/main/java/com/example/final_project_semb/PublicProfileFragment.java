@@ -3,7 +3,6 @@ package com.example.final_project_semb;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -32,12 +30,12 @@ public class PublicProfileFragment extends Fragment implements View.OnClickListe
     TextView name;
     ImageView [] startsArr;
     FirebaseStorage firebaseStorage;
-    FragmentHandler fragmentHandler;
+    FragmentsCallbacks fragmentsCallbacks;
     ConstraintLayout publicProfileOverlay;
     CardView userCard;
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        fragmentHandler = (FragmentHandler) context;
+        fragmentsCallbacks = (FragmentsCallbacks) context;
     }
 
     @Override
@@ -104,7 +102,7 @@ public class PublicProfileFragment extends Fragment implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.cl_publicPostOverlay:
-                fragmentHandler.closeAllFragment();
+                fragmentsCallbacks.closeAllFragment();
                 break;
         }
     }
