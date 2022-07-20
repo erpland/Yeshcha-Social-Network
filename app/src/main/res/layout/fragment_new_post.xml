@@ -27,7 +27,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layoutDirection="ltr">
 
             <TextView
                 android:id="@+id/textView16"
@@ -118,11 +119,11 @@
                 app:layout_constraintVertical_bias="0.0">
 
                 <Spinner
-                    android:layoutDirection="rtl"
                     android:id="@+id/spinner_category"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
+                    android:layoutDirection="rtl"
                     android:spinnerMode="dropdown" />
 
 

@@ -40,6 +40,7 @@
             android:background="@drawable/round_top"
             android:elevation="5dp"
             android:isScrollContainer="true"
+            android:layoutDirection="ltr"
             android:paddingBottom="50dp"
             android:scrollbars="vertical">
 
@@ -125,6 +126,7 @@
                         app:dividerColor="#d7d7d7"
                         app:dividerInsetEnd="32dp"
                         app:dividerInsetStart="32dp" />
+
                     <com.google.android.material.switchmaterial.SwitchMaterial
                         android:id="@+id/switch2"
                         android:layout_width="match_parent"
@@ -146,6 +148,7 @@
                         app:dividerColor="#d7d7d7"
                         app:dividerInsetEnd="32dp"
                         app:dividerInsetStart="32dp" />
+
                     <com.google.android.material.switchmaterial.SwitchMaterial
                         android:id="@+id/switch3"
                         android:layout_width="match_parent"
@@ -167,6 +170,7 @@
                         app:dividerColor="#d7d7d7"
                         app:dividerInsetEnd="32dp"
                         app:dividerInsetStart="32dp" />
+
                     <com.google.android.material.switchmaterial.SwitchMaterial
                         android:id="@+id/switch4"
                         android:layout_width="match_parent"
@@ -179,6 +183,7 @@
                         android:textColor="@color/main_green"
                         android:textDirection="rtl"
                         app:thumbTint="@color/main_green" />
+
                     <com.google.android.material.divider.MaterialDivider
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
@@ -209,6 +214,7 @@
                         app:dividerColor="#d7d7d7"
                         app:dividerInsetEnd="32dp"
                         app:dividerInsetStart="32dp" />
+
                     <com.google.android.material.switchmaterial.SwitchMaterial
                         android:id="@+id/switch6"
                         android:layout_width="match_parent"
@@ -221,7 +227,6 @@
                         android:textColor="@color/main_green"
                         android:textDirection="rtl"
                         app:thumbTint="@color/main_green" />
-
 
 
                 </LinearLayout>
@@ -263,28 +268,26 @@
                 android:elevation="5dp"
                 android:layoutDirection="rtl"
                 android:textDirection="rtl"
+                android:visibility="invisible"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="2dp"
                 app:cardMaxElevation="2dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:visibility="invisible"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView12">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingVertical="10dp"
-        >
+                    android:paddingVertical="10dp">
 
                     <Spinner
                         android:id="@+id/spinner_distance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:spinnerMode="dropdown"
-                        />
+                        android:spinnerMode="dropdown" />
 
 
                     <TextView
@@ -296,8 +299,7 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/heebo"
                         android:text="בחר מרחק"
-                        android:textColor="@color/main_green"
-                        />
+                        android:textColor="@color/main_green" />
 
                 </RelativeLayout>
 

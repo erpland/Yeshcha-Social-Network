@@ -42,14 +42,13 @@
             android:id="@+id/userImg"
             android:layout_width="75dp"
             android:layout_height="75dp"
-            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
             android:layout_marginRight="12dp"
             android:adjustViewBounds="true"
             android:clickable="true"
             android:scaleType="centerCrop"
-            app:shapeAppearanceOverlay="@style/roundedCornersImageView"
-             />
+            app:shapeAppearanceOverlay="@style/roundedCornersImageView" />
 
 
         <RelativeLayout
@@ -117,6 +116,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_weight="0.6"
+                android:layoutDirection="ltr"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
