@@ -30,7 +30,6 @@ public class Requests {
         return this.posts;
     }
 
-
     public void addPosts(Post pst) {
         if (pst != null) {
             this.posts.add(pst);
@@ -40,9 +39,6 @@ public class Requests {
     }
 
     public void setPosts(ArrayList<Post> pst) {
-
         this.posts = pst;
-
-
     }
 }

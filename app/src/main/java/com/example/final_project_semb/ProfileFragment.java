@@ -45,10 +45,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         root = (ViewGroup) inflater.inflate(R.layout.fragment_profile, null);
         user = (User) getArguments().getParcelable("userParcel");
-        hasPosts = getArguments().getBoolean("hasPosts");
+//        hasPosts = getArguments().getBoolean("hasPosts");
         initViews();
         initVars();
-//        showPostsBtn.setEnabled(hasPosts);
 
         showPostsBtn.setOnClickListener(this);
         editProfileBtn.setOnClickListener(this);

@@ -23,7 +23,6 @@ public class User implements Parcelable {
         this.image = image;
         this.name = name;
         this.phoneNumber = phoneNumber;
-
     }
     public User(){
 
@@ -53,7 +52,7 @@ public class User implements Parcelable {
         return flow_level;
     }
     public void setFlow_level(int flow_level) { this.flow_level = flow_level;}
-
+    // טיםול ברמת הזרימה
     public void setFlowLevelByReplies(int replies) {
         if (replies<=2){
             this.flow_level=1;

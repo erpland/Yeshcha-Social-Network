@@ -73,6 +73,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         return this.arr.size();
     }
 
+
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView title, body, name, location;
         private ImageView imgPost;
@@ -91,8 +93,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
     private void getBitMapedImage(String url,ViewHolder holder) {
         StorageReference httpsReference = firebaseStorage.getReferenceFromUrl(url);
-        final long ONE_MEGABYTE = 1024 * 1024*5;
-        httpsReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+        final long FIVE_MEGA = 1024 * 1024*5;
+        httpsReference.getBytes(FIVE_MEGA).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
                 bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);

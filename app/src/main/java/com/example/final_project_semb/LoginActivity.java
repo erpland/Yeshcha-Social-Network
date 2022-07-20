@@ -46,7 +46,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         switch (v.getId()){
             case R.id.btn_login:
                 validateLogin();
-
                 break;
             case R.id.tv_toRegister:
                 startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
@@ -69,19 +68,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-
                             FirebaseUser user = mAuth.getCurrentUser();
 
                             Toast.makeText(LoginActivity.this, "אימות בוצע בהצלחה.",
                                     Toast.LENGTH_SHORT).show();
-
-
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
-
-
                         } else {
                             // If sign in fails, display a message to the user.
-
                             Toast.makeText(LoginActivity.this, "אימות נכשל, בדוק את השדות שהזנת....",
                                     Toast.LENGTH_SHORT).show();
                             return;

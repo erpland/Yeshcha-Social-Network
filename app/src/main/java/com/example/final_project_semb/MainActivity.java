@@ -107,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     Timer isEverythingLoadedTimer;
 
 
+    // ניהול לחיצה אחורה - ניווט נכון או התנתקות
     @Override
     public void onBackPressed() {
         if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
@@ -120,9 +121,8 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         } else {
             closeAllFragment();
         }
-
     }
-
+    //התמדדות עם חזרה מהקפאה של אפלקצייה  וכן חזרה מאינטנט של הגלרייה
     @Override
     protected void onResume() {
         super.onResume();
@@ -138,7 +138,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         askLocationPermission();
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         IS_GPS_ON = isGpsEnabled();
-
         initVars();
         initViews();
         initReplies();
@@ -149,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         loadingErrorCountdown();
         isEverythingLoadedInterval();
     }
-
+    // בדיקה שכל הרכיבים הדרושים נטענו - כדי לעבור לרשימת הפוסטים
     private void isEverythingLoadedInterval() {
         isEverythingLoadedTimer = new Timer();
         isEverythingLoadedTimer.scheduleAtFixedRate(new TimerTask() {
@@ -170,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             }
         }, 0, 1500);
     }
-
+    // מניעת הצגת מסך טעינה אין סופית בעת בעייה בקבלת הרכיבים הדרושים
     private void loadingErrorCountdown() {
         errorCountdownTimer = new CountDownTimer(30000, 1000) {
             @Override
@@ -181,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             public void onFinish() {
                 new AlertDialog.Builder(MainActivity.this, R.style.AlertDialogCustom)
                         .setTitle("בעיה...")
-                        .setMessage("לא הצלחנו לקבל את הנתונים,נסה שוב עם הבעיה ממשיכה אנה צור קשר איתנו")
+                        .setMessage("לא הצלחנו לקבל את הנתונים,נסה שוב עם הבעיה ממשיכה אנא צור קשר איתנו")
                         .setPositiveButton("נסה שוב", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -200,7 +199,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         };
         errorCountdownTimer.start();
     }
-
+    // פונקצייה עזר לוידוא מיקום דלוק
     public boolean isGpsEnabled() {
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         boolean isEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -226,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         }
         return false;
     }
-
+    // קבלת מיקום נוכחי
     @SuppressLint("MissingPermission")
     private void getCurrentLocation() {
         isGpsEnabled();
@@ -255,7 +254,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         };
         LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(mLocationRequest, mLocationCallback, null);
     }
-
+    // בקשת הראשאות מיקום
     private void askLocationPermission() {
         ActivityResultLauncher<String[]> locationPermissionRequest =
                 registerForActivityResult(new ActivityResultContracts
@@ -276,7 +275,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 Manifest.permission.ACCESS_COARSE_LOCATION
         });
     }
-
+    // התמודדות עם תגובה לבקשת מיקום
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -306,7 +305,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             }
         }
     }
-
+    // סגירת מסך הטעינה והעברה למסך הפוסטים
     private void closeLoader() {
         runOnUiThread(new Runnable() {
             @Override
@@ -317,8 +316,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 Navigation.findNavController(MainActivity.this, R.id.activity_main_nav_host_fragment).navigate(R.id.homeFragment, bundle);
             }
         });
-
-
     }
 
     private void initVars() {
@@ -338,7 +335,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         userRequestFragment = new UserRequestsFragment();
 
     }
-
+    //איתחול תפריט הניווט
     private void initNavbar() {
         navController = Navigation.findNavController(this, R.id.activity_main_nav_host_fragment);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
@@ -387,7 +384,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                     }
                 });
     }
-
+    //בדיקה שפוסט עומד בהגדרות המשתמש
     private boolean isPostFit(Post post) {
         switch (post.getCategoryCode()) {
             case 0:
@@ -411,7 +408,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         }
         return false;
     }
-
+    //משיכת יוזר מתאים לטובת הצגת פרופיל ציבורי בפוסט בהצלבה
     private void getUserForPost(Post post) {
         DocumentReference docRef = db.collection("users").document(post.userUid);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -460,14 +457,11 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
-//                    Map<String, Object> postMap = document.getData();
-
                     if (document.exists()) {
                         requests = document.toObject(Requests.class);
                     } else {
                         Log.d("tag1", "get failed with Requests ", task.getException());
                     }
-
                 } else {
                     Log.d("tag1", "RequestsNotFound", task.getException());
                 }
@@ -497,9 +491,10 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         });
 
     }
-
+    //ניהול אירועי לחיצה על עצמים של תפריט הניווט
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        //סגירת כל הפרגמנטים הקטנים למקרה שיש פתוחים
         closeAllFragment();
         Bundle bundle = new Bundle();
         switch (item.getItemId()) {
@@ -510,7 +505,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 break;
             case R.id.profileFragment:
                 bundle.putParcelable("userParcel", user);
-                bundle.putBoolean("hasPosts", requests.posts.size() != 0);
+//                bundle.putBoolean("hasPosts", requests.posts.size() != 0);
                 Navigation.findNavController(this, R.id.activity_main_nav_host_fragment).navigate(R.id.profileFragment, bundle);
                 break;
             case R.id.settingsFragment:
@@ -566,7 +561,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         return currentLocation.distanceTo(endPoint);
     }
 
-
     @Override
     public void replyOnPost(View view, String phoneNumber, String title) {
         reply.increaseReplyAmount();
@@ -578,19 +572,18 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 //        openLoaderOnUpdate();
 
     }
-
+    //פתיחת וואסטאפ למשתמש הרצוי עם הודעת פתיחה
     private void openChat(String phoneNumber, String title) {
         String msg = "אהלן, יש לי " + title + "...";
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse("https://wa.me/972" + phoneNumber + "?text=" + msg));
         startActivity(intent);
     }
-
+    // מעבר חזרה למסך טעינה ואיתחול מחדש של האקטיביטי
     private void openLoaderOnUpdate() {
         Navigation.findNavController(this, R.id.activity_main_nav_host_fragment).navigate(R.id.loaderFragment);
         refreshPage();
     }
-
 
     @Override
     public void addNewPost(View view, String title, String body, Location location, Date date, int categoryCode) {
@@ -601,7 +594,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         db.collection("Requests").document(mAuth.getUid()).set(requests);
         openLoaderOnUpdate();
     }
-
+    // הוספת פוסט חדש לפיירסטור
     private void addPostToFireStore(Post post) {
         // Add a new document with a generated ID
         db.collection("Posts").document(mAuth.getUid() + "$$" + System.currentTimeMillis())
@@ -659,7 +652,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 .addToBackStack("modalFragments")
                 .commit();
     }
-
+    // פילטור הפוסטים הפעילים לטבות הצגתם
     private ArrayList<Post> filterPostList(ArrayList<Post> list) {
         ArrayList<Post> filteredList = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
@@ -690,7 +683,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         navController.navigate(R.id.profileFragment, bundle);
         IS_IMAGE_CHANGED = false;
     }
-
+    // העלת תמונת משתמש חדשה
     public void uploadImage() {
         final StorageReference ref = storageReference.child(mAuth.getUid()).child("Profile_" + System.currentTimeMillis() + ".jpg");
         UploadTask imageUpload = ref.putFile(updatedImageUri);
@@ -720,7 +713,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             }
         });
     }
-
+    // ולידציה לעדכון פרטי משתמש
     private boolean ValidateUpdatedInput(String name, String phoneNumber) {
         if (name.isEmpty() || phoneNumber.isEmpty()) {
             Toast.makeText(this, "אחד או יותר מהשדות ריקים", Toast.LENGTH_SHORT).show();
@@ -757,8 +750,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
             }
         }
     }
-
-
+    // פתיחת הגלרייה
     private void takeGalleryAction() {
         Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(pickPhoto, GALLERY_PHOTO);

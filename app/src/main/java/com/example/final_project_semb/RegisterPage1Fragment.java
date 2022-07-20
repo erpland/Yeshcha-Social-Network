@@ -28,7 +28,6 @@ public class RegisterPage1Fragment extends Fragment implements View.OnClickListe
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         root = (ViewGroup) inflater.inflate(R.layout.fragment_register_page1,null);
         initViews();
         next_btn.setOnClickListener(this);

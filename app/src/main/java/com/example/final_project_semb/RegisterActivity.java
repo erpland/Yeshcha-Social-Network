@@ -236,8 +236,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         db.collection("Preferences").document(mAuth.getUid()).set(preferences);
         db.collection("Replies").document(mAuth.getUid()).set(reply);
         db.collection("Requests").document(mAuth.getUid()).set(requests);
-
-
     }
 
     //upload image
@@ -246,7 +244,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         super.onActivityResult(requestCode, resultCode, data);
 
         switch (requestCode) {
-
             case GALLERY_PHOTO:
                 if (resultCode == RESULT_OK) {
                     imagePath=data.getData();
