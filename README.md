@@ -1,7 +1,7 @@
 # Yeshcha-Social-Network
 Social network for giving and taking items by user proximity.
-Client: Java Android
-Server: Firebase mAuth, Firestore and Firestorage.
+<br/><b>Client:</b> Java Android
+<br/><b>Server:</b> Firebase mAuth, Firestore and Firestorage.
 
 # Screenshots
 ![](https://github.com/erpland/Yeshcha-Social-Network/blob/master/example/start.jpeg)
